@@ -17,6 +17,8 @@ import cutomTheme from "./theme";
 import SetupPage from "./pages/setup.jsx";
 import MobileVersionNotAvailalePage from "./pages/mobileNotAvailable.jsx";
 import LoginPage from "./pages/login.jsx";
+// Remove this line when you start working on the project
+import Dashboard from "./pages/dashboard";
 
 window.addEventListener('resize', () => {
   window.location.reload();
@@ -30,6 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/setup" element={<SetupPage />} />
+          <Route path="/" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>
