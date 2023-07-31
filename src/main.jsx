@@ -27,7 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <ChakraProvider theme={cutomTheme}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<SetupPage />} />
+            <Route path="/setup" element={<SetupPage />} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>
