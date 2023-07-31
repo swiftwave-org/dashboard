@@ -16,6 +16,7 @@ import cutomTheme from "./theme";
 // Pages
 import SetupPage from "./pages/setup.jsx";
 import MobileVersionNotAvailalePage from "./pages/mobileNotAvailable.jsx";
+import LoginPage from "./pages/login.jsx";
 
 window.addEventListener('resize', () => {
   window.location.reload();
@@ -27,7 +28,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <ChakraProvider theme={cutomTheme}>
         <BrowserRouter>
           <Routes>
-            <Route path="/setup" element={<SetupPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/setup" element={<SetupPage />} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>
