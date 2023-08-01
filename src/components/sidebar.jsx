@@ -25,7 +25,8 @@ import {
 } from "@primer/octicons-react";
 
 import Logo from "../assets/images/logo-full.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 // Accordion use for collapse options
 /**
@@ -53,12 +54,14 @@ const LinkItems = [
         name: "Deployed Applications",
         icon: ListUnorderedIcon,
         items: [],
+        link: "/application/deploy/list",
       },
       {
         index: 1,
         name: "Deploy New Application",
         icon: RocketIcon,
         items: [],
+        link: "/application/deploy/new",
       },
     ],
   },
@@ -72,12 +75,14 @@ const LinkItems = [
         name: "Configured Domains",
         icon: ListUnorderedIcon,
         items: [],
+        link: "/domain/list",
       },
       {
         index: 3,
         name: "Configure New Domain",
         icon: FileAddedIcon,
         items: [],
+        link: "/domain/new",
       },
     ],
   },
@@ -91,48 +96,83 @@ const LinkItems = [
         name: "Configured Rules",
         icon: PlugIcon,
         items: [],
+        link: "/ingress/rules/list",
       },
       {
         index: 5,
         name: "Add New Rule",
         icon: PlusIcon,
         items: [],
+        link: "/ingress/rules/new",
       },
       {
         index: 6,
         name: "Redirect Rules",
         icon: RedoIcon,
         items: [],
+        link: "/ingress/redirect_rules/list",
       },
       {
         index: 7,
         name: "Add Redirect Rule",
         icon: PlusIcon,
         items: [],
+        link: "/ingress/redirect_rules/new",
       },
     ],
   },
-  { 
-    index: 3, 
-    name: "Logout", 
+  {
+    index: 3,
+    name: "Logout",
     icon: SignOutIcon,
-    items: [] 
-    },
+    items: [],
+    link: "/logout",
+  },
 ];
 
 export default function SimpleSidebar() {
+  const location = useLocation();
+
   const [activeIndex, setActiveIndex] = useState(0);
   // eslint-disable-next-line no-unused-vars
   const [activeSubIndex, setActiveSubIndex] = useState(0);
+
+  useEffect(() => {
+    // Auto-highlight the active link
+    const path = location.pathname;
+    let index = -1;
+    let subIndex = -1;
+    for (let i = 0; i < LinkItems.length; i++) {
+      const link = LinkItems[i];
+      if (link.items.length == 0) {
+        if (link.link == path) {
+          index = link.index;
+        }
+      } else {
+        for (let j = 0; j < link.items.length; j++) {
+          const subLink = link.items[j];
+          if (subLink.link == path) {
+            index = link.index;
+            subIndex = subLink.index;
+            break;
+          }
+        }
+      }
+      if (index != -1) {
+        break;
+      }
+    }
+    setActiveIndex(index);
+    setActiveSubIndex(subIndex);
+  }, [location]);
 
   return (
     <Box
       bg="white"
       borderRight="1px"
       borderRightColor="gray.200"
-      w="80"
-      pos="fixed"
-      h="full"
+      w="100%"
+      h="100vh"
     >
       <Flex
         h="20"
@@ -151,6 +191,7 @@ export default function SimpleSidebar() {
             title={link.name}
             icon={link.icon}
             items={link.items}
+            link={link.link}
             activeIndex={activeIndex}
             activeSubIndex={activeSubIndex}
             setActiveIndex={setActiveIndex}
@@ -166,6 +207,7 @@ const NavItem = ({
   title,
   icon,
   items,
+  link,
   activeIndex,
   activeSubIndex,
   setActiveIndex,
@@ -188,38 +230,45 @@ const NavItem = ({
       index={index}
       title={title}
       icon={icon}
+      link={link}
       activeIndex={activeIndex}
     />
   );
 };
 
-const NavItemSingle = ({ index, title, icon, activeIndex }) => {
+const NavItemSingle = ({ index, title, icon, link, activeIndex }) => {
   return (
-    <Box
-      alignItems="flex-start"
-      py="2"
-      px="4"
-      borderRadius="full"
-      borderEndRadius="0"
-      role="group"
-      cursor="pointer"
-      _hover={{
-        bg: "gray.100",
-        color: "brand.800",
-      }}
-      bg={activeIndex === index ? "gray.100" : "white"}
-      color={activeIndex === index ? "brand.800" : "black"}
-      fontWeight={activeIndex === index ? "700" : "normal"}
-    >
-      <Text
-        _groupHover={{
+    <Link to={link}>
+      <Box
+        alignItems="flex-start"
+        py="2"
+        px="4"
+        mb="1"
+        borderRadius="full"
+        borderEndRadius="0"
+        role="group"
+        cursor="pointer"
+        _hover={{
+          bg: "gray.100",
           color: "brand.800",
         }}
+        bg={activeIndex === index ? "gray.100" : "white"}
+        color={activeIndex === index ? "brand.800" : "black"}
+        fontWeight={activeIndex === index ? "700" : "normal"}
+        borderWidth={activeIndex === index ? "1.5px" : "0px"}
+        borderColor="brand.400"
+        borderRightWidth="0px"
       >
-        <Icon as={icon} mr="2" />
-        {title}
-      </Text>
-    </Box>
+        <Text
+          _groupHover={{
+            color: "brand.800",
+          }}
+        >
+          <Icon as={icon} mr="2" />
+          {title}
+        </Text>
+      </Box>
+    </Link>
   );
 };
 
@@ -272,6 +321,7 @@ const NavItemWithSubMenu = ({
             icon={item.icon}
             title={item.name}
             items={item.items}
+            link={item.link}
             activeIndex={activeSubIndex}
             activeSubIndex={-1}
           />
