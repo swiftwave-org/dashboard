@@ -48,9 +48,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <ChakraProvider theme={cutomTheme}>
         <BrowserRouter>
           {!isLoggedIn && (
-            <Routes>
+              <Routes>
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/setup" element={<SetupPage />} />
             </Routes>
           )}
           {isLoggedIn && (
