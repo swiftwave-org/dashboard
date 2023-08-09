@@ -15,7 +15,6 @@ import cutomTheme from "./theme";
 import Sidebar from "./components/sidebar";
 
 // Pages
-import SetupPage from "./pages/setup.jsx";
 import MobileVersionNotAvailalePage from "./pages/mobileNotAvailable.jsx";
 import LoginPage from "./pages/login.jsx";
 
