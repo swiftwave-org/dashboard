@@ -30,7 +30,7 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
     
     - name: Install dependencies
-      run: npm install
+      run: yarn
 
     # - name: Run the tests and generate coverage report
     #   run: npm test -- --coverage
@@ -39,14 +39,14 @@ jobs:
     #   uses: codecov/codecov-action@v1
 
     - name: Build
-      run: npm run build
+      run: yarn run build
 
     - name: Deploy
       run: |
         git config --global user.name tanmoysrt
         git config --global user.email admin@swiftwave.org
         git remote set-url origin https://${github_token}@github.com/${repository}
-        npm run deploy
+        yarn run deploy
       env:
         user_name: 'github-actions[bot]'
         user_email: 'github-actions[bot]@users.noreply.github.com'
