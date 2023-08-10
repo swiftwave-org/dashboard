@@ -34,67 +34,70 @@ import IngressRuleNewPage from "./pages/ingress/rules/new";
 // Redirect Rules Management
 import RedirectRuleListPage from "./pages/ingress/redirect_rules/list";
 import RedirectRuleNewPage from "./pages/ingress/redirect_rules/new";
+import { Layout } from "./layout";
 
 window.addEventListener("resize", () => {
   window.location.reload();
 });
 
-const isLoggedIn = true;
+const isLoggedIn = false;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserView>
       <ChakraProvider theme={cutomTheme}>
-        <BrowserRouter>
-          {!isLoggedIn && (
-              <Routes>
-              <Route path="/login" element={<LoginPage />} />
-            </Routes>
-          )}
-          {isLoggedIn && (
-            <Box display="grid" gridTemplateColumns="1fr 4fr">
-              <Sidebar />
-              <Routes>
-                <Route
-                  path="/application/deploy/list"
-                  element={<DeployedApplicationListPage />}
-                />
-                <Route
-                  path="/application/deploy/detail"
-                  element={<DeployedApplicationDetailPage />}
-                />
-                <Route
-                  path="/application/deploy/new"
-                  element={<DeployedApplicationNewPage />}
-                />
-                <Route
-                  path="/domain/list"
-                  element={<ConfiguredDomainListPage />}
-                />
-                <Route
-                  path="/domain/new"
-                  element={<ConfiguredNewDomainPage />}
-                />
-                <Route
-                  path="/ingress/rules/list"
-                  element={<IngressRuleListPage />}
-                />
-                <Route
-                  path="/ingress/rules/new"
-                  element={<IngressRuleNewPage />}
-                />
-                <Route
-                  path="/ingress/redirect_rules/list"
-                  element={<RedirectRuleListPage />}
-                />
-                <Route
-                  path="/ingress/redirect_rules/new"
-                  element={<RedirectRuleNewPage />}
-                />
+        <Layout>
+          <BrowserRouter>
+            {!isLoggedIn && (
+                <Routes>
+                <Route path="/login" element={<LoginPage />} />
               </Routes>
-            </Box>
-          )}
-        </BrowserRouter>
+            )}
+            {isLoggedIn && (
+              <Box display="grid" gridTemplateColumns="1fr 4fr">
+                <Sidebar />
+                <Routes>
+                  <Route
+                    path="/application/deploy/list"
+                    element={<DeployedApplicationListPage />}
+                  />
+                  <Route
+                    path="/application/deploy/detail"
+                    element={<DeployedApplicationDetailPage />}
+                  />
+                  <Route
+                    path="/application/deploy/new"
+                    element={<DeployedApplicationNewPage />}
+                  />
+                  <Route
+                    path="/domain/list"
+                    element={<ConfiguredDomainListPage />}
+                  />
+                  <Route
+                    path="/domain/new"
+                    element={<ConfiguredNewDomainPage />}
+                  />
+                  <Route
+                    path="/ingress/rules/list"
+                    element={<IngressRuleListPage />}
+                  />
+                  <Route
+                    path="/ingress/rules/new"
+                    element={<IngressRuleNewPage />}
+                  />
+                  <Route
+                    path="/ingress/redirect_rules/list"
+                    element={<RedirectRuleListPage />}
+                  />
+                  <Route
+                    path="/ingress/redirect_rules/new"
+                    element={<RedirectRuleNewPage />}
+                  />
+                </Routes>
+              </Box>
+            )}
+          </BrowserRouter>
+        </Layout>
       </ChakraProvider>
     </BrowserView>
     <MobileView>
