@@ -36,6 +36,10 @@ import RedirectRuleListPage from "./pages/ingress/redirect_rules/list";
 import RedirectRuleNewPage from "./pages/ingress/redirect_rules/new";
 import { Layout } from "./layout";
 
+// Import store
+import store from "./redux/store";
+import { Provider } from "react-redux";
+
 window.addEventListener("resize", () => {
   window.location.reload();
 });
@@ -44,66 +48,68 @@ const isLoggedIn = false;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserView>
-      <ChakraProvider theme={cutomTheme}>
-        <Layout>
-          <BrowserRouter>
-            {!isLoggedIn && (
+    <Provider store={store}>
+      <BrowserView>
+        <ChakraProvider theme={cutomTheme}>
+          <Layout>
+            <BrowserRouter>
+              {!isLoggedIn && (
                 <Routes>
-                <Route path="/login" element={<LoginPage />} />
-              </Routes>
-            )}
-            {isLoggedIn && (
-              <Box display="grid" gridTemplateColumns="1fr 4fr">
-                <Sidebar />
-                <Routes>
-                  <Route
-                    path="/application/deploy/list"
-                    element={<DeployedApplicationListPage />}
-                  />
-                  <Route
-                    path="/application/deploy/detail"
-                    element={<DeployedApplicationDetailPage />}
-                  />
-                  <Route
-                    path="/application/deploy/new"
-                    element={<DeployedApplicationNewPage />}
-                  />
-                  <Route
-                    path="/domain/list"
-                    element={<ConfiguredDomainListPage />}
-                  />
-                  <Route
-                    path="/domain/new"
-                    element={<ConfiguredNewDomainPage />}
-                  />
-                  <Route
-                    path="/ingress/rules/list"
-                    element={<IngressRuleListPage />}
-                  />
-                  <Route
-                    path="/ingress/rules/new"
-                    element={<IngressRuleNewPage />}
-                  />
-                  <Route
-                    path="/ingress/redirect_rules/list"
-                    element={<RedirectRuleListPage />}
-                  />
-                  <Route
-                    path="/ingress/redirect_rules/new"
-                    element={<RedirectRuleNewPage />}
-                  />
+                  <Route path="/login" element={<LoginPage />} />
                 </Routes>
-              </Box>
-            )}
-          </BrowserRouter>
-        </Layout>
-      </ChakraProvider>
-    </BrowserView>
-    <MobileView>
-      <ChakraProvider theme={cutomTheme}>
-        <MobileVersionNotAvailalePage />
-      </ChakraProvider>
-    </MobileView>
+              )}
+              {isLoggedIn && (
+                <Box display="grid" gridTemplateColumns="1fr 4fr">
+                  <Sidebar />
+                  <Routes>
+                    <Route
+                      path="/application/deploy/list"
+                      element={<DeployedApplicationListPage />}
+                    />
+                    <Route
+                      path="/application/deploy/detail"
+                      element={<DeployedApplicationDetailPage />}
+                    />
+                    <Route
+                      path="/application/deploy/new"
+                      element={<DeployedApplicationNewPage />}
+                    />
+                    <Route
+                      path="/domain/list"
+                      element={<ConfiguredDomainListPage />}
+                    />
+                    <Route
+                      path="/domain/new"
+                      element={<ConfiguredNewDomainPage />}
+                    />
+                    <Route
+                      path="/ingress/rules/list"
+                      element={<IngressRuleListPage />}
+                    />
+                    <Route
+                      path="/ingress/rules/new"
+                      element={<IngressRuleNewPage />}
+                    />
+                    <Route
+                      path="/ingress/redirect_rules/list"
+                      element={<RedirectRuleListPage />}
+                    />
+                    <Route
+                      path="/ingress/redirect_rules/new"
+                      element={<RedirectRuleNewPage />}
+                    />
+                  </Routes>
+                </Box>
+              )}
+            </BrowserRouter>
+          </Layout>
+        </ChakraProvider>
+      </BrowserView>
+      <MobileView>
+        <ChakraProvider theme={cutomTheme}>
+          <MobileVersionNotAvailalePage />
+        </ChakraProvider>
+      </MobileView>
+    </Provider>
   </React.StrictMode>
 );
