@@ -17,16 +17,13 @@ import DeployedApplicationListPage from "./pages/deployed_application/list.jsx";
 import DeployedApplicationNewPage from "./pages/deployed_application/new.jsx";
 
 // Domain Management
-import ConfiguredDomainListPage from "./pages/domain/list";
-import ConfiguredNewDomainPage from "./pages/domain/new";
+import DomainManagementPage from "./pages/domain_management";
 
 // Ingress Rules Management
-import IngressRuleListPage from "./pages/ingress/rules/list";
-import IngressRuleNewPage from "./pages/ingress/rules/new";
+import IngressRulesPage from "./pages/ingress_rules";
 
 // Redirect Rules Management
-import RedirectRuleListPage from "./pages/ingress/redirect_rules/list";
-import RedirectRuleNewPage from "./pages/ingress/redirect_rules/new";
+import RedirectRulesPage from "./pages/redirect_rules";
 
 const Pages = () => {
   const authContext = useContext(AuthContext);
@@ -51,18 +48,9 @@ const Pages = () => {
           path="/application/deploy/new"
           element={<DeployedApplicationNewPage />}
         />
-        <Route path="/domain/list" element={<ConfiguredDomainListPage />} />
-        <Route path="/domain/new" element={<ConfiguredNewDomainPage />} />
-        <Route path="/ingress/rules/list" element={<IngressRuleListPage />} />
-        <Route path="/ingress/rules/new" element={<IngressRuleNewPage />} />
-        <Route
-          path="/ingress/redirect_rules/list"
-          element={<RedirectRuleListPage />}
-        />
-        <Route
-          path="/ingress/redirect_rules/new"
-          element={<RedirectRuleNewPage />}
-        />
+        <Route path="/domain" element={<DomainManagementPage />} />
+        <Route path="/ingress" element={<IngressRulesPage />} />
+        <Route path="/redirect" element={<RedirectRulesPage />} />
       </Routes>
     </Box>
   );

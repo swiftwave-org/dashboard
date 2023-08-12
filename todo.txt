@@ -1,3 +1,4 @@
 1. Add auto check whether the token is expired or not
 2. Add loading animation when verifying local token
 3. Try to work cookie with axios [set and auto send cookie]
+4. for delete and add item, dont refresh the page, just update the state

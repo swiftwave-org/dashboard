@@ -30,8 +30,13 @@ const AuthState = (props) => {
     const token = localStorage.getItem("token");
     if (token !== null) {
       axios.defaults.headers.common["authorization"] = token;
+      // TODO
+      setTimeout(() => {
+        setAuthenticated(true);
+      }, 1000);
+    } else {
+      setAuthenticated(false);
     }
-    setAuthenticated(true);
   };
 
   // Authenticate the user
