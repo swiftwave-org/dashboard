@@ -3,7 +3,7 @@ import route from "../../config/route"
 
 export default class GitCredentialsController {
 
-  // Fetch domains
+  // Fetch git credentials
   async fetchAll() {
     try {
       const res = await axios({
@@ -25,7 +25,7 @@ export default class GitCredentialsController {
     }
   }
 
-  // Add domain
+  // Add git credentials
   async add(name, username, password) {
     try {
       const res = await axios({
@@ -55,7 +55,7 @@ export default class GitCredentialsController {
     }
   }
 
-  // Update domain
+  // Update git credential
   async update(id, name, username, password) {
     try {
       const res = await axios({
@@ -84,7 +84,7 @@ export default class GitCredentialsController {
       }
     }
   }
-  // Delete domain
+  // Delete git credential
   async delete(id) {
     try {
       const res = await axios({

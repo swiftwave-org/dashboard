@@ -27,6 +27,7 @@ import RedirectRulesPage from "./pages/redirect_rules";
 
 // Git Credential Management
 import GitCredentialManagementPage from "./pages/git_credential_management";
+import VolumeManagementPage from "./pages/volume_management";
 
 const Pages = () => {
   const authContext = useContext(AuthContext);
@@ -55,6 +56,7 @@ const Pages = () => {
         <Route path="/domain" element={<DomainManagementPage />} />
         <Route path="/ingress" element={<IngressRulesPage />} />
         <Route path="/redirect" element={<RedirectRulesPage />} />
+        <Route path="/volume" element={<VolumeManagementPage />} />
       </Routes>
     </Box>
   );
