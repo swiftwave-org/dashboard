@@ -3,5 +3,6 @@ export default {
     AUTH_VERIFY: '/auth/verify',
     AUTH_LOGOUT: '/auth/logout',
     REDIRECT_RULES: '/mapping/redirects',
+    DOMAINS: '/domains',
     DOMAIN_NAMES: '/domains/shortlist'
 }
