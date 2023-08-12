@@ -1,0 +1,3 @@
+1. Add auto check whether the token is expired or not
+2. Add loading animation when verifying local token
+3. Try to work cookie with axios [set and auto send cookie]
