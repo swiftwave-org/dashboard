@@ -12,6 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import {
+  GitBranchIcon,
   GlobeIcon,
   LinkIcon,
   ListUnorderedIcon,
@@ -86,6 +87,13 @@ const LinkItems = [
   },
   {
     index: 6,
+    name: "Git Credentials",
+    icon: GitBranchIcon,
+    items: [],
+    link: "/git",
+  },
+  {
+    index: 7,
     name: "Logout",
     icon: SignOutIcon,
     items: [],
@@ -218,7 +226,7 @@ const NavItemSingle = ({ index, title, icon, link, activeIndex }) => {
         bg={activeIndex === index ? "gray.100" : "white"}
         color={activeIndex === index ? "brand.800" : "black"}
         fontWeight={activeIndex === index ? "700" : "normal"}
-        borderWidth={activeIndex === index ? "1.5px" : "0px"}
+        borderWidth={activeIndex === index ? "1px" : "0px"}
         borderColor="brand.400"
         borderRightWidth="0px"
       >

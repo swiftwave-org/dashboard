@@ -25,6 +25,9 @@ import IngressRulesPage from "./pages/ingress_rules";
 // Redirect Rules Management
 import RedirectRulesPage from "./pages/redirect_rules";
 
+// Git Credential Management
+import GitCredentialManagementPage from "./pages/git_credential_management";
+
 const Pages = () => {
   const authContext = useContext(AuthContext);
 
@@ -48,6 +51,7 @@ const Pages = () => {
           path="/application/deploy/new"
           element={<DeployedApplicationNewPage />}
         />
+        <Route path="/git" element={<GitCredentialManagementPage />} />
         <Route path="/domain" element={<DomainManagementPage />} />
         <Route path="/ingress" element={<IngressRulesPage />} />
         <Route path="/redirect" element={<RedirectRulesPage />} />
