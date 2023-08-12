@@ -18,34 +18,33 @@ import {
   useToast,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useSelector, useDispatch } from "react-redux";
-import { setSeverConfig } from "../redux/features/config/configSlice";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
+import ConfigContext from "../context/config/configContext";
 
 export function ServerConfig() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const dispatch = useDispatch();
   const toast = useToast();
 
-  const isSet = useSelector((state) => state.config.server.set);
-  const ip = useSelector((state) => state.config.server.ip);
-  const port = useSelector((state) => state.config.server.port);
+  const configContext = useContext(ConfigContext);
+  const host = configContext.state.server.host;
+  const port = configContext.state.server.port;
+
   const formDetails = useRef({
-    ip: "",
+    host: "",
     port: "",
   });
 
   function openModal() {
-    formDetails.ip = ip;
+    formDetails.host = host;
     formDetails.port = port;
     onOpen();
   }
 
   function handleSubmission() {
-    if(formDetails.ip === "" || formDetails.port === "") {
+    if(formDetails.host === "" || formDetails.port === "") {
       toast({
         title: "Error",
-        description: "Please fill all the fields",
+        descrhosttion: "Please fill all the fields",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -53,7 +52,7 @@ export function ServerConfig() {
       });
       return;
     }
-    dispatch(setSeverConfig(formDetails));
+    configContext.setServer(formDetails.host, formDetails.port);
     onClose();
   }
 
@@ -78,11 +77,11 @@ export function ServerConfig() {
           gap="15px"
           align="center"
         >
-          {isSet ? (
+          {configContext.isSet() ? (
             <Text>
               &nbsp;&nbsp;Connected to{" "}
               <b>
-                {ip}:{port}
+                {host}:{port}
               </b>
             </Text>
           ) : (
@@ -107,12 +106,12 @@ export function ServerConfig() {
           <ModalBody>
             <Flex gap="3">
               <FormControl>
-                <FormLabel>Public IP</FormLabel>
+                <FormLabel>Public host</FormLabel>
                 <Input
-                  placeholder="IP of server"
+                  placeholder="host of server"
                   type="text"
-                  defaultValue={formDetails.ip}
-                  onChange={(e) => (formDetails.ip = e.target.value)}
+                  defaultValue={formDetails.host}
+                  onChange={(e) => (formDetails.host = e.target.value)}
                 />
               </FormControl>
               <FormControl w="50%">
