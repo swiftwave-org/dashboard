@@ -12,6 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import {
+  FileDirectoryIcon,
   GitBranchIcon,
   GlobeIcon,
   LinkIcon,
@@ -94,6 +95,13 @@ const LinkItems = [
   },
   {
     index: 7,
+    name: "Persistent Volumes",
+    icon: FileDirectoryIcon,
+    items: [],
+    link: "/volume",
+  },
+  {
+    index: 8,
     name: "Logout",
     icon: SignOutIcon,
     items: [],

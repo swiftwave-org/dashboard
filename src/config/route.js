@@ -6,4 +6,5 @@ export default {
     DOMAINS: '/domains',
     DOMAIN_NAMES: '/domains/shortlist',
     GIT_CREDENTIALS: '/git/credentials',
+    VOLUMES: '/volumes',
 }
