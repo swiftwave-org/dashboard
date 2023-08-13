@@ -33,6 +33,20 @@ export default class IngressRulesController{
     else {
       ingress_port = port;
     }
+    if(ingress_port  == ""){
+      return {
+        status: false,
+        message: "Port cannot be empty",
+        data: {}
+      }
+    }
+    if(service_port == ""){
+      return {
+        status: false,
+        message: "Service Port cannot be empty",
+        data: {}
+      }
+    }
     try {
       const res = await axios({
         method: "post",
@@ -42,10 +56,10 @@ export default class IngressRulesController{
         },
         data: JSON.stringify({
           protocol: protocol,
-          port: ingress_port == "" ? 0 : parseInt(ingress_port),
+          port: parseInt(ingress_port),
           domain_name: domain_name,
           service_name: service_name,
-          service_port: service_port == "" ? 0 : parseInt(service_port)
+          service_port: parseInt(service_port)
         })
       })
       return {
