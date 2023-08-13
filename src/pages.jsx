@@ -28,6 +28,7 @@ import RedirectRulesPage from "./pages/redirect_rules";
 // Git Credential Management
 import GitCredentialManagementPage from "./pages/git_credential_management";
 import VolumeManagementPage from "./pages/volume_management";
+import LogoutPage from "./pages/logout";
 
 const Pages = () => {
   const authContext = useContext(AuthContext);
@@ -57,6 +58,7 @@ const Pages = () => {
         <Route path="/ingress" element={<IngressRulesPage />} />
         <Route path="/redirect" element={<RedirectRulesPage />} />
         <Route path="/volume" element={<VolumeManagementPage />} />
+        <Route path="/logout" element={<LogoutPage />} />
       </Routes>
     </Box>
   );
