@@ -9,5 +9,7 @@ export default {
     DOMAIN_NAMES: '/domains/shortlist',
     GIT_CREDENTIALS: '/git/credentials',
     VOLUMES: '/volumes',
-    SERVICE_NAMES: '/applications/servicenames'
+    SERVICE_NAMES: '/applications/servicenames',
+    APPLICATIONS: '/applications',
+    APPLICATIONS_SUMMARY: '/applications/summary',
 }

@@ -24,4 +24,48 @@ export default class ApplicationController {
       }
     }
   }
+
+  // fetch application details
+  async fetchDetails(id){
+    try {
+      const res = await axios({
+        method: 'get',
+        url: route.APPLICATIONS+"/"+id
+      })
+      return {
+        status: true,
+        message: 'Success',
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to fetch service names"
+      return {
+        status: false,
+        message: message,
+        data: []
+      }
+    }
+  }
+
+    // fetch applications summary
+    async fetchApplicationsSummary(){
+      try {
+        const res = await axios({
+          method: 'get',
+          url: route.APPLICATIONS_SUMMARY
+        })
+        return {
+          status: true,
+          message: 'Success',
+          data: res.data
+        }
+      } catch (error) {
+        let message = error.response.data.message || "Failed to fetch applications summary"
+        return {
+          status: false,
+          message: message,
+          data: []
+        }
+      }
+    }
 }

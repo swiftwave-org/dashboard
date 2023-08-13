@@ -12,9 +12,8 @@ import Sidebar from "./components/sidebar";
 import LoginPage from "./pages/login.jsx";
 
 // Application Management
-import DeployedApplicationDetailPage from "./pages/deployed_application/detail.jsx";
-import DeployedApplicationListPage from "./pages/deployed_application/list.jsx";
-import DeployedApplicationNewPage from "./pages/deployed_application/new.jsx";
+import DeployedApplicationManagementPage from "./pages/deployed_application_management";
+import DeployApplicationPage from "./pages/deploy_application";
 
 // Domain Management
 import DomainManagementPage from "./pages/domain_management";
@@ -29,6 +28,7 @@ import RedirectRulesPage from "./pages/redirect_rules";
 import GitCredentialManagementPage from "./pages/git_credential_management";
 import VolumeManagementPage from "./pages/volume_management";
 import LogoutPage from "./pages/logout";
+import DeployedApplicationDetailsPage from "./pages/deployed_application_details";
 
 const Pages = () => {
   const authContext = useContext(AuthContext);
@@ -42,17 +42,14 @@ const Pages = () => {
       <Sidebar />
       <Routes>
         <Route
-          path="/application/deploy/list"
-          element={<DeployedApplicationListPage />}
+          path="/application"
+          element={<DeployedApplicationManagementPage />}
         />
         <Route
-          path="/application/deploy/detail"
-          element={<DeployedApplicationDetailPage />}
+          path="/application/:id"
+          element={<DeployedApplicationDetailsPage />}
         />
-        <Route
-          path="/application/deploy/new"
-          element={<DeployedApplicationNewPage />}
-        />
+        <Route path="/application/deploy" element={<DeployApplicationPage />} />
         <Route path="/git" element={<GitCredentialManagementPage />} />
         <Route path="/domain" element={<DomainManagementPage />} />
         <Route path="/ingress" element={<IngressRulesPage />} />
