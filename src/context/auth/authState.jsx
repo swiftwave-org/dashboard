@@ -109,6 +109,14 @@ const AuthState = (props) => {
         setAuthenticated(false);
       });
   };
+
+  const logout = () => {
+    axios.defaults.headers.common["authorization"] = "";
+    localStorage.removeItem("token");
+    setAuthenticated(false);
+    // TODO Redirect to dashboard
+    window.location.href = "/git";
+  }
   
   return (
     <AuthContext.Provider
@@ -117,7 +125,8 @@ const AuthState = (props) => {
         isAuthenticated,
         verifyAuthenticationStatus,
         authenticate,
-        recoverToken
+        recoverToken,
+        logout
       }}
     >
       {props.children}
