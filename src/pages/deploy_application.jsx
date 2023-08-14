@@ -16,6 +16,9 @@ import {
 import { useContext, useRef } from "react";
 import ControllerContext from "../context/controller/ControllerContext";
 import ServiceNameField from "./deploy_application/service_name";
+import ConfigureSourcePage from "./deploy_application/configure_source";
+import ConfigureVolumePage from "./deploy_application/configure_volume";
+import ReviewAndDeployPage from "./deploy_application/review_and_deploy";
 
 export default function DeployApplicationPage() {
   const context = useContext(ControllerContext);
@@ -34,16 +37,16 @@ export default function DeployApplicationPage() {
       tooltip: "Git, Source Code, Docker Image Supported",
     },
     {
-      slug: "configure-environment",
-      title: "Environment Variable",
-      subtitle: "Modify & Add",
-      tooltip: "Customize Environment Variable (Optional)",
+      slug: "configure-volume",
+      title: "Persistent Volume",
+      subtitle: "Configure Volume",
+      tooltip: "Configure Persistent Volume (Optional)",
     },
     {
-      slug: "configure-network",
-      title: "Deploy",
-      subtitle: "Review and Deploy",
-      tooltip: "Review and Deploy",
+      slug: "deploy-application",
+      title: "Deploy Application",
+      subtitle: "Final Step",
+      tooltip: "Final Step",
     },
   ];
   const { activeStep, goToNext } = useSteps({
@@ -52,10 +55,19 @@ export default function DeployApplicationPage() {
   });
 
   const formRef = useRef({
-    serviceName: "",
+    service_name: "",
+    source_type: "",
+    git_credential_id: 0,
+    repository_url: "",
+    branch: "",
+    tarball_file: "",
+    dockerfile: "",
+    docker_image: "",
+    build_args: {},
+    environment_variables: {},
+    volumes: {},
+    replicas: 1, // TODO: Add support for replicas
   });
-
-
 
   return (
     <>
@@ -81,7 +93,36 @@ export default function DeployApplicationPage() {
           ))}
         </Stepper>
         {/* Service name */}
-        <ServiceNameField context={context} toast={toast} activeStep={activeStep} formRef={formRef} goToNext={goToNext} />
+        <ServiceNameField
+          context={context}
+          toast={toast}
+          activeStep={activeStep}
+          formRef={formRef}
+          goToNext={goToNext}
+        />
+        {/* Configure Source  */}
+        <ConfigureSourcePage
+          context={context}
+          toast={toast}
+          activeStep={activeStep}
+          formRef={formRef}
+          goToNext={goToNext}
+        />
+        {/* Configure Volume */}
+        <ConfigureVolumePage
+          context={context}
+          toast={toast}
+          activeStep={activeStep}
+          formRef={formRef}
+          goToNext={goToNext}
+        />
+        {/* Deploy Confirmation */}
+        <ReviewAndDeployPage
+          context={context}
+          toast={toast}
+          activeStep={activeStep}
+          formRef={formRef}
+        />
       </Box>
     </>
   );

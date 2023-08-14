@@ -42,7 +42,7 @@ export default function ServiceNameField({
           setServiceNameStatus(-1);
           return;
         } else {
-          formRef.current.serviceName = serviceName;
+          formRef.current.service_name = serviceName;
           if (res.available === false) {
             console.log("not available");
             setServiceNameStatus(0);
@@ -66,12 +66,12 @@ export default function ServiceNameField({
           />
           <FormErrorMessage>
             <FormErrorIcon />
-            {formRef.current.serviceName + " is not available"}
+            {formRef.current.service_name + " is not available"}
           </FormErrorMessage>
           {serviceNameStatus === 1 && (
             <FormHelperText color="green">
               <Icon as={CheckCircleFillIcon} color="green.500" mr="1" />
-              {formRef.current.serviceName + " is available"}
+              {formRef.current.service_name + " is available"}
             </FormHelperText>
           )}
         </FormControl>
@@ -82,7 +82,7 @@ export default function ServiceNameField({
           isDisabled={serviceNameStatus !== 1}
           onClick={goToNext}
         >
-          Proceed{" "}
+          Proceed
         </Button>
       </Box>
     </Center>

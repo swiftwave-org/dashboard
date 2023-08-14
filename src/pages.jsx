@@ -40,23 +40,28 @@ const Pages = () => {
   ) : (
     <Box display="grid" gridTemplateColumns="1fr 4fr">
       <Sidebar />
-      <Routes>
-        <Route
-          path="/application"
-          element={<DeployedApplicationManagementPage />}
-        />
-        <Route
-          path="/application/:id"
-          element={<DeployedApplicationDetailsPage />}
-        />
-        <Route path="/application/deploy" element={<DeployApplicationPage />} />
-        <Route path="/git" element={<GitCredentialManagementPage />} />
-        <Route path="/domain" element={<DomainManagementPage />} />
-        <Route path="/ingress" element={<IngressRulesPage />} />
-        <Route path="/redirect" element={<RedirectRulesPage />} />
-        <Route path="/volume" element={<VolumeManagementPage />} />
-        <Route path="/logout" element={<LogoutPage />} />
-      </Routes>
+      <Box maxH="100vh" overflowY="scroll">
+        <Routes>
+          <Route
+            path="/application"
+            element={<DeployedApplicationManagementPage />}
+          />
+          <Route
+            path="/application/:id"
+            element={<DeployedApplicationDetailsPage />}
+          />
+          <Route
+            path="/application/deploy"
+            element={<DeployApplicationPage />}
+          />
+          <Route path="/git" element={<GitCredentialManagementPage />} />
+          <Route path="/domain" element={<DomainManagementPage />} />
+          <Route path="/ingress" element={<IngressRulesPage />} />
+          <Route path="/redirect" element={<RedirectRulesPage />} />
+          <Route path="/volume" element={<VolumeManagementPage />} />
+          <Route path="/logout" element={<LogoutPage />} />
+        </Routes>
+      </Box>
     </Box>
   );
 };
