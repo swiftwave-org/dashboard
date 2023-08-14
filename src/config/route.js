@@ -12,4 +12,5 @@ export default {
     SERVICE_NAMES: '/applications/servicenames',
     APPLICATIONS: '/applications',
     APPLICATIONS_SUMMARY: '/applications/summary',
+    APPLICATION_SERVICE_NAME_AVAILABILITY: '/applications/availiblity/service_name',
 }
