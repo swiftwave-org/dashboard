@@ -111,10 +111,8 @@ const AuthState = (props) => {
   };
 
   const logout = () => {
-    axios.defaults.headers.common["authorization"] = "";
     localStorage.removeItem("token");
-    setAuthenticated(false);
-    window.location.href = "/application";
+    window.location.href = "/";
   }
   
   return (

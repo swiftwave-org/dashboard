@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 
 // Contexts
@@ -60,6 +60,7 @@ const Pages = () => {
           <Route path="/redirect" element={<RedirectRulesPage />} />
           <Route path="/volume" element={<VolumeManagementPage />} />
           <Route path="/logout" element={<LogoutPage />} />
+          <Route path="*" element={<Navigate to="/application" />} />
         </Routes>
       </Box>
     </Box>
