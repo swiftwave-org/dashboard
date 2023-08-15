@@ -110,6 +110,33 @@ const AuthState = (props) => {
       });
   };
 
+  // Verrify authentication status and logout if session timed out
+  const logoutIfSessionTimedout = async() => {
+    console.log("Checking authentication status");
+    if(localStorage.getItem("token") === null) {
+      return;
+    }
+    var config = {
+      method: "post",
+      url: route.AUTH_VERIFY,
+    };
+
+    try {
+      let res = await axios(config);
+      if(res.status !== 200) {
+        throw new Error("Not authenticated");
+      }
+    } catch (error) {
+      console.error(error);
+      logout();      
+    }
+
+    // verifyAuthenticationStatus();
+
+
+    // }, 1000);
+  }
+
   const logout = () => {
     localStorage.removeItem("token");
     window.location.href = "/";
@@ -123,7 +150,8 @@ const AuthState = (props) => {
         verifyAuthenticationStatus,
         authenticate,
         recoverToken,
-        logout
+        logout,
+        logoutIfSessionTimedout
       }}
     >
       {props.children}

@@ -1,4 +1,5 @@
-import { useContext } from "react";
+/* eslint-disable no-constant-condition */
+import { useContext, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 
@@ -32,6 +33,19 @@ import DeployedApplicationDetailsPage from "./pages/deployed_application_details
 
 const Pages = () => {
   const authContext = useContext(AuthContext);
+  
+  const periodicallyVerifySession = async() => {
+    while (true) {
+      authContext.logoutIfSessionTimedout();
+      // sleep
+      await new Promise(r => setTimeout(r, 1000*60));
+    }
+  }
+
+  useEffect(() => {
+    periodicallyVerifySession();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return !authContext.isAuthenticated() ? (
     <Routes>
