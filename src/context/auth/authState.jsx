@@ -112,7 +112,6 @@ const AuthState = (props) => {
 
   // Verrify authentication status and logout if session timed out
   const logoutIfSessionTimedout = async() => {
-    console.log("Checking authentication status");
     if(localStorage.getItem("token") === null) {
       return;
     }
