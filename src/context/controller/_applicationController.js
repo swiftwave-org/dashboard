@@ -154,8 +154,6 @@ export default class ApplicationController {
     try {
       var data = new FormData();
       data.append('file', fileblob, 'file.tar');
-
-      console.log(data.getAll('file'))
       const res = await axios({
         method: "post",
         url: route.UPLOAD_TAR,
@@ -197,6 +195,148 @@ export default class ApplicationController {
       }
     } catch (error) {
       let message = error.response.data.message || "Failed to deploy application"
+      return {
+        status: false,
+        message: message,
+        data: {}
+      }
+    }
+  }
+
+  // redeploy application
+  async redeploy(id) {
+    try {
+      const res = await axios({
+        method: "post",
+        url: route.APPLICATIONS + "/" + id + "/redeploy",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      return {
+        status: true,
+        message: res.data.message || "Success",
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to redeploy application"
+      return {
+        status: false,
+        message: message,
+        data: {}
+      }
+    }
+  }
+
+  // delete application
+  async delete(id) {
+    try {
+      const res = await axios({
+        method: "delete",
+        url: route.APPLICATIONS + "/" + id,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      return {
+        status: true,
+        message: res.data.message || "Success",
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to delete application"
+      return {
+        status: false,
+        message: message,
+        data: {}
+      }
+    }
+  }
+
+  // fetch application logs
+  async fetchBuildLogs(id) {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: route.APPLICATIONS + "/" + id + "/logs/build"
+      })
+      return {
+        status: true,
+        message: 'Success',
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to fetch service names"
+      return {
+        status: false,
+        message: message,
+        data: []
+      }
+    }
+  }
+
+  // fetch application log
+  async fetchBuildLog(application_id, log_id) {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: route.APPLICATIONS + "/" + application_id + "/logs/build/" + log_id
+      })
+      return {
+        status: true,
+        message: 'Success',
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to fetch service names"
+      return {
+        status: false,
+        message: message,
+        data: []
+      }
+    }
+  }
+
+  // fetch runtime log
+  async fetchRuntimeLog(application_id) {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: route.APPLICATIONS + "/" + application_id + "/logs/runtime"
+      })
+      return {
+        status: true,
+        message: 'Success',
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to fetch service names"
+      return {
+        status: false,
+        message: message,
+        data: []
+      }
+    }
+  }
+
+  // update application
+  async update(id, config) {
+    try {
+      const res = await axios({
+        method: "put",
+        url: route.APPLICATIONS+"/"+id,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        data: JSON.stringify(config)
+      })
+      return {
+        status: true,
+        message: res.data.message || "Success",
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to update application"
       return {
         status: false,
         message: message,

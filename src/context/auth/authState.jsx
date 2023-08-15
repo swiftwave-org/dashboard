@@ -114,8 +114,7 @@ const AuthState = (props) => {
     axios.defaults.headers.common["authorization"] = "";
     localStorage.removeItem("token");
     setAuthenticated(false);
-    // TODO Redirect to dashboard
-    window.location.href = "/git";
+    window.location.href = "/application";
   }
   
   return (
