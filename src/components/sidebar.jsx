@@ -17,7 +17,6 @@ import {
   GlobeIcon,
   LinkIcon,
   ListUnorderedIcon,
-  PackageIcon,
   RedoIcon,
   RocketIcon,
   SignOutIcon,
@@ -44,26 +43,20 @@ import { Link, useLocation } from "react-router-dom";
 
 const LinkItems = [
   {
-    index: 0,
-    name: "Application Management",
-    icon: PackageIcon,
-    items: [
-      {
-        index: 1,
-        name: "Deployed Applications",
-        icon: ListUnorderedIcon,
-        items: [],
-        link: "/application/deploy/list",
-      },
-      {
-        index: 2,
-        name: "Deploy New Application",
-        icon: RocketIcon,
-        items: [],
-        link: "/application/deploy/new",
-      },
-    ],
+    index: 1,
+    name: "Deploy New Application",
+    icon: RocketIcon,
+    items: [],
+    link: "/application/deploy",
   },
+  {
+    index: 2,
+    name: "Deployed Applications",
+    icon: ListUnorderedIcon,
+    items: [],
+    link: "/application",
+  },
+ 
   {
     index: 3,
     name: "Domain Management",

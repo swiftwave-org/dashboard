@@ -60,7 +60,7 @@ export default class GitCredentialsController {
     try {
       const res = await axios({
         method: "put",
-        url: route.GIT_CREDENTIALS+"/"+id,
+        url: route.GIT_CREDENTIALS + "/" + id,
         headers: {
           "Content-Type": "application/json"
         },
@@ -84,6 +84,7 @@ export default class GitCredentialsController {
       }
     }
   }
+
   // Delete git credential
   async delete(id) {
     try {
@@ -98,6 +99,28 @@ export default class GitCredentialsController {
       }
     } catch (error) {
       let message = error.response.data.message || "Failed to delete git credentials"
+      return {
+        status: false,
+        message: message,
+        data: {}
+      }
+    }
+  }
+
+  // test git credential
+  async testAccess(id, repo_url, branch) {
+    try {
+      const res = await axios({
+        method: "get",
+        url: route.GIT_CREDENTIALS + "/" + id + "/test?repository_url=" + repo_url+"&branch="+branch,
+      })
+      return {
+        status: true,
+        message: res.data.message || "Success",
+        data: {}
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to access git repository"
       return {
         status: false,
         message: message,

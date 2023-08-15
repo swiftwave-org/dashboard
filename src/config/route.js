@@ -9,5 +9,12 @@ export default {
     DOMAIN_NAMES: '/domains/shortlist',
     GIT_CREDENTIALS: '/git/credentials',
     VOLUMES: '/volumes',
-    SERVICE_NAMES: '/applications/servicenames'
+    SERVICE_NAMES: '/applications/servicenames',
+    APPLICATIONS: '/applications',
+    APPLICATIONS_SUMMARY: '/applications/summary',
+    APPLICATION_SERVICE_NAME_AVAILABILITY: '/applications/availiblity/service_name',
+    DOCKER_CONFIG_GENERATE_GIT: '/applications/deploy/dockerconfig/generate/git',
+    DOCKER_CONFIG_GENERATE_CODE: '/applications/deploy/dockerconfig/generate/tarball',
+    DEPLOY_APPLICATION: '/applications/deploy',
+    UPLOAD_TAR: '/applications/deploy/upload'
 }
