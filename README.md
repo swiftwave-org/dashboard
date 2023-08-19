@@ -7,8 +7,7 @@
 
 #### 👀 Let's Have a look of application deployment process from SwiftWave dashboard
 
-[<img alt="Swiftwave dashboard" width="500px" src="https://github.com/swiftwave-org/swiftwave-dashboard/assets/57363826/68546452-644d-4fc2-8de0-55faf2e61383" />](https://www.youtube.com/watch?v=lojP-5SRDt0 "Swiftwave Dashboard
-")
+[<img alt="Swiftwave dashboard" width="500px" src="https://github.com/swiftwave-org/swiftwave-dashboard/assets/57363826/68546452-644d-4fc2-8de0-55faf2e61383" />](https://youtu.be/lojP-5SRDt0 "Swiftwave Dashboard")
 
 ### 🤔 How to Access ?
 #### Hosted Version
