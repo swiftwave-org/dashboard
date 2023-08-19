@@ -47,6 +47,10 @@ export default function DeployedApplicationManagementPage() {
     navigate(`/application/${id}`);
   };
 
+  const deployNewApplication = () => {
+    navigate("/application/deploy");
+  }
+
   useEffect(() => {
     fetchApplicationsSummary();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,7 +94,7 @@ export default function DeployedApplicationManagementPage() {
               Deploy your application within minutes 🔥
             </Text>
 
-            <Button colorScheme="brand" w="fit-content" variant="solid">
+            <Button colorScheme="brand" w="fit-content" variant="solid" onClick={deployNewApplication}>
               Deploy Application
             </Button>
           </Box>
