@@ -7,7 +7,7 @@
 
 #### 👀 Let's Have a look of application deployment process from SwiftWave dashboard
 
-[![Swiftwave Dashboard](https://github.com/swiftwave-org/swiftwave-dashboard/assets/57363826/68546452-644d-4fc2-8de0-55faf2e61383)](https://youtu.be/lojP-5SRDt0 "Swiftwave Dashboard")
+[![Swiftwave Dashboard](https://raw.githubusercontent.com/Tanmoy741127/Intellup/main/screenshots/video.gif)](https://youtu.be/lojP-5SRDt0 "Swiftwave Dashboard")
 
 ### 🤔 How to Access ?
 #### Hosted Version
