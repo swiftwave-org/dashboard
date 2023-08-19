@@ -34,4 +34,10 @@ Steps -
 2. Clone the forked repository
 3. Run `npm install`
 4. Run `npm run dev`
-5. Open the url displayed on terminal
+5. Open `localhost:5173` in browser
+
+### 🐋 Docker Based Local Installation for Contribution
+1. Fork the repository
+2. Clone the forked repository
+3. Run `docker compose up`
+4. Open `localhost:5173` in browser
