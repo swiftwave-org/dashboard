@@ -7,7 +7,7 @@
 
 #### 👀 Let's Have a look of application deployment process from SwiftWave dashboard
 
-[![Swiftwave Dashboard](https://raw.githubusercontent.com/Tanmoy741127/Intellup/main/screenshots/video.gif)](https://youtu.be/lojP-5SRDt0 "Swiftwave Dashboard")
+[<img src="https://raw.githubusercontent.com/swiftwave-org/assets/main/swiftwave-dashboard-preview-video.png" width="500px" />](https://youtu.be/lojP-5SRDt0 "Swiftwave Dashboard")
 
 ### 🤔 How to Access ?
 #### Hosted Version
