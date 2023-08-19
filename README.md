@@ -33,5 +33,5 @@ Steps -
 1. Fork the repository
 2. Clone the forked repository
 3. Run `npm install`
-4. Run `npm run start`
+4. Run `npm run dev`
 5. Open the url displayed on terminal
