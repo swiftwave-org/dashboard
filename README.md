@@ -29,7 +29,7 @@ Steps -
 3. Run `npm run build`
 4. Using nginx or web server, serve the `dist` folder
 
-### 🫂 Setup for Contribution
+### 🫂 Local Installation for Contribution
 1. Fork the repository
 2. Clone the forked repository
 3. Run `npm install`
