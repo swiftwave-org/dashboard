@@ -32,6 +32,8 @@ RUN chown -R nginx:nginx /var/cache/nginx && \
 RUN touch /var/run/nginx.pid && \
     chown -R nginx:nginx /var/run/nginx.pid
 
+COPY nginx.default.conf /etc/nginx/conf.d/default.conf
+
 # Switch to use a non-root user from here on
 USER nginx
 
