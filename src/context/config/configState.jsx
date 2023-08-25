@@ -38,9 +38,15 @@ const ConfigState = (props) => {
 
   // Get the server host and port
   const setURI = () => {
-    let baseURL = state.server.host + ":" + state.server.port;
-    axios.defaults.baseURL = "https://proxy.swiftwave.org";
-    axios.defaults.headers.common["X-PROXY-PASS"] = baseURL;
+    if(window.location.host == "dashboard.swiftwave.org" ){
+      let baseURL = state.server.host + ":" + state.server.port;
+      axios.defaults.baseURL = "https://proxy.swiftwave.org";
+      axios.defaults.headers.common["X-PROXY-PASS"] = baseURL;
+    } else {
+      let baseURL = state.server.host + ":" + state.server.port;
+      axios.defaults.baseURL = "http://"+baseURL;
+    }
+
   };
 
   // Set default axios config
