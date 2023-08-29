@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import {
+  Alert,
+  AlertIcon,
   Button,
   FormControl,
   FormLabel,
@@ -14,15 +16,25 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 
-export default function AddDomainModal({ addDomain, onClose, isOpen }) {
+export default function AddDomainModal({ addDomain, verifyDomain, onClose, isOpen }) {
   const [isAdding, setIsAdding] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const domainFieldRef = useRef();
 
   const handleSubmission = async () => {
+    setErrorMessage("");
     setIsAdding(true);
-    await addDomain({
+    const isPointing = await verifyDomain({
       domain_name: domainFieldRef.current.value,
-    });
+    })
+    if(isPointing === false){
+      setErrorMessage(`${domainFieldRef.current.value} is not ponting to your server.\n Update DNS Configuration to fix`);
+    } else {
+      setErrorMessage("");
+      await addDomain({
+        domain_name: domainFieldRef.current.value,
+      });
+    }    
     setIsAdding(false);
   };
 
@@ -30,6 +42,7 @@ export default function AddDomainModal({ addDomain, onClose, isOpen }) {
     // reset form
     if (domainFieldRef.current) {
       domainFieldRef.current.value = "";
+      setErrorMessage("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
@@ -45,6 +58,14 @@ export default function AddDomainModal({ addDomain, onClose, isOpen }) {
             <FormLabel>Domain</FormLabel>
             <Input placeholder="Enter domain" ref={domainFieldRef} />
           </FormControl>
+          <Alert status="warning" mt="2" rounded="md" hidden={errorMessage === ""}>
+            <AlertIcon />
+            <p style={{
+              whiteSpace: "pre-line"
+            }}>
+            {errorMessage}
+            </p>
+          </Alert>
         </ModalBody>
 
         <ModalFooter>
