@@ -7,6 +7,7 @@ export default {
     RESTRICTED_PORTS: '/mapping/ingresses/restricted-ports',
     DOMAINS: '/domains',
     DOMAIN_NAMES: '/domains/shortlist',
+    DOMAIN_REACHIBILITY_TEST: '/tests/domain/reachibility',
     GIT_CREDENTIALS: '/git/credentials',
     VOLUMES: '/volumes',
     SERVICE_NAMES: '/applications/servicenames',

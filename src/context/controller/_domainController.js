@@ -121,4 +121,28 @@ export default class DomainController {
       }
     }
   }
+
+  // Veriffy domain name point
+  async verifyDomainNameReachibility(domain_name){
+    // /tests/domain/reachibility?domain=
+    try {
+      const res = await axios({
+        method: 'get',
+        url: route.DOMAIN_REACHIBILITY_TEST+"/?domain="+domain_name
+      })
+      return {
+        status: true,
+        message: 'Success',
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Server error"
+      return {
+        status: false,
+        message: message,
+        data: {}
+      }
+    }
+  }
+  
 } 

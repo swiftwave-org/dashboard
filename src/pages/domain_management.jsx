@@ -92,6 +92,16 @@ export default function DomailManagementPage() {
     }
   };
 
+  const verifyDomain = async ({ domain_name }) => {
+    const res = await controller.domains.verifyDomainNameReachibility(domain_name);
+    if (res.status) {
+      return true;
+    } else {
+      showErrorToast(toast, res.message);
+      return false;
+    }
+  };
+
   const showSSLDetails = (fullchain, privateKey) => {
     setPrivateKey(privateKey);
     setFullchain(fullchain);
@@ -117,6 +127,7 @@ export default function DomailManagementPage() {
         />
         <AddDomainModal
           addDomain={addDomain}
+          verifyDomain={verifyDomain}
           isOpen={addModalDisclosure.isOpen}
           onClose={addModalDisclosure.onClose}
         />
