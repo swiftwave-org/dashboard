@@ -2,11 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
   Button,
   Center,
@@ -14,8 +9,17 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Select,
   Text,
+  Textarea,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { showErrorToast, showSuccessToast } from "../../utils";
@@ -39,6 +43,7 @@ export default function ConfigureSourcePage({
   const [environmentVariables, setEnvironmentVariables] = useState([]);
   const uploadCodeFieldRef = useRef(null);
   const tarballRef = useRef(null);
+  const dockerfileModalDisclosure = useDisclosure();
 
   // Is configuration generating
   const [isConfigurationGenerating, setIsConfigurationGenerating] =
@@ -301,7 +306,9 @@ export default function ConfigureSourcePage({
               <FormLabel>Docker Image URL</FormLabel>
               <Input
                 placeholder="Docker Image URL"
-                onChange={(e) => (formRef.current.docker_image = e.target.value)}
+                onChange={(e) =>
+                  (formRef.current.docker_image = e.target.value)
+                }
               />
             </FormControl>
 
@@ -317,7 +324,28 @@ export default function ConfigureSourcePage({
               Generate Configuration
             </Button>
           </Box>
-
+          {/* Dockerfile modal */}
+          <Modal
+            onClose={dockerfileModalDisclosure.onClose}
+            size="full"
+            isOpen={dockerfileModalDisclosure.isOpen}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>🐋 Dockerfile for {detectedServiceName}</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Textarea minH="75vh" boxSizing="border-box">
+                  {dockerFile}
+                </Textarea>
+              </ModalBody>
+              <ModalFooter>
+                <Button onClick={dockerfileModalDisclosure.onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
           {/* Configuration section */}
           <Box w="25vw">
             {/* Generated Configuration */}
@@ -327,27 +355,15 @@ export default function ConfigureSourcePage({
                   <Text fontWeight="bold">
                     🏄 Detected Service Name: {detectedServiceName}
                   </Text>
-                  <Accordion m="6" allowToggle>
-                    <AccordionItem>
-                      <h2>
-                        <AccordionButton>
-                          <Box as="span" flex="1" textAlign="left">
-                            Dockerfile <b>[Click to view]</b>
-                          </Box>
-                          <AccordionIcon />
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel pb={4}>
-                        <p
-                          style={{
-                            whiteSpace: "pre-wrap",
-                          }}
-                        >
-                          {dockerFile}
-                        </p>
-                      </AccordionPanel>
-                    </AccordionItem>
-                  </Accordion>
+                  <Button
+                    w="100%"
+                    mt="5"
+                    mb="5"
+                    colorScheme="brand"
+                    onClick={dockerfileModalDisclosure.onOpen}
+                  >
+                    View or Modify Dockerfile
+                  </Button>
                 </>
               )}
             {isConfigurationGenerated && sourceType === "image" && (
