@@ -2,7 +2,7 @@
   "name": "swiftwave-frontend",
   "homepage": "https://dashboard.swiftwave.org",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
