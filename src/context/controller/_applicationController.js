@@ -149,6 +149,34 @@ export default class ApplicationController {
     }
   }
 
+  // from dockerfile custom
+  async generateDockerConfigFromCustomDockerfile(docker_file) {
+    try {
+      const res = await axios({
+        method: "post",
+        url: route.DOCKER_CONFIG_GENERATE_CUSTOM,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: qs.stringify({
+          'dockerfile': docker_file
+        })
+      })
+      return {
+        status: true,
+        message: "Success",
+        data: res.data
+      }
+    } catch (error) {
+      let message = error.response.data.message || "Failed to generate docker config"
+      return {
+        status: false,
+        message: message,
+        data: {}
+      }
+    }
+  }
+
   // Upload tar file
   async uploadTarFile(fileblob) {
     try {
@@ -324,7 +352,7 @@ export default class ApplicationController {
     try {
       const res = await axios({
         method: "put",
-        url: route.APPLICATIONS+"/"+id,
+        url: route.APPLICATIONS + "/" + id,
         headers: {
           "Content-Type": "application/json"
         },
