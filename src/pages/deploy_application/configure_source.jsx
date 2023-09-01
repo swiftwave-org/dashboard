@@ -18,10 +18,11 @@ import {
   ModalOverlay,
   Select,
   Text,
-  Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import Editor from "@monaco-editor/react";
+
 import { showErrorToast, showSuccessToast } from "../../utils";
 import EnvironmentVariablesSetup from "./environment _variables";
 
@@ -374,12 +375,12 @@ export default function ConfigureSourcePage({
               <ModalHeader>🐋 Dockerfile for {detectedServiceName}</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <Textarea
-                  minH="75vh"
-                  boxSizing="border-box"
-                  value={editedDockerFile}
-                  onChange={(e) => setEditedDockerFile(e.target.value)}
-                ></Textarea>
+                <Editor
+                  height="75vh"
+                  defaultLanguage="dockerfile"
+                  defaultValue={editedDockerFile}
+                  onChange={(v) => setEditedDockerFile(v)}
+                />
               </ModalBody>
               <ModalFooter>
                 <Button
