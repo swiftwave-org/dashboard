@@ -2,11 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
   Button,
   Center,
@@ -14,10 +9,20 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Select,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import Editor from "@monaco-editor/react";
+
 import { showErrorToast, showSuccessToast } from "../../utils";
 import EnvironmentVariablesSetup from "./environment _variables";
 
@@ -35,10 +40,13 @@ export default function ConfigureSourcePage({
   const [selectedGitCredential, setSelectedGitCredential] = useState("0");
   const [detectedServiceName, setDetectedServiceName] = useState("");
   const [dockerFile, setDockerFile] = useState("");
+  const [editedDockerFile, setEditedDockerFile] = useState("");
+  const [generatingConfig, setGeneratingConfig] = useState(false);
   const [buildArgs, setBuildArgs] = useState({});
   const [environmentVariables, setEnvironmentVariables] = useState([]);
   const uploadCodeFieldRef = useRef(null);
   const tarballRef = useRef(null);
+  const dockerfileModalDisclosure = useDisclosure();
 
   // Is configuration generating
   const [isConfigurationGenerating, setIsConfigurationGenerating] =
@@ -98,6 +106,7 @@ export default function ConfigureSourcePage({
 
     // generate configuration
     if (sourceType === "git") {
+      setIsConfigurationGenerating(true);
       const res = await context.applications.generateDockerConfigFromGit(
         formRef.current.git_credential_id,
         formRef.current.repository_url,
@@ -106,6 +115,7 @@ export default function ConfigureSourcePage({
       if (res.status === false) {
         showErrorToast(toast, res.message);
         setIsConfigurationGenerated(false);
+        setIsConfigurationGenerating(false);
         return;
       } else {
         setDetectedServiceName(res.data.detected_service);
@@ -113,8 +123,10 @@ export default function ConfigureSourcePage({
         formRef.current.dockerfile = res.data.docker_file;
         setBuildArgs(res.data.variables);
         fillBuildArgsWithDefault(res.data.variables);
+        setIsConfigurationGenerating(false);
       }
     } else if (sourceType === "tarball") {
+      setIsConfigurationGenerating(true);
       // Tar file
       await createTarballFromField();
       const res = await context.applications.uploadTarFile(tarballRef.current);
@@ -122,8 +134,10 @@ export default function ConfigureSourcePage({
       if (res.status === false) {
         showErrorToast(toast, res.message);
         setIsConfigurationGenerated(false);
+        setIsConfigurationGenerating(false);
         return;
       } else {
+        setIsConfigurationGenerating(true);
         // send tar file for generate docker config
         const res2 = await context.applications.generateDockerConfigFromTarball(
           res.data.file
@@ -131,6 +145,7 @@ export default function ConfigureSourcePage({
         if (res2.status === false) {
           showErrorToast(toast, res2.message);
           setIsConfigurationGenerated(false);
+          setIsConfigurationGenerating(false);
           return;
         } else {
           setDetectedServiceName(res2.data.detected_service);
@@ -138,6 +153,7 @@ export default function ConfigureSourcePage({
           formRef.current.dockerfile = res2.data.docker_file;
           setBuildArgs(res2.data.variables);
           fillBuildArgsWithDefault(res2.data.variables);
+          setIsConfigurationGenerating(false);
         }
       }
     } else if (sourceType === "image") {
@@ -147,7 +163,37 @@ export default function ConfigureSourcePage({
     setIsConfigurationGenerated(true);
   };
 
+  const generateCustomConfigFromDockerfile = async () => {
+    // if submitted dockerfile and previous one same then skip
+    if (dockerFile === editedDockerFile) {
+      dockerfileModalDisclosure.onClose();
+      return;
+    }
+    // else submit | send request
+    setGeneratingConfig(true);
+    const res =
+      await context.applications.generateDockerConfigFromCustomDockerfile(
+        editedDockerFile
+      );
+    if (res.status === false) {
+      showErrorToast(toast, res.message);
+      setGeneratingConfig(false);
+      return;
+    }
+    // update dockerfile & build args with default values both in state as well as in
+    setDetectedServiceName(res.data.detected_service);
+    setDockerFile(res.data.docker_file);
+    formRef.current.dockerfile = res.data.docker_file;
+    setBuildArgs(res.data.variables);
+    fillBuildArgsWithDefault(res.data.variables);
+    setGeneratingConfig(false);
+    dockerfileModalDisclosure.onClose();
+  };
+
   const fillBuildArgsWithDefault = (args) => {
+    // clear all entry first
+    formRef.current.build_args = {};
+    // fill
     Object.entries(args).map(([key, value]) => {
       formRef.current.build_args[key] = value.default;
     });
@@ -207,6 +253,13 @@ export default function ConfigureSourcePage({
     }
     formRef.current.environment_variables = tmp;
     goToNext();
+  };
+
+  const openDockerfileEditModal = () => {
+    // set docker file
+    setEditedDockerFile(dockerFile);
+    // open modal
+    dockerfileModalDisclosure.onOpen();
   };
 
   useEffect(() => {
@@ -289,11 +342,15 @@ export default function ConfigureSourcePage({
             {/* Upload code */}
             <FormControl hidden={sourceType !== "tarball"} isRequired>
               <FormLabel>Upload Code</FormLabel>
-              <Input
+              <input
+                className="brand-input"
                 placeholder="Upload Code"
                 type="file"
                 ref={uploadCodeFieldRef}
-              ></Input>
+                style={{
+                  marginTop: "10px",
+                }}
+              ></input>
             </FormControl>
 
             {/* Docker Image */}
@@ -301,7 +358,9 @@ export default function ConfigureSourcePage({
               <FormLabel>Docker Image URL</FormLabel>
               <Input
                 placeholder="Docker Image URL"
-                onChange={(e) => (formRef.current.docker_image = e.target.value)}
+                onChange={(e) =>
+                  (formRef.current.docker_image = e.target.value)
+                }
               />
             </FormControl>
 
@@ -317,7 +376,42 @@ export default function ConfigureSourcePage({
               Generate Configuration
             </Button>
           </Box>
-
+          {/* Dockerfile modal */}
+          <Modal
+            onClose={dockerfileModalDisclosure.onClose}
+            size="full"
+            isOpen={dockerfileModalDisclosure.isOpen}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>🐋 Dockerfile for {detectedServiceName}</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Editor
+                  height="75vh"
+                  defaultLanguage="dockerfile"
+                  defaultValue={editedDockerFile}
+                  onChange={(v) => setEditedDockerFile(v)}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  colorScheme="brand"
+                  mr={3}
+                  onClick={generateCustomConfigFromDockerfile}
+                  isLoading={generatingConfig}
+                >
+                  Update
+                </Button>
+                <Button
+                  onClick={dockerfileModalDisclosure.onClose}
+                  isDisabled={generatingConfig}
+                >
+                  Close
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
           {/* Configuration section */}
           <Box w="25vw">
             {/* Generated Configuration */}
@@ -327,27 +421,15 @@ export default function ConfigureSourcePage({
                   <Text fontWeight="bold">
                     🏄 Detected Service Name: {detectedServiceName}
                   </Text>
-                  <Accordion m="6" allowToggle>
-                    <AccordionItem>
-                      <h2>
-                        <AccordionButton>
-                          <Box as="span" flex="1" textAlign="left">
-                            Dockerfile <b>[Click to view]</b>
-                          </Box>
-                          <AccordionIcon />
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel pb={4}>
-                        <p
-                          style={{
-                            whiteSpace: "pre-wrap",
-                          }}
-                        >
-                          {dockerFile}
-                        </p>
-                      </AccordionPanel>
-                    </AccordionItem>
-                  </Accordion>
+                  <Button
+                    w="100%"
+                    mt="5"
+                    mb="5"
+                    colorScheme="brand"
+                    onClick={openDockerfileEditModal}
+                  >
+                    View or Modify Dockerfile
+                  </Button>
                 </>
               )}
             {isConfigurationGenerated && sourceType === "image" && (

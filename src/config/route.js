@@ -16,6 +16,7 @@ export default {
     APPLICATION_SERVICE_NAME_AVAILABILITY: '/applications/availiblity/service_name',
     DOCKER_CONFIG_GENERATE_GIT: '/applications/deploy/dockerconfig/generate/git',
     DOCKER_CONFIG_GENERATE_CODE: '/applications/deploy/dockerconfig/generate/tarball',
+    DOCKER_CONFIG_GENERATE_CUSTOM: '/applications/deploy/dockerconfig/generate/custom',
     DEPLOY_APPLICATION: '/applications/deploy',
     UPLOAD_TAR: '/applications/deploy/upload'
 }
