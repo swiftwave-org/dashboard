@@ -106,6 +106,7 @@ export default function ConfigureSourcePage({
 
     // generate configuration
     if (sourceType === "git") {
+      setIsConfigurationGenerating(true);
       const res = await context.applications.generateDockerConfigFromGit(
         formRef.current.git_credential_id,
         formRef.current.repository_url,
@@ -114,6 +115,7 @@ export default function ConfigureSourcePage({
       if (res.status === false) {
         showErrorToast(toast, res.message);
         setIsConfigurationGenerated(false);
+        setIsConfigurationGenerating(false);
         return;
       } else {
         setDetectedServiceName(res.data.detected_service);
@@ -121,8 +123,10 @@ export default function ConfigureSourcePage({
         formRef.current.dockerfile = res.data.docker_file;
         setBuildArgs(res.data.variables);
         fillBuildArgsWithDefault(res.data.variables);
+        setIsConfigurationGenerating(false);
       }
     } else if (sourceType === "tarball") {
+      setIsConfigurationGenerating(true);
       // Tar file
       await createTarballFromField();
       const res = await context.applications.uploadTarFile(tarballRef.current);
@@ -130,8 +134,10 @@ export default function ConfigureSourcePage({
       if (res.status === false) {
         showErrorToast(toast, res.message);
         setIsConfigurationGenerated(false);
+        setIsConfigurationGenerating(false);
         return;
       } else {
+        setIsConfigurationGenerating(true);
         // send tar file for generate docker config
         const res2 = await context.applications.generateDockerConfigFromTarball(
           res.data.file
@@ -139,6 +145,7 @@ export default function ConfigureSourcePage({
         if (res2.status === false) {
           showErrorToast(toast, res2.message);
           setIsConfigurationGenerated(false);
+          setIsConfigurationGenerating(false);
           return;
         } else {
           setDetectedServiceName(res2.data.detected_service);
@@ -146,6 +153,7 @@ export default function ConfigureSourcePage({
           formRef.current.dockerfile = res2.data.docker_file;
           setBuildArgs(res2.data.variables);
           fillBuildArgsWithDefault(res2.data.variables);
+          setIsConfigurationGenerating(false);
         }
       }
     } else if (sourceType === "image") {
@@ -334,11 +342,15 @@ export default function ConfigureSourcePage({
             {/* Upload code */}
             <FormControl hidden={sourceType !== "tarball"} isRequired>
               <FormLabel>Upload Code</FormLabel>
-              <Input
+              <input
+                className="brand-input"
                 placeholder="Upload Code"
                 type="file"
                 ref={uploadCodeFieldRef}
-              ></Input>
+                style={{
+                  marginTop: "10px",
+                }}
+              ></input>
             </FormControl>
 
             {/* Docker Image */}
