@@ -9,7 +9,7 @@
 
 [<img src="https://raw.githubusercontent.com/swiftwave-org/assets/main/swiftwave-dashboard-preview-video.png" width="500px" />](https://youtu.be/lojP-5SRDt0 "Swiftwave Dashboard")
 
-### 🤔 How to Access ?
+### 🤔 How to Access?
 #### Hosted Version
 > It's a deployed dashboard with pre-configured HTTPS proxy to keep connection encrypted.
 
@@ -22,7 +22,7 @@ Steps -
 4. Login
 5. 🍻 That's all. Now explore the dashboard
 
-#### Self deployed
+#### Self-deployed
 Steps -
 1. Clone the repository
 2. Run `npm install`
@@ -35,6 +35,11 @@ Steps -
 3. Run `npm install`
 4. Run `npm run dev`
 5. Open `localhost:5173` in browser
+6. Use the Swiftwave staging environment to work on the front end without installing the Swiftwave server locally.
+   1. Server Url -> `staging.swiftwave.org`
+   2. Server Port -> `3333`
+   3. Username -> `admin`
+   4. Password -> `admin`
 
 ### 🐋 Docker Based Local Installation for Contribution
 1. Fork the repository
