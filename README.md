@@ -46,3 +46,14 @@ Steps -
    Don't deploy any other application to keep it accessible to other contributors.
 2. For Ingress Mapping, use any subdomain of `swiftwave.xyz` . Example - `test.swiftwave.xyz`, `test2.swiftwave.xyz`
 3. Don't add a real GitHub username and password to the `Git Credentials` page, as the staging environment is accessible to various users
+
+
+### Community
+We would love to hear from you and brainstorm on ideas! We communicate on Slack:
+
+[![Slack](https://img.shields.io/badge/chat-on_slack-purple.svg?style=for-the-badge&logo=slack)](https://join.slack.com/t/swiftwave-team/shared_invite/zt-21n86aslx-aAvBi3hv1GigVA_XoXiu4Q)
+
+### 🎉 Thanks to all our contributors
+<a href="https://github.com/swiftwave-org/swiftwave-dashboard/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=swiftwave-org/swiftwave-dashboard" />
+</a>
