@@ -93,6 +93,10 @@ export default class ApplicationController {
   // Generate docker config
   // from git
   async generateDockerConfigFromGit(git_credential_id, repository_url, branch) {
+    const pattern = /^(https:\/\/github\.com\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/main$/;
+    const new_repo_url = repository_url.replace(pattern, '$1');
+    console.log(new_repo_url);
+
     try {
       const res = await axios({
         method: "post",
@@ -101,7 +105,7 @@ export default class ApplicationController {
           "Content-Type": "application/x-www-form-urlencoded"
         },
         data: qs.stringify({
-          'repository_url': repository_url,
+          'repository_url': new_repo_url,
           'branch': branch,
           'git_credential_id': git_credential_id
         })
