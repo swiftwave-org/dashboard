@@ -35,14 +35,14 @@ Steps -
 3. Run `npm install`
 4. Run `npm run dev`
 5. Open `localhost:5173` in browser
-6. Use the Swiftwave staging environment to work on the front end without installing the Swiftwave server locally.
+6. Use the `Swiftwave staging environment` to work on the front end without installing the Swiftwave server locally.
    1. Server Url -> `staging.swiftwave.org`
    2. Server Port -> `3333`
    3. Username -> `admin`
    4. Password -> `admin`
 
-### 🐋 Docker Based Local Installation for Contribution
-1. Fork the repository
-2. Clone the forked repository
-3. Run `docker compose up`
-4. Open `localhost:5173` in browser
+### Some Important Note Regarding Staging Environment
+1. For testing deployment of the app, use this project [https://github.com/tanmoysrt/minc](https://github.com/tanmoysrt/minc).
+   Don't deploy any other application to keep it accessible to other contributors.
+2. For Ingress Mapping, use any subdomain of `swiftwave.xyz` . Example - `test.swiftwave.xyz`, `test2.swiftwave.xyz`
+3. Don't add a real GitHub username and password to the `Git Credentials` page, as the staging environment is accessible to various users
