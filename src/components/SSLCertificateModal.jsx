@@ -32,7 +32,7 @@ export default function SSLCertificateModal({
               {privateKey}
             </Textarea>
             <Text>Fullchain</Text>
-            <Textarea height={500}>
+            <Textarea height={500} variant="filled" readOnly>
               {fullchain}
             </Textarea>
 
