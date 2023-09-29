@@ -109,7 +109,8 @@ export default class GitCredentialsController {
 
   // test git credential
   async testAccess(id, repo_url, branch) {
-    const pattern = /^(https:\/\/github\.com\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/main$/;
+    // const pattern = /^(https:\/\/github\.com\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/main$/;
+    const pattern = /^(https:\/\/(?:github\.com|gitlab\.com|bitbucket\.org)\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/main$/;
     const new_repo_url = repo_url.replace(pattern, '$1');
     console.log(repo_url) // https://github.com/avelynhc/til_tracker/tree/main
     console.log(new_repo_url) // https://github.com/avelynhc/til_tracker

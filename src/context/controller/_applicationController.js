@@ -93,7 +93,8 @@ export default class ApplicationController {
   // Generate docker config
   // from git
   async generateDockerConfigFromGit(git_credential_id, repository_url, branch) {
-    const pattern = /^(https:\/\/github\.com\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/main$/;
+    // const pattern = /^(https:\/\/github\.com\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/main$/;
+    const pattern = /^(https:\/\/(?:github\.com|gitlab\.com|bitbucket\.org)\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/main$/;
     const new_repo_url = repository_url.replace(pattern, '$1');
     console.log(new_repo_url);
 
