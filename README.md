@@ -9,7 +9,7 @@
 
 [<img src="https://raw.githubusercontent.com/swiftwave-org/assets/main/swiftwave-dashboard-preview-video.png" width="500px" />](https://youtu.be/lojP-5SRDt0 "Swiftwave Dashboard")
 
-### 🤔 How to Access ?
+### 🤔 How to Access?
 #### Hosted Version
 > It's a deployed dashboard with pre-configured HTTPS proxy to keep connection encrypted.
 
@@ -22,7 +22,7 @@ Steps -
 4. Login
 5. 🍻 That's all. Now explore the dashboard
 
-#### Self deployed
+#### Self-deployed
 Steps -
 1. Clone the repository
 2. Run `npm install`
@@ -35,9 +35,25 @@ Steps -
 3. Run `npm install`
 4. Run `npm run dev`
 5. Open `localhost:5173` in browser
+6. Use the `Swiftwave staging environment` to work on the front end without installing the Swiftwave server locally.
+   1. Server Url -> `staging.swiftwave.org`
+   2. Server Port -> `3333`
+   3. Username -> `admin`
+   4. Password -> `admin`
 
-### 🐋 Docker Based Local Installation for Contribution
-1. Fork the repository
-2. Clone the forked repository
-3. Run `docker compose up`
-4. Open `localhost:5173` in browser
+### Some Important Note Regarding Staging Environment
+1. For testing deployment of the app, use this project [https://github.com/tanmoysrt/minc](https://github.com/tanmoysrt/minc).
+   Don't deploy any other application to keep it accessible to other contributors.
+2. For Ingress Mapping, use any subdomain of `swiftwave.xyz` . Example - `test.swiftwave.xyz`, `test2.swiftwave.xyz`
+3. Don't add a real GitHub username and password to the `Git Credentials` page, as the staging environment is accessible to various users
+
+
+### Community
+We would love to hear from you and brainstorm on ideas! We communicate on Slack:
+
+[![Slack](https://img.shields.io/badge/chat-on_slack-purple.svg?style=for-the-badge&logo=slack)](https://join.slack.com/t/swiftwave-team/shared_invite/zt-21n86aslx-aAvBi3hv1GigVA_XoXiu4Q)
+
+### 🎉 Thanks to all our contributors
+<a href="https://github.com/swiftwave-org/swiftwave-dashboard/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=swiftwave-org/swiftwave-dashboard" />
+</a>
