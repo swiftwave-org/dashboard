@@ -1,25 +1,5 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  Flex,
-  Heading,
-  Icon,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Tag,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
-import {
-  FileSymlinkFileIcon,
-  PlayIcon,
-  SyncIcon,
-} from "@primer/octicons-react";
+import { Box, Button, Card, CardBody, Flex, Heading, Icon, Tab, TabList, TabPanel, TabPanels, Tabs, Tag, Text, useToast } from "@chakra-ui/react";
+import { FileSymlinkFileIcon, PlayIcon, SyncIcon } from "@primer/octicons-react";
 import { useContext, useEffect, useState } from "react";
 import ControllerContext from "../context/controller/ControllerContext";
 import { formatReadableDate, showErrorToast, showSuccessToast } from "../utils";
@@ -27,6 +7,8 @@ import tag_color from "../config/tag_color";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { DeleteIcon } from "@chakra-ui/icons";
 import EnvironmentVariablesSetup from "./deploy_application/environment _variables";
+import { Terminal } from "xterm";
+import("xterm/css/xterm.css");
 
 export default function DeployedApplicationDetailsPage() {
   const { id } = useParams();
@@ -41,6 +23,13 @@ export default function DeployedApplicationDetailsPage() {
   const [log, setLog] = useState("");
   const [runtimeLog, setRuntimeLog] = useState("");
   const [environmentVariables, setEnvironmentVariables] = useState([]);
+  // xterm terminal
+  const terminal = new Terminal({
+    // cursorBlink: true,
+    convertEol: true,
+    rows: 30,
+    cols: 80,
+  });
 
   const fetchApplicationDetails = async (id) => {
     setLoadingState(-1);
@@ -110,17 +99,7 @@ export default function DeployedApplicationDetailsPage() {
 
   const detailsToSourceDetails = (details) => {
     if (details.source.type === "git") {
-      return (
-        details.source.git_provider +
-        " - " +
-        details.source.repository_username +
-        "/" +
-        details.source.repository_name +
-        " - " +
-        details.source.branch +
-        " - " +
-        details.source.last_commit
-      );
+      return details.source.git_provider + " - " + details.source.repository_username + "/" + details.source.repository_name + " - " + details.source.branch + " - " + details.source.last_commit;
     }
     if (details.source.type === "tarball") {
       return "Source Code uploaded manually !";
@@ -131,9 +110,7 @@ export default function DeployedApplicationDetailsPage() {
   };
 
   const redeployApplication = async () => {
-    const choice = confirm(
-      "Are you sure you want to redeploy this application?\nThis will rebuild the application and deploy it."
-    );
+    const choice = confirm("Are you sure you want to redeploy this application?\nThis will rebuild the application and deploy it.");
     if (!choice) return;
     const res = await controller.applications.redeploy(id);
     if (res.status) {
@@ -179,6 +156,25 @@ export default function DeployedApplicationDetailsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  useEffect(() => {
+    if (log.length === 0) return;
+    if (document.getElementById("build_terminal") === null) return;
+    document.getElementById("build_terminal").innerHTML = "";
+    terminal.open(document.getElementById("build_terminal"));
+    terminal.write(log);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [log]);
+
+  useEffect(() => {
+    if (runtimeLog.length === 0) return;
+    if (document.getElementById("runtime_terminal") === null) return;
+    document.getElementById("runtime_terminal").innerHTML = "";
+    terminal.open(document.getElementById("runtime_terminal"));
+    terminal.write(runtimeLog);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [runtimeLog]);
+  
+
   return (
     <>
       {loadingState === -1 ? (
@@ -217,11 +213,7 @@ export default function DeployedApplicationDetailsPage() {
                     <Icon as={PlayIcon} mr="2" />
                     Rebuild & deploy
                   </Button>
-                  <Button
-                    colorScheme="red"
-                    size="sm"
-                    onClick={() => deleteApplication(id)}
-                  >
+                  <Button colorScheme="red" size="sm" onClick={() => deleteApplication(id)}>
                     <Icon as={DeleteIcon} mr="2" />
                     Delete
                   </Button>
@@ -258,8 +250,7 @@ export default function DeployedApplicationDetailsPage() {
                         <Text as="span" fontWeight="bold">
                           Git Credential:{" "}
                         </Text>
-                        {applicationDetails.source.git_credential.name} [
-                        {applicationDetails.source.git_credential.username}]{" "}
+                        {applicationDetails.source.git_credential.name} [{applicationDetails.source.git_credential.username}]{" "}
                         <Link to="/git">
                           <Icon as={FileSymlinkFileIcon} />
                         </Link>
@@ -273,13 +264,10 @@ export default function DeployedApplicationDetailsPage() {
                     <Heading as="h3" size="sm" mb="4">
                       Volumes
                     </Heading>
-                    {Object.keys(JSON.parse(applicationDetails.volumes))
-                      .length === 0 ? (
+                    {Object.keys(JSON.parse(applicationDetails.volumes)).length === 0 ? (
                       <Text>No volumes attached</Text>
                     ) : (
-                      Object.entries(
-                        JSON.parse(applicationDetails.volumes)
-                      ).map(([name, path]) => (
+                      Object.entries(JSON.parse(applicationDetails.volumes)).map(([name, path]) => (
                         <Text key={name}>
                           <Text as="span" fontWeight="bold">
                             Volume Name:{" "}
@@ -301,13 +289,10 @@ export default function DeployedApplicationDetailsPage() {
                     <Heading as="h3" size="sm" mb="4">
                       Build Arguments
                     </Heading>
-                    {Object.keys(JSON.parse(applicationDetails.build_args))
-                      .length === 0 ? (
+                    {Object.keys(JSON.parse(applicationDetails.build_args)).length === 0 ? (
                       <Text>No build arguments</Text>
                     ) : (
-                      Object.entries(
-                        JSON.parse(applicationDetails.build_args)
-                      ).map(([name, value]) => (
+                      Object.entries(JSON.parse(applicationDetails.build_args)).map(([name, value]) => (
                         <Text key={name}>
                           {name} = {value}
                         </Text>
@@ -323,15 +308,10 @@ export default function DeployedApplicationDetailsPage() {
                         <Heading as="h3" size="sm" mb="4">
                           Environment Variables
                         </Heading>
-                        <Text mb="4">
-                          Configure environment variables for your application.
-                        </Text>
+                        <Text mb="4">Configure environment variables for your application.</Text>
                       </Box>
                       <Box width="100%">
-                        <EnvironmentVariablesSetup
-                          environmentVariables={environmentVariables}
-                          setEnvironmentVariables={setEnvironmentVariables}
-                        />
+                        <EnvironmentVariablesSetup environmentVariables={environmentVariables} setEnvironmentVariables={setEnvironmentVariables} />
                       </Box>
                     </Flex>
                   </CardBody>
@@ -339,19 +319,13 @@ export default function DeployedApplicationDetailsPage() {
 
                 {/* Update & Redeploy */}
                 <Box>
-                  <Button
-                    float="right"
-                    colorScheme="green"
-                    onClick={updateRedeployApplication}
-                  >
+                  <Button float="right" colorScheme="green" onClick={updateRedeployApplication}>
                     Update & Redeploy
                   </Button>
                 </Box>
               </TabPanel>
               <TabPanel>
-                <Text mb="4">
-                  Click on the date, to view/refresh build logs
-                </Text>
+                <Text mb="4">Click on the date, to view/refresh build logs</Text>
                 <Flex direction="row" gap="6px" mb="6">
                   {buildLogs.map((log, index) => (
                     <Button key={index} onClick={() => fetchBuildLog(log.id)}>
@@ -359,30 +333,13 @@ export default function DeployedApplicationDetailsPage() {
                     </Button>
                   ))}
                 </Flex>
-                <Box maxH="60vh" overflowY="scroll">
-                  <Text
-                    colorScheme="gray"
-                    style={{
-                      whiteSpace: "pre-wrap",
-                    }}
-                  >
-                    {log}
-                  </Text>
-                </Box>
+                <Box maxH="50vh" id="build_terminal"></Box>
               </TabPanel>
               <TabPanel>
                 <Button onClick={() => fetchRuntimeLog()} mb="6">
                   Fetch Latest Runtime Logs
                 </Button>
-                <Box maxH="60vh" overflowY="scroll">
-                  <Text
-                    style={{
-                      whiteSpace: "pre-wrap",
-                    }}
-                  >
-                    {runtimeLog}
-                  </Text>
-                </Box>
+                <Box maxH="50vh" id="runtime_terminal"></Box>
               </TabPanel>
             </TabPanels>
           </Tabs>

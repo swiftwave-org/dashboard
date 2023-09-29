@@ -54,7 +54,7 @@ const Pages = () => {
   ) : (
     <Box display="grid" gridTemplateColumns="1fr 4fr">
       <Sidebar />
-      <Box maxH="100vh" overflowY="scroll">
+      <Box maxH="100vh" overflowY="auto" overflowX="hidden">
         <Routes>
           <Route
             path="/application"
