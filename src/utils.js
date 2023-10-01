@@ -35,3 +35,12 @@ export function showSuccessToast(toast, message){
     position: "top"
   });
 }
+
+export function runTaskAtInterval(callback, interval) {
+  const intervalId = setInterval(() => {
+    callback(); // Call the provided callback function
+  }, interval);
+
+  // Return the interval ID in case you want to clear it later
+  return intervalId;
+}
