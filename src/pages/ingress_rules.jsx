@@ -23,7 +23,12 @@ import {
 import { SyncIcon } from "@primer/octicons-react";
 import { useContext, useEffect, useState } from "react";
 import ControllerContext from "../context/controller/ControllerContext";
-import { formatReadableDate, showErrorToast, showSuccessToast } from "../utils";
+import {
+  formatReadableDate,
+  showErrorToast,
+  showSuccessToast,
+  runTaskAtInterval,
+} from "../utils";
 import tag_color from "../config/tag_color";
 import { AddIcon } from "@chakra-ui/icons";
 import AddIngressRulesModal from "../components/addIngressRulesModal";
@@ -94,6 +99,8 @@ export default function IngressRulesPage() {
 
   useEffect(() => {
     fetchRules();
+    const intervalID = runTaskAtInterval(fetchRules, 10000);
+    return () => clearInterval(intervalID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
