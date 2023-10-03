@@ -110,9 +110,9 @@ export default function DomailManagementPage() {
 
   useEffect(() => {
     fetchDomains();
-    // setInterval(() => {
-    //   fetchDomains();
-    // }, 10000);
+    setInterval(() => {
+      fetchDomains();
+    }, 10000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -145,7 +145,7 @@ export default function DomailManagementPage() {
                   onClick={fetchDomains}
                 >
                   <Icon as={SyncIcon} mr="2" />
-                  Refresh domains
+                  Refresh 
                 </Button>{" "}
                 <Button
                   colorScheme="brand"
