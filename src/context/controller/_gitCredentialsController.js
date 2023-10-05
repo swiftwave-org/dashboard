@@ -109,15 +109,10 @@ export default class GitCredentialsController {
 
   // test git credential
   async testAccess(id, repo_url, branch) {
-    const pattern = /^(https:\/\/(?:github\.com|gitlab\.com|bitbucket\.org)\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/(?:main|master)$/;
-    const new_repo_url = repo_url.replace(pattern, '$1');
-    console.log(repo_url) // https://github.com/avelynhc/til_tracker/tree/main
-    console.log(new_repo_url) // https://github.com/avelynhc/til_tracker
-
     try {
       const res = await axios({
         method: "get",
-        url: route.GIT_CREDENTIALS + "/" + id + "/test?repository_url=" + new_repo_url+"&branch="+branch,
+        url: route.GIT_CREDENTIALS + "/" + id + "/test?repository_url=" + repo_url+"&branch="+branch,
       })
       return {
         status: true,
