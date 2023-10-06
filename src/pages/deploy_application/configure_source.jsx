@@ -265,9 +265,8 @@ export default function ConfigureSourcePage({
 
   const rectifyGitRepoUrlHandler = (e) => {
     const original_url = e.target.value;
-    const pattern = /^(https:\/\/(?:github\.com|gitlab\.com|bitbucket\.org)\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/(?:main|master)$/;
+    const pattern = /^(https:\/\/(?:github\.com|gitlab\.com|bitbucket\.org)\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/(\w+)$/;
     formRef.current.repository_url = original_url.replace(pattern, '$1');
-    console.log(formRef.current.repository_url)
     setInputField({...inputField, url: formRef.current.repository_url})
   }
 
