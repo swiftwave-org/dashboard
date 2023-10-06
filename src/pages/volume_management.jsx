@@ -21,7 +21,7 @@ import {
 import { SyncIcon } from "@primer/octicons-react";
 import { useContext, useEffect, useState } from "react";
 import ControllerContext from "../context/controller/ControllerContext";
-import { showErrorToast, showSuccessToast } from "../utils";
+import { showErrorToast, showSuccessToast, runTaskAtInterval } from "../utils";
 import { AddIcon } from "@chakra-ui/icons";
 import AddVolumeModal from "../components/addVolumeModal";
 
@@ -71,9 +71,8 @@ export default function VolumeManagementPage() {
 
   useEffect(() => {
     fetchVolumes();
-    // setInterval(() => {
-    //   fetchVolumes();
-    // }, 10000);
+    const intervalID = runTaskAtInterval(fetchVolumes, 10000);
+    return () => clearInterval(intervalID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
