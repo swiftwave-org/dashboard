@@ -47,7 +47,7 @@ export default function ConfigureSourcePage({
   const uploadCodeFieldRef = useRef(null);
   const tarballRef = useRef(null);
   const dockerfileModalDisclosure = useDisclosure();
-  const [inputField, setInputField] = useState({url: ""})
+  const inputRef = useRef(null);
 
   // Is configuration generating
   const [isConfigurationGenerating, setIsConfigurationGenerating] =
@@ -267,7 +267,7 @@ export default function ConfigureSourcePage({
     const original_url = e.target.value;
     const pattern = /^(https:\/\/(?:github\.com|gitlab\.com|bitbucket\.org)\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)\/tree\/(\w+)$/;
     formRef.current.repository_url = original_url.replace(pattern, '$1');
-    setInputField({...inputField, url: formRef.current.repository_url})
+    inputRef.current.value = formRef.current.repository_url;
   }
 
   useEffect(() => {
@@ -334,7 +334,7 @@ export default function ConfigureSourcePage({
                 <Input
                   placeholder="Git Repo URL"
                   onChange={rectifyGitRepoUrlHandler}
-                  value={inputField.url}
+                  ref={inputRef}
                 />
               </FormControl>
               <FormControl isRequired>
