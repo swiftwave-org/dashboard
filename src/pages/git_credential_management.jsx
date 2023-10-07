@@ -21,7 +21,7 @@ import {
 import { EyeClosedIcon, EyeIcon, SyncIcon } from "@primer/octicons-react";
 import { useContext, useEffect, useState } from "react";
 import ControllerContext from "../context/controller/ControllerContext";
-import { showErrorToast, showSuccessToast } from "../utils";
+import { showErrorToast, showSuccessToast, runTaskAtInterval } from "../utils";
 import { AddIcon } from "@chakra-ui/icons";
 import AddGitCredentialsModal from "../components/addGitCredentialsModal";
 
@@ -84,6 +84,8 @@ export default function GitCredentialManagementPage() {
 
   useEffect(() => {
     fetchGitCredentials();
+    const intervalID = runTaskAtInterval(fetchGitCredentials, 10000);
+    return () => clearInterval(intervalID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
