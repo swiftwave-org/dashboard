@@ -112,7 +112,7 @@ export default class GitCredentialsController {
     try {
       const res = await axios({
         method: "get",
-        url: route.GIT_CREDENTIALS + "/" + id + "/test?repository_url=" + repo_url+"&branch="+branch,
+        url: route.GIT_CREDENTIALS + "/" + id + "/test?repository_url=" + repo_url + "&branch="+branch,
       })
       return {
         status: true,
