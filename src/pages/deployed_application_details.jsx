@@ -1,6 +1,6 @@
 import { Box, Button, Card, CardBody, Flex, Heading, Icon, Tab, TabList, TabPanel, TabPanels, Tabs, Tag, Text, useToast } from "@chakra-ui/react";
 import { FileSymlinkFileIcon, PlayIcon, SyncIcon } from "@primer/octicons-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ControllerContext from "../context/controller/ControllerContext";
 import { formatReadableDate, showErrorToast, showSuccessToast } from "../utils";
 import tag_color from "../config/tag_color";
@@ -8,6 +8,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { DeleteIcon } from "@chakra-ui/icons";
 import EnvironmentVariablesSetup from "./deploy_application/environment _variables";
 import { Terminal } from "xterm";
+import { AttachAddon } from 'xterm-addon-attach';
+import ConfigContext from "../context/config/configContext";
+import AuthContext from "../context/auth/authContext";
+
 import("xterm/css/xterm.css");
 
 export default function DeployedApplicationDetailsPage() {
@@ -15,6 +19,10 @@ export default function DeployedApplicationDetailsPage() {
   const controller = useContext(ControllerContext);
   const toast = useToast();
   const navigate = useNavigate();
+  // context
+  const configContext = useContext(ConfigContext);
+  const authContext = useContext(AuthContext);
+  // states
   const [loadingState, setLoadingState] = useState(-1);
   // -1: loading, 0: error, 1: success
   const [applicationDetails, setApplicationDetails] = useState({});
@@ -30,6 +38,8 @@ export default function DeployedApplicationDetailsPage() {
     rows: 30,
     cols: 80,
   });
+  // websocket instance
+  const websocketInstanceRef = useRef(null);
 
   const fetchApplicationDetails = async (id) => {
     setLoadingState(-1);
@@ -78,22 +88,40 @@ export default function DeployedApplicationDetailsPage() {
   };
 
   const fetchBuildLog = async (log_id) => {
-    setLog("");
-    const res = await controller.applications.fetchBuildLog(id, log_id);
-    if (res.status) {
-      setLog(res.data);
-    } else {
-      showErrorToast(toast, res.message);
+    if(websocketInstanceRef.current !== null) {
+      websocketInstanceRef.current.close();
+      websocketInstanceRef.current = null;
+    }
+    const token = await authContext.generateWebsocketToken();
+    terminal.clear();
+    document.getElementById("build_terminal").innerHTML = "";
+    terminal.open(document.getElementById("build_terminal"));
+    try {
+      const socket = new WebSocket(controller.applications.fetchBuildLogWebsocketEndpoint(configContext.getWebsocketURI(), token, id, log_id));
+      websocketInstanceRef.current = socket;
+      const attachAddon = new AttachAddon(socket);
+      terminal.loadAddon(attachAddon);
+    } catch (error) {
+      showErrorToast(toast, "Failed to fetch build log"); 
     }
   };
 
   const fetchRuntimeLog = async () => {
-    setRuntimeLog("");
-    const res = await controller.applications.fetchRuntimeLog(id);
-    if (res.status) {
-      setRuntimeLog(res.data.logs);
-    } else {
-      showErrorToast(toast, res.message);
+    if(websocketInstanceRef.current !== null) {
+      websocketInstanceRef.current.close();
+      websocketInstanceRef.current = null;
+    }
+    const token = await authContext.generateWebsocketToken();
+    terminal.clear();
+    document.getElementById("runtime_terminal").innerHTML = "";
+    terminal.open(document.getElementById("runtime_terminal"));
+    try {
+      const socket = new WebSocket(controller.applications.fetchRuntimeLogWebsocketEndpoint(configContext.getWebsocketURI(), token, id));
+      websocketInstanceRef.current = socket;
+      const attachAddon = new AttachAddon(socket);
+      terminal.loadAddon(attachAddon);
+    } catch (error) {
+      showErrorToast(toast, "Failed to fetch runtime log");
     }
   };
 
@@ -150,29 +178,15 @@ export default function DeployedApplicationDetailsPage() {
     }
   };
 
-  useEffect(() => {
+  const refreshDetails = async () => {
     fetchApplicationDetails(id);
     fetchBuildLogs(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }
+
+  useEffect(() => {
+    refreshDetails();
   }, [id]);
 
-  useEffect(() => {
-    if (log.length === 0) return;
-    if (document.getElementById("build_terminal") === null) return;
-    document.getElementById("build_terminal").innerHTML = "";
-    terminal.open(document.getElementById("build_terminal"));
-    terminal.write(log);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [log]);
-
-  useEffect(() => {
-    if (runtimeLog.length === 0) return;
-    if (document.getElementById("runtime_terminal") === null) return;
-    document.getElementById("runtime_terminal").innerHTML = "";
-    terminal.open(document.getElementById("runtime_terminal"));
-    terminal.write(runtimeLog);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [runtimeLog]);
   
 
   return (
@@ -205,7 +219,7 @@ export default function DeployedApplicationDetailsPage() {
                   </Tag>
                 </Flex>
                 <Flex gap="10px">
-                  <Button size="sm" onClick={() => fetchApplicationDetails(id)}>
+                  <Button size="sm" onClick={() => refreshDetails()}>
                     <Icon as={SyncIcon} mr="2" />
                     Refresh
                   </Button>
