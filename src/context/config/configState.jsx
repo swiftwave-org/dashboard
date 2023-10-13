@@ -49,12 +49,18 @@ const ConfigState = (props) => {
 
   };
 
+  // Get websocket URI
+  const getWebsocketURI = () => {
+    let baseURL = state.server.host + ":" + state.server.port;
+    return "ws://"+baseURL;
+  };
+
   // Set default axios config
   setURI()
 
   // Return
   return (
-    <ConfigContext.Provider value={{ state, setServer, isSet }}>
+    <ConfigContext.Provider value={{ state, setServer, isSet, getWebsocketURI }}>
       {props.children}
     </ConfigContext.Provider>
   );

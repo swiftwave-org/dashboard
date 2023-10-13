@@ -2,6 +2,7 @@ export default {
     AUTH_LOGIN: '/auth/login',
     AUTH_VERIFY: '/auth/verify',
     AUTH_LOGOUT: '/auth/logout',
+    AUTH_WEBSOCKET_TOKEN: '/auth/ws/token',
     REDIRECT_RULES: '/mapping/redirects',
     INGRESS_RULES: '/mapping/ingresses',
     RESTRICTED_PORTS: '/mapping/ingresses/restricted-ports',
@@ -12,11 +13,12 @@ export default {
     VOLUMES: '/volumes',
     SERVICE_NAMES: '/applications/servicenames',
     APPLICATIONS: '/applications',
+    APPLICATIONS_WEBSOCKET: '/ws/applications',
     APPLICATIONS_SUMMARY: '/applications/summary',
     APPLICATION_SERVICE_NAME_AVAILABILITY: '/applications/availiblity/service_name',
     DOCKER_CONFIG_GENERATE_GIT: '/applications/deploy/dockerconfig/generate/git',
     DOCKER_CONFIG_GENERATE_CODE: '/applications/deploy/dockerconfig/generate/tarball',
     DOCKER_CONFIG_GENERATE_CUSTOM: '/applications/deploy/dockerconfig/generate/custom',
     DEPLOY_APPLICATION: '/applications/deploy',
-    UPLOAD_TAR: '/applications/deploy/upload'
+    UPLOAD_TAR: '/applications/deploy/upload',
 }
