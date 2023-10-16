@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/${{ github.ref_name }}:develop
+  IMAGE_NAME: ${{ github.repository }}:${{ github.ref_name }}
 
 jobs:
   build:
