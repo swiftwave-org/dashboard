@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Publish Latest Docker Image from develop branch
 on:
   workflow_dispatch:
   push:
