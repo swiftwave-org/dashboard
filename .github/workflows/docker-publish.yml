@@ -1,11 +1,13 @@
-name: Publish Docker Image
+name: Build and Publish Docker Image
 on:
   workflow_dispatch:
   push:
-    branches: [ "master" ]
+    branches:
+      - develop
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ${{ github.repository }}:${{ github.ref_name }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,12 +15,13 @@ jobs:
       contents: read
       packages: write
     steps:
-    - uses: actions/checkout@v3
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@v5
-      with:
-        name: ${{ env.IMAGE_NAME }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        registry: ghcr.io
-        dockerfile: Dockerfile.production
+      - uses: actions/checkout@v3
+
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: ${{ env.IMAGE_NAME }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          dockerfile: Dockerfile.production
