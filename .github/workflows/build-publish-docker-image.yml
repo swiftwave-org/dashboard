@@ -1,10 +1,13 @@
-name: Publish Latest Docker Image from develop branch
+name: Build and Publish Docker Image
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch name to publish'
+        required: true
   push:
     branches:
       - develop
-
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}:${{ github.ref_name }}
