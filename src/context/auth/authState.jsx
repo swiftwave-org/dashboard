@@ -129,12 +129,26 @@ const AuthState = (props) => {
       console.error(error);
       logout();      
     }
-
-    // verifyAuthenticationStatus();
-
-
-    // }, 1000);
   }
+
+  // Generate websocket token
+  const generateWebsocketToken = async () => {
+    // TODO: error notification
+    var config = {
+      method: "get",
+      url: route.AUTH_WEBSOCKET_TOKEN,
+    };
+
+    try {
+      let res = await axios(config);
+      if(res.status !== 200) {
+        return null;
+      }
+      return res.data.token;
+    } catch (error) {
+      return null;
+    }
+  };
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -150,7 +164,8 @@ const AuthState = (props) => {
         authenticate,
         recoverToken,
         logout,
-        logoutIfSessionTimedout
+        logoutIfSessionTimedout,
+        generateWebsocketToken
       }}
     >
       {props.children}
