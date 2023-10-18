@@ -1,7 +1,7 @@
 name: Welcome
 on:
  pull_request:
-  types: [opened, closed]
+  types: [opened]
  issues:
   types: [opened]
 jobs:
@@ -12,7 +12,7 @@ jobs:
      with:
       FIRST_ISSUE: |
        👋 @{{ author }}
-       Welcome to SwiftWave Community! Star ⭐ the main repository [swiftwave](https://github.com/swiftwave-org/swiftwave) to grow this project and join our Slack community [invite link](https://join.slack.com/t/swiftwave-team/shared_invite/zt-21n86aslx-aAvBi3hv1GigVA_XoXiu4Q) to stay updated. Be sure to follow the issue template!
+       Welcome to SwiftWave Community! Star ⭐ the main repository [swiftwave](https://github.com/swiftwave-org/swiftwave) to grow this project and join our Slack community [invite link](https://join.slack.com/t/swiftwave-team/shared_invite/zt-21n86aslx-aAvBi3hv1GigVA_XoXiu4Q) to stay updated.
 
       FIRST_PR: |
        👋 @{{ author }}
