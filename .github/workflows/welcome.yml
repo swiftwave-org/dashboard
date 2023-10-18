@@ -1,0 +1,19 @@
+name: Welcome
+on:
+ pull_request:
+  types: [opened]
+ issues:
+  types: [opened]
+jobs:
+ run:
+  runs-on: ubuntu-latest
+  steps:
+   - uses: wow-actions/welcome@v1
+     with:
+      FIRST_ISSUE: |
+       👋 @{{ author }}
+       Welcome to SwiftWave Community! Star ⭐ the main repository [swiftwave](https://github.com/swiftwave-org/swiftwave) to grow this project and join our Slack community [invite link](https://join.slack.com/t/swiftwave-team/shared_invite/zt-21n86aslx-aAvBi3hv1GigVA_XoXiu4Q) to stay updated.
+
+      FIRST_PR: |
+       👋 @{{ author }}
+       Congratulations on opening your first pull request! We appreciate your contribution. Join our Slack community [invite link](https://join.slack.com/t/swiftwave-team/shared_invite/zt-21n86aslx-aAvBi3hv1GigVA_XoXiu4Q) to connect with other contributors and seek reviews for your PR.
