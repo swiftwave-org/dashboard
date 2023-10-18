@@ -1,6 +1,7 @@
 import axios from "axios"
 import route from "../../config/route"
 import qs from "qs";
+import ConfigState from "../config/configState";
 
 export default class ApplicationController {
 
@@ -371,5 +372,15 @@ export default class ApplicationController {
         data: {}
       }
     }
+  }
+
+  // Fetch websocket endpoint for runtime logs
+  fetchRuntimeLogWebsocketEndpoint(baseURI, token, application_id) {
+   return baseURI + route.APPLICATIONS_WEBSOCKET + "/" + application_id + "/logs/runtime"+ "?token=" + token
+  }
+
+  // Fetch websocket endpoint for build logs
+  fetchBuildLogWebsocketEndpoint(baseURI, token, application_id, log_id) {
+    return baseURI + route.APPLICATIONS_WEBSOCKET + "/" + application_id + "/logs/build/" + log_id + "?token=" + token
   }
 }
