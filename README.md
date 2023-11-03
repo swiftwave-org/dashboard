@@ -36,7 +36,7 @@ Steps -
 4. Run `npm run dev`
 5. Open `localhost:5173` in browser
 6. Use the `Swiftwave staging environment` to work on the front end without installing the Swiftwave server locally.
-   1. Server Url -> `staging.swiftwave.org`
+   1. Server Url -> `staging.swiftwave.org`  [Temporarily not available]
    2. Server Port -> `3333`
    3. Username -> `admin`
    4. Password -> `admin`
