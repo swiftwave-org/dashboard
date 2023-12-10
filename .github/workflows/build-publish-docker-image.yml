@@ -25,3 +25,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           dockerfile: Dockerfile.production
+          platforms: linux/amd64,linux/arm64
