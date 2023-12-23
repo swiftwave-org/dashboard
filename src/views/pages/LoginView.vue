@@ -2,6 +2,7 @@
 import Logo from '@/assets/images/logo-subtitle.png'
 import { reactive, ref } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
+import router from '@/router/index.js'
 
 const username = ref('')
 const password = ref('')
@@ -18,7 +19,8 @@ const login = async () => {
   authenticationStatus.message = res.message
   authenticationStatus.visible = true
   if (res.success) {
-    // Redirect to dashboard
+    // TODO: update this to redirect to dashboard
+    await router.push({ name: 'test' })
   }
 }
 </script>

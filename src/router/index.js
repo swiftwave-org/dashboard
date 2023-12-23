@@ -9,15 +9,11 @@ const router = createRouter({
       name: 'Login',
       component: LoginView
     },
+    // TODO update this to redirect to dashboard
     {
       path: '/',
       redirect: '/test'
     },
-    {
-      path: '/test',
-      name: 'test',
-      component: () => import('@/views/pages/TestView.vue')
-    }
   ]
 })
 
