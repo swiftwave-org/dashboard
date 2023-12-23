@@ -17,11 +17,14 @@ const login = async () => {
   authenticationStatus.success = res.success
   authenticationStatus.message = res.message
   authenticationStatus.visible = true
+  if (res.success) {
+    // Redirect to dashboard
+  }
 }
 </script>
 
 <template>
-  <div class="flex min-h-[100vh] flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="flex min-h-100 min-w-[100vw] flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-14 w-auto" v-bind:src="Logo" alt="SwiftWave" />
     </div>

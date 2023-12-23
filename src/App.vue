@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import { onBeforeMount } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
+import SideBar from '@/views/components/SideBar.vue'
 
 onBeforeMount(() => {
   const token = localStorage.getItem('token')
@@ -12,5 +13,17 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <RouterView />
+  <div class="app">
+    <SideBar />
+    <RouterView />
+  </div>
 </template>
+
+<style scoped>
+.app {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+}
+</style>
