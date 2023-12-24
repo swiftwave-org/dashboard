@@ -2,6 +2,7 @@
 import Logo from '@/assets/images/logo-subtitle.png'
 import { reactive, ref } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
+import router from '@/router/index.js'
 
 const username = ref('')
 const password = ref('')
@@ -17,11 +18,15 @@ const login = async () => {
   authenticationStatus.success = res.success
   authenticationStatus.message = res.message
   authenticationStatus.visible = true
+  if (res.success) {
+    // TODO: update this to redirect to dashboard
+    await router.push({ name: 'Users' })
+  }
 }
 </script>
 
 <template>
-  <div class="flex min-h-[100vh] flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="flex h-full min-w-[100vw] flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img class="mx-auto h-14 w-auto" v-bind:src="Logo" alt="SwiftWave" />
     </div>
