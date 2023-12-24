@@ -8,7 +8,6 @@ import PageBar from '@/views/components/PageBar.vue'
 import { useToast } from 'vue-toastification'
 
 const toast = useToast()
-// Modal state
 const isModalOpen = ref(false)
 const openModal = () => {
   isModalOpen.value = true
@@ -203,7 +202,7 @@ const users = computed(() => userListResult.value?.users)
           </tr>
         </thead>
         <tbody
-          v-if="!loading"
+          v-show="!loading"
           class="divide-y divide-gray-200 bg-white">
           <tr
             v-for="user in users"
@@ -225,7 +224,6 @@ const users = computed(() => userListResult.value?.users)
             <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
               <a
                 class="text-red-600"
-                href="#"
                 @click.prevent="deleteUser({ id: user.id })">
                 Delete
               </a>
