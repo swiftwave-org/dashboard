@@ -15,7 +15,7 @@ onBeforeMount(() => {
 <template>
   <div class="app">
     <SideBar />
-    <RouterView />
+    <RouterView class="p-3" />
   </div>
 </template>
 

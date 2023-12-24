@@ -20,7 +20,7 @@ const login = async () => {
   authenticationStatus.visible = true
   if (res.success) {
     // TODO: update this to redirect to dashboard
-    await router.push({ name: 'test' })
+    await router.push({ name: 'Users' })
   }
 }
 </script>

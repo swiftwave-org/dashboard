@@ -6,6 +6,19 @@ export const useAuthStore = defineStore('counter', () => {
   const IsLoggedIn = ref(false)
   const AccessToken = ref('')
 
+  function FetchBearerToken() {
+    if(IsLoggedIn.value){
+      return 'Bearer ' + AccessToken.value
+    }
+    return ''
+  }
+
+  function SetCredential(token) {
+    IsLoggedIn.value = true
+    AccessToken.value = token
+    localStorage.setItem('token', token)
+  }
+
   async function Login(username, password) {
     // login
     let data = new FormData()
@@ -49,11 +62,5 @@ export const useAuthStore = defineStore('counter', () => {
     window.location.href = '/'
   }
 
-  function SetCredential(token) {
-    IsLoggedIn.value = true
-    AccessToken.value = token
-    localStorage.setItem('token', token)
-  }
-
-  return { IsLoggedIn, Login, Logout, SetCredential }
+  return { IsLoggedIn, FetchBearerToken, Login, Logout, SetCredential }
 })

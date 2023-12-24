@@ -94,7 +94,7 @@ const authStore = useAuthStore()
             User
           </label>
           <RouterLink
-            to="#"
+            to="/users"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-users" />
@@ -102,7 +102,7 @@ const authStore = useAuthStore()
           </RouterLink>
           <a
             @click="authStore.Logout"
-            class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+            class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 cursor-pointer hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
             <span class="mx-2 text-sm font-medium">Logout</span>
