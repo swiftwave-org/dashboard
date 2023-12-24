@@ -4,18 +4,22 @@ import { onBeforeMount } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
 import SideBar from '@/views/components/SideBar.vue'
 
+const authStore = useAuthStore()
+
 onBeforeMount(() => {
   const token = localStorage.getItem('token')
   if (token !== null) {
-    useAuthStore().SetCredential(token)
+    authStore.SetCredential(token)
   }
 })
 </script>
 
 <template>
   <div class="app">
-    <SideBar />
-    <RouterView class="p-3" />
+    <SideBar class="w-80" />
+    <div class="w-full flex flex-col items-center p-6">
+      <RouterView />
+    </div>
   </div>
 </template>
 

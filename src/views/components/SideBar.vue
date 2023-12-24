@@ -8,7 +8,7 @@ const authStore = useAuthStore()
 </script>
 
 <template>
-  <aside class="flex h-screen w-64 flex-col overflow-y-auto border-r bg-[#6B46c1] px-5 py-8" v-if="authStore.IsLoggedIn">
+  <aside class="flex h-screen flex-col overflow-y-auto border-r bg-brand-600 px-5 py-8" v-if="authStore.IsLoggedIn">
     <!--    Logo [Replace Later] -->
     <RouterLink to="/">
       <img :src="Logo" alt="logo" class="w-full" />
@@ -18,7 +18,7 @@ const authStore = useAuthStore()
       <nav class="-mx-3 space-y-6 ">
         <div class="space-y-3 ">
           <RouterLink
-            to="#"
+            to="/dummy"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-hammer" />
@@ -30,14 +30,14 @@ const authStore = useAuthStore()
             Project
           </label>
           <RouterLink
-            to="#"
+            to="/dummy"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-box" />
             <span class="mx-2 text-sm font-medium">Applications</span>
           </RouterLink>
           <RouterLink
-            to="#"
+            to="/dummy"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-hard-drive" />
@@ -49,14 +49,14 @@ const authStore = useAuthStore()
             Credentials
           </label>
           <RouterLink
-            to="#"
+            to="/dummy"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-code-branch" />
             <span class="mx-2 text-sm font-medium">Git Credentials</span>
           </RouterLink>
           <RouterLink
-            to="#"
+            to="/dummy"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-cloud" />
@@ -68,21 +68,21 @@ const authStore = useAuthStore()
             Routing
           </label>
           <RouterLink
-            to="#"
+            to="/dummy"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-link" />
             <span class="mx-2 text-sm font-medium">Domains</span>
           </RouterLink>
           <RouterLink
-            to="#"
+            to="/dummy"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-network-wired" />
             <span class="mx-2 text-sm font-medium">Ingress Rules</span>
           </RouterLink>
           <RouterLink
-            to="#"
+            to="/dummy"
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
           >
             <font-awesome-icon icon="fa-solid fa-location-arrow" />

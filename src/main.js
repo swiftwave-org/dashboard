@@ -1,4 +1,4 @@
-import { createApp, provide, h } from 'vue'
+import { createApp, h, provide } from 'vue'
 import { createPinia } from 'pinia'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 
@@ -6,6 +6,28 @@ import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache } from '@apollo
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
+  faBox,
+  faCloud,
+  faCodeBranch,
+  faHammer,
+  faHardDrive,
+  faLink,
+  faLocationArrow,
+  faNetworkWired,
+  faRightFromBracket,
+  faUsers
+} from '@fortawesome/free-solid-svg-icons'
+
+import { useAuthStore } from '@/store/auth.js'
+import Toast from 'vue-toastification'
+
+import App from './App.vue'
+import router from './router'
+import './assets/css/base.css'
+import 'vue-toastification/dist/index.css'
+
+// add icons to library
+library.add(
   faHammer,
   faBox,
   faHardDrive,
@@ -16,17 +38,7 @@ import {
   faLocationArrow,
   faUsers,
   faRightFromBracket
-} from '@fortawesome/free-solid-svg-icons'
-
-
-import { useAuthStore } from '@/store/auth.js'
-
-import App from './App.vue'
-import router from './router'
-import './assets/css/base.css'
-
-// add icons to library
-library.add(faHammer, faBox, faHardDrive, faCodeBranch, faCloud, faLink, faNetworkWired, faLocationArrow, faUsers, faRightFromBracket)
+)
 
 // Setup apollo client
 // create apollo link
@@ -63,6 +75,20 @@ const app = createApp({
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(createPinia())
 app.use(router)
+app.use(Toast, {
+  position: 'top-right',
+  timeout: 5000,
+  closeOnClick: true,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: true,
+  closeButton: 'button',
+  icon: true,
+  rtl: false
+})
 app.mount('#app')
 
 // Protect routes

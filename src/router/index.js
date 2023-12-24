@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginView from "@/views/pages/LoginView.vue";
+import LoginView from '@/views/pages/LoginView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,7 +17,7 @@ const router = createRouter({
     {
       path: '/users',
       name: 'Users',
-      component: () => import('@/views/pages/Users.vue')
+      component: () => import('@/views/pages/UsersManagement.vue')
     }
   ]
 })
