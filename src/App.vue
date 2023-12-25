@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 import { onBeforeMount } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
-import SideBar from '@/views/components/SideBar.vue'
+import SideBar from '@/views/partials/SideBar.vue'
 
 const authStore = useAuthStore()
 
@@ -17,7 +17,7 @@ onBeforeMount(() => {
 <template>
   <div class="app">
     <SideBar class="w-80" />
-    <div class="w-full flex flex-col items-center p-6">
+    <div class="flex w-full flex-col items-center p-6">
       <RouterView />
     </div>
   </div>

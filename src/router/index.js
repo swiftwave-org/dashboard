@@ -12,12 +12,22 @@ const router = createRouter({
     // TODO update this to redirect to dashboard
     {
       path: '/',
-      redirect: '/users'
+      redirect: '/git-credentials'
     },
     {
       path: '/users',
       name: 'Users',
       component: () => import('@/views/pages/UsersManagement.vue')
+    },
+    {
+      path: '/git-credentials',
+      name: 'Git Credentials',
+      component: () => import('@/views/pages/GitCredentialManagement.vue')
+    },
+    {
+      path: '/image-registry-credentials',
+      name: 'Image Registry Credentials',
+      component: () => import('@/views/pages/ImageRegistryCredentialManagement.vue')
     }
   ]
 })
