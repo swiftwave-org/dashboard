@@ -6,6 +6,9 @@ import ModalDialog from '@/views/components/ModalDialog.vue'
 import FilledButton from '@/views/components/FilledButton.vue'
 import PageBar from '@/views/components/PageBar.vue'
 import { useToast } from 'vue-toastification'
+import Table from '@/views/components/Table/Table.vue'
+import TableHeader from '@/views/components/Table/TableHeader.vue'
+import UserListRow from '@/views/partials/UserListRow.vue'
 
 const toast = useToast()
 const isModalOpen = ref(false)
@@ -65,6 +68,12 @@ const {
   }
 `)
 
+const deleteUserWithConfirmation = (user) => {
+  if (confirm(`Are you sure you want to delete user ${user.username}?`)) {
+    deleteUser({ id: user.id })
+  }
+}
+
 onUserDeleteSuccess(() => {
   refetchUserList()
   toast.success('User deleted successfully')
@@ -77,8 +86,8 @@ onUserDeleteFail((err) => {
 // User list query
 const {
   result: userListResult,
-  loading,
-  refetch: refetchUserList
+  refetch: refetchUserList,
+  onError: onUserListFetchFailed
 } = useQuery(
   gql`
     query {
@@ -94,6 +103,10 @@ const {
   }
 )
 const users = computed(() => userListResult.value?.users)
+
+onUserListFetchFailed((err) => {
+  toast.error(err.message)
+})
 </script>
 
 <template>
@@ -170,67 +183,21 @@ const users = computed(() => userListResult.value?.users)
     </PageBar>
 
     <!-- Tables -->
-    <div class="mt-8 min-w-full overflow-hidden border border-gray-200 md:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th
-              class="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
-              scope="col">
-              <span>Username</span>
-            </th>
-            <th
-              class="px-12 py-3.5 text-left text-sm font-normal text-gray-700"
-              scope="col">
-              ID
-            </th>
-            <th
-              class="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
-              scope="col">
-              Status
-            </th>
-            <th
-              class="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
-              scope="col">
-              Role
-            </th>
-            <th
-              class="px-4 py-3.5 text-right text-sm font-normal text-gray-700"
-              scope="col">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          v-show="!loading"
-          class="divide-y divide-gray-200 bg-white">
-          <tr
-            v-for="user in users"
-            v-bind:key="user.id">
-            <td class="whitespace-nowrap px-4 py-4">
-              <div class="text-sm font-medium text-gray-900">
-                {{ user.username }}
-              </div>
-            </td>
-            <td class="whitespace-nowrap px-12 py-4">
-              <div class="text-sm text-gray-900">{{ user.id }}</div>
-            </td>
-            <td class="whitespace-nowrap px-4 py-4">
-              <span class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                Active
-              </span>
-            </td>
-            <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">Administrator</td>
-            <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
-              <a
-                class="text-red-600"
-                @click.prevent="deleteUser({ id: user.id })">
-                Delete
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <Table class="mt-8">
+      <template v-slot:header>
+        <TableHeader align="left">Username</TableHeader>
+        <TableHeader align="left">ID</TableHeader>
+        <TableHeader align="center">Status</TableHeader>
+        <TableHeader align="left">Role</TableHeader>
+        <TableHeader align="right">Actions</TableHeader>
+      </template>
+      <template v-slot:body>
+        <UserListRow
+          v-for="user in users"
+          v-bind:key="user.id"
+          :delete-user="deleteUserWithConfirmation"
+          :user="user" />
+      </template>
+    </Table>
   </section>
 </template>
