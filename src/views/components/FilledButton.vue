@@ -3,11 +3,9 @@ import { computed } from 'vue'
 
 const props = defineProps({
   loading: {
-    type: Boolean,
     default: false
   },
   disabled: {
-    type: Boolean,
     default: false
   },
   click: {

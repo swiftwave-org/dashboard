@@ -46,13 +46,13 @@ const authStore = useAuthStore()
           <label class="px-3 text-xs font-semibold uppercase text-white"> Credentials </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-            to="/dummy">
+            to="/git-credentials">
             <font-awesome-icon icon="fa-solid fa-code-branch" />
             <span class="mx-2 text-sm font-medium">Git Credentials</span>
           </RouterLink>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-            to="/dummy">
+            to="/image-registry-credentials">
             <font-awesome-icon icon="fa-solid fa-cloud" />
             <span class="mx-2 text-sm font-medium">Image Reg Credentials</span>
           </RouterLink>

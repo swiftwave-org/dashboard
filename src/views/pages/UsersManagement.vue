@@ -9,6 +9,7 @@ import { useToast } from 'vue-toastification'
 import Table from '@/views/components/Table/Table.vue'
 import TableHeader from '@/views/components/Table/TableHeader.vue'
 import UserListRow from '@/views/partials/UserListRow.vue'
+import TableMessage from '@/views/components/Table/TableMessage.vue'
 
 const toast = useToast()
 const isModalOpen = ref(false)
@@ -27,6 +28,7 @@ const newUser = reactive({
 
 const {
   mutate: createUser,
+  loading: isUserCreating,
   onDone: onUserCreateSuccess,
   onError: onUserCreateFail
 } = useMutation(
@@ -160,6 +162,7 @@ onUserListFetchFailed((err) => {
       <template v-slot:footer>
         <FilledButton
           :click="createUser"
+          :loading="isUserCreating"
           type="primary"
           >Create
         </FilledButton>
@@ -176,8 +179,8 @@ onUserListFetchFailed((err) => {
       <template v-slot:buttons>
         <FilledButton
           :click="openModal"
-          type="primary"
-          >Create User
+          type="primary">
+          Create User
         </FilledButton>
       </template>
     </PageBar>
@@ -190,6 +193,17 @@ onUserListFetchFailed((err) => {
         <TableHeader align="center">Status</TableHeader>
         <TableHeader align="left">Role</TableHeader>
         <TableHeader align="right">Actions</TableHeader>
+      </template>
+      <template v-slot:message>
+        <TableMessage
+          v-if="!users"
+          :loading="true">
+          Loading users...
+        </TableMessage>
+        <TableMessage v-else-if="users.length === 0">
+          No users found.<br />
+          Click on the "Create User" button to create a new user.
+        </TableMessage>
       </template>
       <template v-slot:body>
         <UserListRow

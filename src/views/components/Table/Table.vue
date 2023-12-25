@@ -10,5 +10,6 @@
         <slot name="body"></slot>
       </tbody>
     </table>
+    <slot name="message"></slot>
   </div>
 </template>
