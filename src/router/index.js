@@ -28,6 +28,11 @@ const router = createRouter({
       path: '/image-registry-credentials',
       name: 'Image Registry Credentials',
       component: () => import('@/views/pages/ImageRegistryCredentialManagement.vue')
+    },
+    {
+      path: '/domains',
+      name: 'Domains',
+      component: () => import('@/views/pages/DomainManagement.vue')
     }
   ]
 })

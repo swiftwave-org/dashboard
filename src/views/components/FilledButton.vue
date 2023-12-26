@@ -18,6 +18,10 @@ const props = defineProps({
     validator(value) {
       return ['primary', 'success', 'warning', 'danger', 'secondary'].includes(value)
     }
+  },
+  slim: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -36,26 +40,26 @@ const isDisabled = computed(() => {
       'bg-danger-600 hover:bg-danger-600/80 focus-visible:outline-danger-600': type === 'danger',
       'cursor-not-allowed opacity-50': disabled,
       'hover:bg-[type]-600/80': !disabled,
-      'cursor-progress': loading
+      'cursor-progress': loading,
+      'py-2 text-sm': !slim,
+      'px-2 py-1 text-xs': slim
     }"
     :disabled="isDisabled"
-    class="flex items-center justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+    class="flex items-center justify-center rounded-md px-3 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
     type="button"
     @click="click">
     <!--    spinner -->
     <svg
       v-if="loading"
+      :class="{
+        'h-5 w-5': !slim,
+        'h-2 w-2': slim
+      }"
       class="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
       fill="none"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg">
-      <circle
-        class="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4"></circle>
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
       <path
         class="opacity-75"
         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
