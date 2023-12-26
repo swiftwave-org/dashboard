@@ -108,14 +108,26 @@ onDomainDeleteError((err) => {
 })
 
 // Verify DNS
-const { result: verifyDnsResult, load: verifyDns } = useLazyQuery(gql`
-  query ($name: String!) {
-    verifyDomainConfiguration(name: $name)
+const {
+  result: verifyDnsResult,
+  load: verifyDns,
+  variables: verifyDnsVars
+} = useLazyQuery(
+  gql`
+    query ($name: String!) {
+      verifyDomainConfiguration(name: $name)
+    }
+  `,
+  {
+    variables: {
+      name: ''
+    }
   }
-`)
+)
 
-const verifyDomainDNS = async (domain) => {
-  await verifyDns(null, { name: domain.name })
+const verifyDomainDNS = async (domain_name) => {
+  verifyDnsVars.value.name = domain_name
+  await verifyDns()
   return verifyDnsResult.value.verifyDomainConfiguration
 }
 </script>
