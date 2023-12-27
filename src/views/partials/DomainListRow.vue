@@ -20,6 +20,14 @@ const props = defineProps({
   verifyDns: {
     type: Function,
     required: true
+  },
+  issueSsl: {
+    type: Function,
+    required: true
+  },
+  viewSsl: {
+    type: Function,
+    required: true
   }
 })
 
@@ -50,7 +58,9 @@ const verifyDnsPointing = async () => {
       <Badge v-else-if="domain.sslStatus === 'failed'" type="danger">Failed</Badge>
     </TableRow>
     <TableRow align="center" flex>
-      <FilledButton :disabled="domain.sslStatus !== 'issued'" slim type="secondary">View SSL</FilledButton>
+      <FilledButton :click="() => viewSsl(domain.id)" :disabled="domain.sslStatus !== 'issued'" slim type="secondary"
+        >View SSL
+      </FilledButton>
     </TableRow>
     <TableRow align="center">
       <div class="text-sm text-gray-900">
@@ -58,7 +68,7 @@ const verifyDnsPointing = async () => {
       </div>
     </TableRow>
     <TableRow align="center" flex>
-      <FilledButton slim type="secondary">Issue SSL</FilledButton>
+      <FilledButton :click="() => issueSsl(domain)" slim type="secondary">Issue SSL</FilledButton>
     </TableRow>
     <TableRow align="center">
       <Badge v-if="domain.sslAutoRenew" type="success">Enabled</Badge>
@@ -66,7 +76,7 @@ const verifyDnsPointing = async () => {
     </TableRow>
 
     <TableRow align="center" flex>
-      <FilledButton :click="verifyDnsPointing" :loading="verifyingDns" slim type="secondary">Verify DNS </FilledButton>
+      <FilledButton :click="verifyDnsPointing" :loading="verifyingDns" slim type="secondary">Verify DNS</FilledButton>
     </TableRow>
     <TableRow align="right">
       <TextButton :click="() => deleteDomain(domain)" type="danger">Delete</TextButton>

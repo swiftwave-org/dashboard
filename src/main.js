@@ -7,6 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faBox,
+  faChevronDown,
   faCloud,
   faCodeBranch,
   faHammer,
@@ -37,7 +38,8 @@ library.add(
   faNetworkWired,
   faLocationArrow,
   faUsers,
-  faRightFromBracket
+  faRightFromBracket,
+  faChevronDown
 )
 
 // Setup apollo client

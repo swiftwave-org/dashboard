@@ -15,6 +15,11 @@ const router = createRouter({
       redirect: '/git-credentials'
     },
     {
+      path: '/persistent-volumes',
+      name: 'Persistent Volumes',
+      component: () => import('@/views/pages/PersistentVolumeManagement.vue')
+    },
+    {
       path: '/users',
       name: 'Users',
       component: () => import('@/views/pages/UsersManagement.vue')
