@@ -29,10 +29,7 @@ const login = async () => {
 <template>
   <div class="flex h-full min-w-[100vw] flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img
-        alt="SwiftWave"
-        class="mx-auto h-14 w-auto"
-        v-bind:src="Logo" />
+      <img alt="SwiftWave" class="mx-auto h-14 w-auto" v-bind:src="Logo" />
     </div>
 
     <div class="mt-12 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -43,7 +40,7 @@ const login = async () => {
           'border-red-500 bg-red-50': !authenticationStatus.success,
           'border-green-500 bg-green-50': authenticationStatus.success
         }"
-        class="mb-5 mb-5 rounded border-s-4 p-4"
+        class="mb-5 rounded border-s-4 p-4"
         role="alert">
         <strong
           :class="{
@@ -56,21 +53,15 @@ const login = async () => {
       </div>
       <div
         v-else-if="!authenticationStatus.visible"
-        class="mb-5 mb-5 rounded border-s-4 border-gray-500 bg-gray-50 p-4"
+        class="mb-5 rounded border-s-4 border-gray-500 bg-gray-50 p-4"
         role="alert">
         <p>You can create <strong>admin</strong> from <strong>SwiftWave CLI</strong></p>
       </div>
 
       <!--   Login Form   -->
-      <form
-        class="space-y-6"
-        @submit.prevent="login">
+      <form class="space-y-6" @submit.prevent="login">
         <div>
-          <label
-            class="block text-sm font-medium leading-6 text-gray-900"
-            for="username"
-            >Username</label
-          >
+          <label class="block text-sm font-medium leading-6 text-gray-900" for="username">Username</label>
           <div class="mt-2">
             <input
               id="username"
@@ -84,11 +75,7 @@ const login = async () => {
           </div>
         </div>
         <div>
-          <label
-            class="block text-sm font-medium leading-6 text-gray-900"
-            for="password"
-            >Password</label
-          >
+          <label class="block text-sm font-medium leading-6 text-gray-900" for="password">Password</label>
           <div class="mt-2">
             <input
               id="password"
@@ -101,11 +88,7 @@ const login = async () => {
           </div>
         </div>
         <div>
-          <FilledButton
-            :click="login"
-            class="w-full">
-            Sign in
-          </FilledButton>
+          <FilledButton :click="login" class="w-full"> Sign in </FilledButton>
         </div>
       </form>
     </div>
