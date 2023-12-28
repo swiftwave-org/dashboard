@@ -11,6 +11,11 @@ const router = createRouter({
     },
     // TODO update this to redirect to dashboard
     {
+      path: '/deploy-application',
+      name: 'Deploy Application',
+      component: () => import('@/views/pages/DeployApplication.vue')
+    },
+    {
       path: '/',
       redirect: '/git-credentials'
     },
