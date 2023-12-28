@@ -6,6 +6,7 @@ import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache } from '@apollo
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
+  faArrowRight,
   faBox,
   faChevronDown,
   faCloud,
@@ -39,7 +40,8 @@ library.add(
   faLocationArrow,
   faUsers,
   faRightFromBracket,
-  faChevronDown
+  faChevronDown,
+  faArrowRight
 )
 
 // Setup apollo client

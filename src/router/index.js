@@ -38,6 +38,11 @@ const router = createRouter({
       path: '/domains',
       name: 'Domains',
       component: () => import('@/views/pages/DomainManagement.vue')
+    },
+    {
+      path: '/redirect-rules',
+      name: 'Redirect Rules',
+      component: () => import('@/views/pages/RedirectRuleManagement.vue')
     }
   ]
 })
