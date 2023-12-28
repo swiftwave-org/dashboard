@@ -2,10 +2,16 @@
 defineProps({
   align: {
     type: String,
+    required: false,
     default: 'left',
     validator: (value) => {
       return ['left', 'center', 'right'].includes(value)
     }
+  },
+  flex: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 </script>
@@ -15,9 +21,13 @@ defineProps({
     :class="{
       'text-left': align === 'left',
       'text-center': align === 'center',
-      'text-right': align === 'right'
+      'text-right': align === 'right',
+      'justify-start': align === 'left',
+      'justify-center': align === 'center',
+      'justify-end': align === 'right',
+      flex: flex
     }"
-    class="whitespace-nowrap px-4 py-4">
+    class="gap-2 whitespace-nowrap px-4 py-4">
     <slot></slot>
   </td>
 </template>

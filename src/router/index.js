@@ -15,6 +15,11 @@ const router = createRouter({
       redirect: '/git-credentials'
     },
     {
+      path: '/persistent-volumes',
+      name: 'Persistent Volumes',
+      component: () => import('@/views/pages/PersistentVolumeManagement.vue')
+    },
+    {
       path: '/users',
       name: 'Users',
       component: () => import('@/views/pages/UsersManagement.vue')
@@ -28,6 +33,16 @@ const router = createRouter({
       path: '/image-registry-credentials',
       name: 'Image Registry Credentials',
       component: () => import('@/views/pages/ImageRegistryCredentialManagement.vue')
+    },
+    {
+      path: '/domains',
+      name: 'Domains',
+      component: () => import('@/views/pages/DomainManagement.vue')
+    },
+    {
+      path: '/redirect-rules',
+      name: 'Redirect Rules',
+      component: () => import('@/views/pages/RedirectRuleManagement.vue')
     }
   ]
 })

@@ -19,7 +19,7 @@ defineProps({
       'bg-danger-100 text-danger-800': type === 'danger',
       'bg-warning-100 text-warning-800': type === 'warning'
     }"
-    class="inline-flex rounded-full bg-success-100 px-2 text-xs font-semibold leading-5 text-success-700">
+    class="inline-flex rounded-full px-2 text-xs font-semibold leading-5">
     <slot></slot>
   </span>
 </template>

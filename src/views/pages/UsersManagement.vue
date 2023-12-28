@@ -195,11 +195,7 @@ onUserListFetchFailed((err) => {
         <TableHeader align="right">Actions</TableHeader>
       </template>
       <template v-slot:message>
-        <TableMessage
-          v-if="!users"
-          :loading="true">
-          Loading users...
-        </TableMessage>
+        <TableMessage v-if="!users"> Loading users... </TableMessage>
         <TableMessage v-else-if="users.length === 0">
           No users found.<br />
           Click on the "Create User" button to create a new user.

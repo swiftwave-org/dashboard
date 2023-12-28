@@ -7,14 +7,9 @@ const authStore = useAuthStore()
 </script>
 
 <template>
-  <aside
-    v-if="authStore.IsLoggedIn"
-    class="flex h-screen flex-col overflow-y-auto border-r bg-primary-600 px-5 py-8">
+  <aside v-if="authStore.IsLoggedIn" class="flex h-screen flex-col overflow-y-auto border-r bg-primary-600 px-5 py-8">
     <RouterLink to="/">
-      <img
-        :src="Logo"
-        alt="logo"
-        class="max-w-[10vw]" />
+      <img :src="Logo" alt="logo" class="max-w-[10vw]" />
     </RouterLink>
 
     <div class="mt-6 flex flex-1 flex-col justify-between">
@@ -37,7 +32,7 @@ const authStore = useAuthStore()
           </RouterLink>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-            to="/dummy">
+            to="/persistent-volumes">
             <font-awesome-icon icon="fa-solid fa-hard-drive" />
             <span class="mx-2 text-sm font-medium">Persistent Volumes</span>
           </RouterLink>
@@ -61,7 +56,7 @@ const authStore = useAuthStore()
           <label class="px-3 text-xs font-semibold uppercase text-white"> Routing </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-            to="/dummy">
+            to="/domains">
             <font-awesome-icon icon="fa-solid fa-link" />
             <span class="mx-2 text-sm font-medium">Domains</span>
           </RouterLink>
@@ -73,7 +68,7 @@ const authStore = useAuthStore()
           </RouterLink>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-            to="/dummy">
+            to="/redirect-rules">
             <font-awesome-icon icon="fa-solid fa-location-arrow" />
             <span class="mx-2 text-sm font-medium">Redirect Rules</span>
           </RouterLink>
