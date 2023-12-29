@@ -47,7 +47,7 @@ const setSourceType = (type) => {
         class="optionButton"
         @click.prevent="() => setSourceType('sourceCode')">
         <font-awesome-icon class="optionIcon" icon="fa-solid fa-upload" />
-        <p>Git Repository</p>
+        <p>Upload Codes</p>
       </div>
     </div>
 

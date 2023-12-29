@@ -3,7 +3,6 @@ import { RouterView } from 'vue-router'
 import { onBeforeMount } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
 import SideBar from '@/views/partials/SideBar.vue'
-import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev'
 
 const authStore = useAuthStore()
 
@@ -13,10 +12,6 @@ onBeforeMount(() => {
     authStore.SetCredential(token)
   }
 })
-
-// Adds messages only in a dev environment
-loadDevMessages()
-loadErrorMessages()
 </script>
 
 <template>

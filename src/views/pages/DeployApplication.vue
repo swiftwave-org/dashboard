@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import { Tab, TabGroup, TabList, TabPanels } from '@headlessui/vue'
 import ApplicationNameSelection from '@/views/partials/DeployApplication/ApplicationNameSelection.vue'
 import ApplicationSourceSelection from '@/views/partials/DeployApplication/ApplicationSourceSelection.vue'
+import ApplicationSourceConfiguration from '@/views/partials/DeployApplication/ApplicationSourceConfiguration.vue'
 
 const sectionNames = [
   'Application Name',
@@ -12,7 +13,7 @@ const sectionNames = [
   'Deploy Application'
 ]
 
-const selectedTabIndex = ref(0)
+const selectedTabIndex = ref(1)
 
 const changeTab = (index) => {
   selectedTabIndex.value = index
@@ -53,6 +54,8 @@ const finalizeApplicationSourceAndMoveToNextTab = (sourceType) => {
         <!-- Source Selection -->
         <ApplicationSourceSelection
           :finalize-application-source-and-move-to-next-tab="finalizeApplicationSourceAndMoveToNextTab" />
+        <!--  Source Configuration -->
+        <ApplicationSourceConfiguration :application-source-type="newApplicationState.sourceType" />
       </TabPanels>
     </TabGroup>
   </div>
