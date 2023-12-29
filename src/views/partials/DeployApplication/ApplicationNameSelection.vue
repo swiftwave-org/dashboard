@@ -51,8 +51,8 @@ const isExistApplicationNameCheck = debounce(() => {
 </script>
 
 <template>
-  <TabPanel :key="1" class="mt-5 w-full max-w-md">
-    <div class="mt-4">
+  <TabPanel :key="0" class="mt-5 flex h-full w-full max-w-md flex-col justify-center">
+    <div class="mt-1">
       <label class="block text-sm font-medium text-gray-700" for="application_name"> Application Name </label>
       <div class="mt-1">
         <input
@@ -69,10 +69,12 @@ const isExistApplicationNameCheck = debounce(() => {
           !isExistApplicationNameLoading &&
           isExistApplicationVariables.name === newApplicationName
         ">
-        <p v-if="isExistApplicationName" class="mt-1 text-sm text-danger-600">
+        <p v-if="isExistApplicationName" class="mt-1 text-sm text-danger-500">
+          <font-awesome-icon icon="fa-solid fa-circle-xmark" />
           Sorry, {{ newApplicationName }} name is not available
         </p>
-        <p v-else-if="!isExistApplicationName" class="mt-1 text-sm text-success-600">
+        <p v-else-if="!isExistApplicationName" class="mt-1 text-sm text-success-500">
+          <font-awesome-icon icon="fa-solid fa-circle-check" />
           {{ newApplicationName }} name is available
         </p>
       </div>

@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { Tab, TabGroup, TabList, TabPanels } from '@headlessui/vue'
 import ApplicationNameSelection from '@/views/partials/DeployApplication/ApplicationNameSelection.vue'
+import ApplicationSourceSelection from '@/views/partials/DeployApplication/ApplicationSourceSelection.vue'
 
 const sectionNames = [
   'Application Name',
@@ -19,7 +20,8 @@ const changeTab = (index) => {
 
 // state
 const newApplicationState = reactive({
-  name: ''
+  name: '',
+  sourceType: ''
 })
 
 // functions
@@ -27,10 +29,15 @@ const finalApplicationNameAndMoveToNextTab = (name) => {
   newApplicationState.name = name
   changeTab(1)
 }
+
+const finalizeApplicationSourceAndMoveToNextTab = (sourceType) => {
+  newApplicationState.sourceType = sourceType
+  changeTab(2)
+}
 </script>
 
 <template>
-  <div class="flex w-full max-w-7xl flex-col items-center justify-center sm:px-0">
+  <div class="flex h-full w-full max-w-7xl flex-col items-center sm:px-0">
     <TabGroup :selected-index="selectedTabIndex">
       <TabList class="flex w-full max-w-4xl space-x-3 rounded-full bg-primary-600 p-1">
         <Tab v-for="sectionName in sectionNames" :key="sectionName" v-slot="{ selected }" as="template">
@@ -40,10 +47,12 @@ const finalApplicationNameAndMoveToNextTab = (name) => {
         </Tab>
       </TabList>
 
-      <TabPanels class="mt-6 flex w-full flex-col items-center">
+      <TabPanels class="mt-6 flex h-full w-full flex-col items-center">
         <!-- Application Name Selection -->
         <ApplicationNameSelection :final-application-name-and-move-to-next-tab="finalApplicationNameAndMoveToNextTab" />
         <!-- Source Selection -->
+        <ApplicationSourceSelection
+          :finalize-application-source-and-move-to-next-tab="finalizeApplicationSourceAndMoveToNextTab" />
       </TabPanels>
     </TabGroup>
   </div>
