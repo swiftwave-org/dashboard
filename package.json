@@ -23,6 +23,7 @@
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
     "moment": "^2.30.0",
+    "monaco-editor": "^0.45.0",
     "pinia": "^2.1.7",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",

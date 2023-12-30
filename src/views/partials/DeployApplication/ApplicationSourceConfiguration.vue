@@ -8,6 +8,8 @@ import gql from 'graphql-tag'
 import { useToast } from 'vue-toastification'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { generateTarBlob } from '@/vendor/tarts.js'
+import DockerfileEditor from '@/views/components/DockerfileEditor.vue'
+import BuildArgInput from '@/views/partials/BuildArgInput.vue'
 
 const props = defineProps({
   applicationSourceType: {
@@ -30,8 +32,19 @@ const stateRef = reactive({
   isUploadingSourceCode: false,
   detectedServiceName: '',
   dockerFile: '',
-  dockerBuildArgs: []
+  dockerBuildArgs: [],
+  buildArgs: {},
+  isDockerFileEditorOpen: false,
+  isDockerConfigurationGenerated: false
 })
+
+const openDockerFileEditor = () => {
+  stateRef.isDockerFileEditorOpen = true
+}
+
+const closeDockerFileEditor = () => {
+  stateRef.isDockerFileEditorOpen = false
+}
 
 const enableGenerateConfigurationButton = computed(() => {
   if (props.applicationSourceType === 'git') {
@@ -40,6 +53,8 @@ const enableGenerateConfigurationButton = computed(() => {
     return stateRef.sourceCodeFile !== ''
   } else if (props.applicationSourceType === 'image') {
     return stateRef.dockerImage !== ''
+  } else {
+    return false
   }
 })
 
@@ -127,8 +142,8 @@ const uploadSourceCode = async () => {
 
 // Generate Configuration
 const {
-  result: generateConfigurationResult,
   load: generateConfigurationLoad,
+  refetch: generateConfigurationRefetch,
   loading: dockerConfigGeneratorGenerating,
   onError: onGenerateConfigurationError,
   onResult: onGenerateConfigurationSuccess,
@@ -142,7 +157,6 @@ const {
         dockerBuildArgs {
           key
           description
-          type
           defaultValue
         }
       }
@@ -153,13 +167,31 @@ const {
   }
 )
 
+onGenerateConfigurationError((err) => toast.error(err.message))
+
 onGenerateConfigurationSuccess((res) => {
-  if (res.data.dockerConfigGenerator) {
+  if (res.data && res.data.dockerConfigGenerator) {
     stateRef.detectedServiceName = res.data.dockerConfigGenerator.detectedServiceName
     stateRef.dockerFile = res.data.dockerConfigGenerator.dockerFile
     stateRef.dockerBuildArgs = res.data.dockerConfigGenerator.dockerBuildArgs
+    // set default build args if not set
+    for (const buildArg of stateRef.dockerBuildArgs) {
+      stateRef.buildArgs[buildArg.key] = buildArg.defaultValue
+    }
+    // delete build args if not present in dockerBuildArgs
+    for (const buildArgKey in stateRef.buildArgs) {
+      if (!stateRef.dockerBuildArgs.some((buildArg) => buildArg.key === buildArgKey)) {
+        delete stateRef.buildArgs[buildArgKey]
+      }
+    }
+    stateRef.isDockerConfigurationGenerated = true
+    closeDockerFileEditor()
   }
 })
+
+const updateBuildArg = (key, value) => {
+  stateRef.buildArgs[key] = value
+}
 
 const generateConfiguration = () => {
   stateRef.gitRepoUrl = stateRef.gitRepoUrl.trim().replace('https://', '').replace('http://', '')
@@ -168,13 +200,31 @@ const generateConfiguration = () => {
     sourceType: props.applicationSourceType,
     gitCredentialID: gitCredentialId === 0 ? null : gitCredentialId,
     gitProvider: getGitProvideFromGitRepoUrl(stateRef.gitRepoUrl),
-    repositoryBranch: stateRef.gitBranch,
+    repositoryBranch: stateRef.gitBranch === '' ? null : stateRef.gitBranch,
     repositoryName: getGitRepoNameFromGitRepoUrl(stateRef.gitRepoUrl),
     repositoryOwner: getGitRepoOwnerFromGitRepoUrl(stateRef.gitRepoUrl),
     customDockerFile: '',
-    sourceCodeCompressedFileName: stateRef.sourceCodeFile
+    sourceCodeCompressedFileName: stateRef.sourceCodeFile === '' ? null : stateRef.sourceCodeFile
   }
-  generateConfigurationLoad()
+  if (generateConfigurationLoad() === false) {
+    generateConfigurationRefetch()
+  }
+}
+
+const generateConfigurationForCustomDockerFile = (customDockerFile) => {
+  generateConfigurationVariables.value.input = {
+    sourceType: 'custom',
+    gitCredentialID: null,
+    gitProvider: null,
+    repositoryBranch: null,
+    repositoryName: null,
+    repositoryOwner: null,
+    customDockerFile: customDockerFile,
+    sourceCodeCompressedFileName: null
+  }
+  if (generateConfigurationLoad() === false) {
+    generateConfigurationRefetch()
+  }
 }
 
 // utils
@@ -338,14 +388,36 @@ const getGitRepoNameFromGitRepoUrl = (gitRepoUrl) => {
     <!-- just for padding purpose -->
     <div></div>
 
-    <div class="w-1/2 max-w-md">
+    <div v-if="stateRef.isDockerConfigurationGenerated" class="w-1/2 max-w-md">
       <p class="text-xl font-medium">Generated Configuration</p>
-      <p class="mt-3 font-medium">
+      <p class="mt-6 font-medium text-gray-700">
         🏂 Detected Service Name -
-        <span class="font-bold uppercase text-primary-600">{{ stateRef.detectedServiceName }}</span>
+        <span class="font-normal text-primary-600">{{ stateRef.detectedServiceName }}</span>
       </p>
-      <FilledButton class="mt-4 w-full">View / Modify Dockerfile</FilledButton>
+      <FilledButton class="mt-4 w-full" @click="openDockerFileEditor">View / Modify Dockerfile</FilledButton>
+      <div v-if="stateRef.dockerBuildArgs.length !== 0">
+        <p class="mt-6 font-medium text-gray-700">🐳 Docker Build Args</p>
+        <div class="w-full">
+          <BuildArgInput
+            v-for="buildArg in stateRef.dockerBuildArgs"
+            :key="buildArg.key"
+            :arg-key="buildArg.key"
+            :description="buildArg.description"
+            :update-build-arg="(val) => updateBuildArg(buildArg.key, val)"
+            :value="stateRef.buildArgs[buildArg.key]" />
+        </div>
+      </div>
+      <FilledButton class="mt-10 w-full">Confirm & Proceed to Next Step</FilledButton>
     </div>
+    <div v-else class="w-1/2 max-w-md"></div>
+
+    <!-- Dockerfile Editor -->
+    <DockerfileEditor
+      :close-modal="closeDockerFileEditor"
+      :code="stateRef.dockerFile"
+      :docker-configuration-generating="dockerConfigGeneratorGenerating"
+      :is-open="stateRef.isDockerFileEditorOpen"
+      :submit="generateConfigurationForCustomDockerFile" />
   </TabPanel>
 </template>
 

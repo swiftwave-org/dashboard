@@ -13,7 +13,7 @@ const sectionNames = [
   'Deploy Application'
 ]
 
-const selectedTabIndex = ref(1)
+const selectedTabIndex = ref(0)
 
 const changeTab = (index) => {
   selectedTabIndex.value = index
