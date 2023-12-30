@@ -15,6 +15,10 @@ const props = defineProps({
   applicationSourceType: {
     type: String,
     required: true
+  },
+  finalizeApplicationSourceConfigurationAndMoveToNextTab: {
+    type: Function,
+    required: true
   }
 })
 
@@ -194,20 +198,25 @@ const updateBuildArg = (key, value) => {
 }
 
 const generateConfiguration = () => {
-  stateRef.gitRepoUrl = stateRef.gitRepoUrl.trim().replace('https://', '').replace('http://', '')
-  let gitCredentialId = parseInt(stateRef.gitCredentialId.toString())
-  generateConfigurationVariables.value.input = {
-    sourceType: props.applicationSourceType,
-    gitCredentialID: gitCredentialId === 0 ? null : gitCredentialId,
-    gitProvider: getGitProvideFromGitRepoUrl(stateRef.gitRepoUrl),
-    repositoryBranch: stateRef.gitBranch === '' ? null : stateRef.gitBranch,
-    repositoryName: getGitRepoNameFromGitRepoUrl(stateRef.gitRepoUrl),
-    repositoryOwner: getGitRepoOwnerFromGitRepoUrl(stateRef.gitRepoUrl),
-    customDockerFile: '',
-    sourceCodeCompressedFileName: stateRef.sourceCodeFile === '' ? null : stateRef.sourceCodeFile
-  }
-  if (generateConfigurationLoad() === false) {
-    generateConfigurationRefetch()
+  if (props.applicationSourceType === 'image') {
+    stateRef.detectedServiceName = "😅 You don't need configuration for docker image"
+    stateRef.isDockerConfigurationGenerated = true
+  } else {
+    stateRef.gitRepoUrl = stateRef.gitRepoUrl.trim().replace('https://', '').replace('http://', '')
+    let gitCredentialId = parseInt(stateRef.gitCredentialId.toString())
+    generateConfigurationVariables.value.input = {
+      sourceType: props.applicationSourceType,
+      gitCredentialID: gitCredentialId === 0 ? null : gitCredentialId,
+      gitProvider: getGitProvideFromGitRepoUrl(stateRef.gitRepoUrl),
+      repositoryBranch: stateRef.gitBranch === '' ? null : stateRef.gitBranch,
+      repositoryName: getGitRepoNameFromGitRepoUrl(stateRef.gitRepoUrl),
+      repositoryOwner: getGitRepoOwnerFromGitRepoUrl(stateRef.gitRepoUrl),
+      customDockerFile: '',
+      sourceCodeCompressedFileName: stateRef.sourceCodeFile === '' ? null : stateRef.sourceCodeFile
+    }
+    if (generateConfigurationLoad() === false) {
+      generateConfigurationRefetch()
+    }
   }
 }
 
@@ -394,7 +403,9 @@ const getGitRepoNameFromGitRepoUrl = (gitRepoUrl) => {
         🏂 Detected Service Name -
         <span class="font-normal text-primary-600">{{ stateRef.detectedServiceName }}</span>
       </p>
-      <FilledButton class="mt-4 w-full" @click="openDockerFileEditor">View / Modify Dockerfile</FilledButton>
+      <FilledButton v-if="applicationSourceType !== 'image'" class="mt-4 w-full" @click="openDockerFileEditor"
+        >View / Modify Dockerfile
+      </FilledButton>
       <div v-if="stateRef.dockerBuildArgs.length !== 0">
         <p class="mt-6 font-medium text-gray-700">🐳 Docker Build Args</p>
         <div class="w-full">
@@ -407,7 +418,9 @@ const getGitRepoNameFromGitRepoUrl = (gitRepoUrl) => {
             :value="stateRef.buildArgs[buildArg.key]" />
         </div>
       </div>
-      <FilledButton class="mt-10 w-full">Confirm & Proceed to Next Step</FilledButton>
+      <FilledButton :click="() => finalizeApplicationSourceConfigurationAndMoveToNextTab(stateRef)" class="mt-10 w-full"
+        >Confirm & Proceed to Next Step
+      </FilledButton>
     </div>
     <div v-else class="w-1/2 max-w-md"></div>
 

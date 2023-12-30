@@ -35,6 +35,11 @@ const finalizeApplicationSourceAndMoveToNextTab = (sourceType) => {
   newApplicationState.sourceType = sourceType
   changeTab(2)
 }
+
+const finalizeApplicationSourceConfigurationAndMoveToNextTab = (configuration) => {
+  // Store the configuration in the state TODO
+  changeTab(3)
+}
 </script>
 
 <template>
@@ -55,7 +60,11 @@ const finalizeApplicationSourceAndMoveToNextTab = (sourceType) => {
         <ApplicationSourceSelection
           :finalize-application-source-and-move-to-next-tab="finalizeApplicationSourceAndMoveToNextTab" />
         <!--  Source Configuration -->
-        <ApplicationSourceConfiguration :application-source-type="newApplicationState.sourceType" />
+        <ApplicationSourceConfiguration
+          :application-source-type="newApplicationState.sourceType"
+          :finalize-application-source-configuration-and-move-to-next-tab="
+            finalizeApplicationSourceConfigurationAndMoveToNextTab
+          " />
       </TabPanels>
     </TabGroup>
   </div>
