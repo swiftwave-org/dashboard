@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 import { useToast } from 'vue-toastification'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { generateTarBlob } from '@/vendor/tarts.js'
-import DockerfileEditor from '@/views/components/DockerfileEditor.vue'
+import DockerfileEditor from '@/views/partials/DeployApplication/DockerfileEditor.vue'
 import BuildArgInput from '@/views/partials/BuildArgInput.vue'
 
 const props = defineProps({

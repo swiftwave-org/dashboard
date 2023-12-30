@@ -1,6 +1,6 @@
 <script setup>
 import ModalDialog from '@/views/components/ModalDialog.vue'
-import DockerfileEditorOnly from '@/views/components/DockerfileEditorOnly.vue'
+import DockerfileEditorOnly from '@/views/partials/DeployApplication/DockerfileEditorOnly.vue'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { ref, watch } from 'vue'
 
