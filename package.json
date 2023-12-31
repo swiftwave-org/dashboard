@@ -14,14 +14,18 @@
   "dependencies": {
     "@apollo/client": "^3.8.8",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.5",
     "@headlessui/vue": "^1.7.16",
     "@vue/apollo-composable": "^4.0.0-beta.12",
     "axios": "^1.6.2",
     "graphql-tag": "^2.12.6",
+    "lodash": "^4.17.21",
     "moment": "^2.30.0",
+    "monaco-editor": "^0.45.0",
     "pinia": "^2.1.7",
+    "uuid": "^9.0.1",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
     "vue-toastification": "^2.0.0-rc.5"

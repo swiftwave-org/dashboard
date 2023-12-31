@@ -7,7 +7,7 @@ export const useAuthStore = defineStore('counter', () => {
   const AccessToken = ref('')
 
   function FetchBearerToken() {
-    if(IsLoggedIn.value){
+    if (IsLoggedIn.value) {
       return 'Bearer ' + AccessToken.value
     }
     return ''
@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('counter', () => {
 
     let config = {
       method: 'post',
-      url: 'https://ip-13-232-106-63.swiftwave.xyz:3333/auth/login',
+      url: 'https://ip-3-7-45-250.swiftwave.xyz:3333/auth/login',
       data: data
     }
 

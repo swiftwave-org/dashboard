@@ -13,6 +13,13 @@ const props = defineProps({
   nonCancelable: {
     type: Boolean,
     default: false
+  },
+  width: {
+    type: String,
+    default: 'md',
+    validator: (value) => {
+      return ['sm', 'md', 'lg', 'xl', '2xl'].includes(value)
+    }
   }
 })
 
@@ -25,14 +32,8 @@ const closeModalWithValidation = () => {
 </script>
 
 <template>
-  <TransitionRoot
-    :show="isOpen"
-    appear
-    as="template">
-    <Dialog
-      as="div"
-      class="relative z-10 select-none"
-      @close="closeModalWithValidation">
+  <TransitionRoot :show="isOpen" appear as="template">
+    <Dialog as="div" class="relative z-10 select-none" @close="closeModalWithValidation">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -43,7 +44,6 @@ const closeModalWithValidation = () => {
         leave-to="opacity-0">
         <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
-
       <div class="fixed inset-0 overflow-y-auto">
         <div class="flex min-h-full items-center justify-center p-4 text-center">
           <TransitionChild
@@ -55,10 +55,15 @@ const closeModalWithValidation = () => {
             leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95">
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-4 text-left align-middle shadow-xl transition-all">
-              <DialogTitle
-                as="h3"
-                class="text-lg font-semibold leading-6 text-gray-900">
+              :class="{
+                'max-w-sm': width === 'sm',
+                'max-w-md': width === 'md',
+                'max-w-lg': width === 'lg',
+                'max-w-xl': width === 'xl',
+                'max-w-2xl': width === '2xl'
+              }"
+              class="w-full transform overflow-hidden rounded-2xl bg-white p-4 text-left align-middle shadow-xl transition-all">
+              <DialogTitle as="h3" class="text-lg font-semibold leading-6 text-gray-900">
                 <slot name="header"></slot>
                 <!-- Close button -->
                 <button
@@ -67,11 +72,7 @@ const closeModalWithValidation = () => {
                   type="button"
                   @click="closeModalWithValidation">
                   <span class="sr-only">Close</span>
-                  <svg
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M6 18L18 6M6 6l12 12"
                       stroke="currentColor"

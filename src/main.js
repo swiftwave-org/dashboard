@@ -9,6 +9,8 @@ import {
   faArrowRight,
   faBox,
   faChevronDown,
+  faCircleCheck,
+  faCircleXmark,
   faCloud,
   faCodeBranch,
   faHammer,
@@ -17,6 +19,8 @@ import {
   faLocationArrow,
   faNetworkWired,
   faRightFromBracket,
+  faTrash,
+  faUpload,
   faUsers
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -27,6 +31,8 @@ import App from './App.vue'
 import router from './router'
 import './assets/css/base.css'
 import 'vue-toastification/dist/index.css'
+import { faDocker } from '@fortawesome/free-brands-svg-icons/faDocker'
+import { faGit } from '@fortawesome/free-brands-svg-icons'
 
 // add icons to library
 library.add(
@@ -41,13 +47,19 @@ library.add(
   faUsers,
   faRightFromBracket,
   faChevronDown,
-  faArrowRight
+  faArrowRight,
+  faUpload,
+  faDocker,
+  faGit,
+  faCircleCheck,
+  faCircleXmark,
+  faTrash
 )
 
 // Setup apollo client
 // create apollo link
 const apolloLink = createHttpLink({
-  uri: 'https://ip-13-232-106-63.swiftwave.xyz:3333/graphql'
+  uri: 'https://ip-3-7-45-250.swiftwave.xyz:3333/graphql'
 })
 
 // create auth middleware

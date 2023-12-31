@@ -17,7 +17,7 @@ const authStore = useAuthStore()
         <div class="space-y-3">
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-700"
-            to="/dummy">
+            to="/deploy-application">
             <font-awesome-icon icon="fa-solid fa-hammer" />
             <span class="mx-2 text-sm font-medium">Deploy New Application</span>
           </RouterLink>
