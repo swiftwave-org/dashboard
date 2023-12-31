@@ -15,7 +15,7 @@ defineProps({
 })
 
 const stateRef = reactive({
-  replicas: 0,
+  replicas: 1,
   deploymentStrategy: 'replicated',
   // replicate -> false, global -> true,
   environmentVariablesKeys: [],

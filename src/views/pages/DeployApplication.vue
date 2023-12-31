@@ -106,6 +106,7 @@ const finalizeApplicationSourceConfigurationAndMoveToNextTab = (configuration) =
   newApplicationState.buildArgs = buildArgs
   newApplicationState.gitCredentialID = configuration.gitCredentialId === 0 ? null : configuration.gitCredentialId
   newApplicationState.gitProvider = getGitProvideFromGitRepoUrl(configuration.gitRepoUrl)
+  newApplicationState.repositoryBranch = configuration.gitBranch
   newApplicationState.repositoryName = getGitRepoNameFromGitRepoUrl(configuration.gitRepoUrl)
   newApplicationState.repositoryOwner = getGitRepoOwnerFromGitRepoUrl(configuration.gitRepoUrl)
   changeTab(3)
