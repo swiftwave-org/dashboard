@@ -17,7 +17,7 @@ onBeforeMount(() => {
 <template>
   <div class="app">
     <SideBar class="w-80" />
-    <div class="flex w-full flex-col items-center p-6">
+    <div class="flex max-h-[100vh] w-full flex-col items-center overflow-y-auto p-6">
       <RouterView />
     </div>
   </div>

@@ -25,6 +25,7 @@
     "moment": "^2.30.0",
     "monaco-editor": "^0.45.0",
     "pinia": "^2.1.7",
+    "uuid": "^9.0.1",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
     "vue-toastification": "^2.0.0-rc.5"

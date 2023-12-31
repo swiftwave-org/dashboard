@@ -10,6 +10,11 @@ import FilledButton from '@/views/components/FilledButton.vue'
 import { generateTarBlob } from '@/vendor/tarts.js'
 import DockerfileEditor from '@/views/partials/DeployApplication/DockerfileEditor.vue'
 import BuildArgInput from '@/views/partials/BuildArgInput.vue'
+import {
+  getGitProvideFromGitRepoUrl,
+  getGitRepoNameFromGitRepoUrl,
+  getGitRepoOwnerFromGitRepoUrl
+} from '@/vendor/utils.js'
 
 const props = defineProps({
   applicationSourceType: {
@@ -234,33 +239,6 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
   if (generateConfigurationLoad() === false) {
     generateConfigurationRefetch()
   }
-}
-
-// utils
-const getGitProvideFromGitRepoUrl = (gitRepoUrl) => {
-  if (gitRepoUrl.includes('github')) {
-    return 'github'
-  } else if (gitRepoUrl.includes('gitlab')) {
-    return 'gitlab'
-  } else {
-    return null
-  }
-}
-
-const getGitRepoOwnerFromGitRepoUrl = (gitRepoUrl) => {
-  const gitRepoUrlParts = gitRepoUrl.split('/')
-  if (gitRepoUrlParts.length < 2) {
-    return null
-  }
-  return gitRepoUrlParts[gitRepoUrlParts.length - 2]
-}
-
-const getGitRepoNameFromGitRepoUrl = (gitRepoUrl) => {
-  const gitRepoUrlParts = gitRepoUrl.split('/')
-  if (gitRepoUrlParts.length < 2) {
-    return null
-  }
-  return gitRepoUrlParts[gitRepoUrlParts.length - 1]
 }
 </script>
 

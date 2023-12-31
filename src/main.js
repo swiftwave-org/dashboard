@@ -19,6 +19,7 @@ import {
   faLocationArrow,
   faNetworkWired,
   faRightFromBracket,
+  faTrash,
   faUpload,
   faUsers
 } from '@fortawesome/free-solid-svg-icons'
@@ -51,7 +52,8 @@ library.add(
   faDocker,
   faGit,
   faCircleCheck,
-  faCircleXmark
+  faCircleXmark,
+  faTrash
 )
 
 // Setup apollo client
