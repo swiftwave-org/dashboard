@@ -30,6 +30,10 @@ const {
   `,
   {
     name: ''
+  },
+  {
+    fetchPolicy: 'no-cache',
+    nextFetchPolicy: 'no-cache'
   }
 )
 

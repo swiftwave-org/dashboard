@@ -27,7 +27,7 @@ const login = async () => {
 </script>
 
 <template>
-  <div class="flex h-full min-w-[100vw] flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="flex h-full w-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img alt="SwiftWave" class="mx-auto h-14 w-auto" v-bind:src="Logo" />
     </div>
@@ -88,7 +88,7 @@ const login = async () => {
           </div>
         </div>
         <div>
-          <FilledButton :click="login" class="w-full"> Sign in </FilledButton>
+          <FilledButton :click="login" class="w-full"> Sign in</FilledButton>
         </div>
       </form>
     </div>

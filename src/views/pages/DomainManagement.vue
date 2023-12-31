@@ -146,6 +146,10 @@ const {
     variables: {
       id: 0
     }
+  },
+  {
+    fetchPolicy: 'no-cache',
+    nextFetchPolicy: 'no-cache'
   }
 )
 
@@ -186,6 +190,10 @@ const {
     variables: {
       name: ''
     }
+  },
+  {
+    fetchPolicy: 'no-cache',
+    nextFetchPolicy: 'no-cache'
   }
 )
 

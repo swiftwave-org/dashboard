@@ -173,6 +173,10 @@ const {
   `,
   {
     input: {}
+  },
+  {
+    fetchPolicy: 'no-cache',
+    nextFetchPolicy: 'no-cache'
   }
 )
 
