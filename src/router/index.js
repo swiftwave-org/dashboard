@@ -9,6 +9,10 @@ const router = createRouter({
       name: 'Login',
       component: LoginView
     },
+    {
+      path: '/',
+      redirect: '/applications'
+    },
     // TODO update this to redirect to dashboard
     {
       path: '/deploy-application',
@@ -16,8 +20,9 @@ const router = createRouter({
       component: () => import('@/views/pages/DeployApplication.vue')
     },
     {
-      path: '/',
-      redirect: '/git-credentials'
+      path: '/applications',
+      name: 'Applications',
+      component: () => import('@/views/pages/ApplicationManagement.vue')
     },
     {
       path: '/persistent-volumes',
@@ -48,6 +53,11 @@ const router = createRouter({
       path: '/redirect-rules',
       name: 'Redirect Rules',
       component: () => import('@/views/pages/RedirectRuleManagement.vue')
+    },
+    {
+      path: '/ingress-rules',
+      name: 'Ingress Rules',
+      component: () => import('@/views/pages/IngressRuleManagement.vue')
     }
   ]
 })
