@@ -158,7 +158,6 @@ const sslDetailsIssuedAt = computed(() => {
   if (!viewSslDetailsResultRaw.value?.domain ?? '') {
     return ''
   }
-  console.log(viewSslDetailsResultRaw.value?.domain)
   if (viewSslDetailsResultRaw.value?.domain) {
     return moment(viewSslDetailsResultRaw.value?.domain.sslIssuedAt).format('YYYY-MM-DD HH:mm:ss')
   }

@@ -96,7 +96,7 @@ const {
 )
 
 const deleteRedirectRulesWithConfirmation = (redirect_rules) => {
-  if (confirm('Are you sure you want to delete this persistent volume?')) {
+  if (confirm('Are you sure you want to delete this redirect rule?')) {
     deleteRedirectRule({
       id: redirect_rules.id
     })
@@ -116,7 +116,7 @@ onRedirectRuleDeleteFail((err) => {
 const {
   result: redirectRulesRaw,
   refetch: refetchRedirectRules,
-  onError: onPersistentVolumesError
+  onError: onRedirectRulesError
 } = useQuery(
   gql`
     query {
@@ -139,14 +139,14 @@ const {
 
 const redirectRules = computed(() => redirectRulesRaw.value?.redirectRules ?? [])
 
-onPersistentVolumesError((err) => {
+onRedirectRulesError((err) => {
   toast.error(err.message)
 })
 </script>
 
 <template>
   <section class="mx-auto w-full max-w-7xl">
-    <!-- Modal for create persistent volumes -->
+    <!-- Modal for create redirect rules -->
     <ModalDialog :close-modal="closeModal" :is-open="isModalOpen">
       <template v-slot:header>Create Redirect Rule</template>
       <template v-slot:body>
@@ -212,7 +212,7 @@ onPersistentVolumesError((err) => {
       <template v-slot:message>
         <TableMessage v-if="redirectRules.length === 0">
           No Redirect Rules found.<br />
-          Click on the "Add New" button to create a new persistent volume.
+          Click on the "Add New" button to create a new redirect rule.
         </TableMessage>
       </template>
       <template v-slot:body>
