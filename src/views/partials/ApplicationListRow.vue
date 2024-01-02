@@ -4,6 +4,7 @@ import Badge from '@/views/components/Badge.vue'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { computed } from 'vue'
 import moment from 'moment'
+import router from '@/router/index.js'
 
 const props = defineProps({
   application: {
@@ -15,6 +16,9 @@ const props = defineProps({
 const createdAtFormatted = computed(() => {
   return moment(props.application.latestDeployment.createdAt).format('DD/MM/YYYY HH:mm')
 })
+const viewApplicationDetails = () => {
+  router.push(`/application/${props.application.id}`)
+}
 </script>
 
 <template>
@@ -65,7 +69,9 @@ const createdAtFormatted = computed(() => {
       <span class="text-sm text-gray-700"> {{ createdAtFormatted }} </span>
     </TableRow>
     <TableRow align="right" class="flex">
-      <FilledButton slim type="primary">View Details</FilledButton>
+      <FilledButton
+        :click="viewApplicationDetails"
+        slim type="primary">View Details</FilledButton>
     </TableRow>
   </tr>
 </template>

@@ -10,8 +10,10 @@ import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { computed } from 'vue'
 import ApplicationListRow from '@/views/partials/ApplicationListRow.vue'
+import { useToast } from 'vue-toastification'
 
 const router = useRouter()
+const toast = useToast()
 
 const deployNewApplication = () => {
   router.push('/deploy-application')
@@ -46,8 +48,8 @@ const {
   pollInterval: 10000
 })
 
-onApplicationsError(() => {
-  console.log('Error')
+onApplicationsError((err) => {
+  toast.error(err.message)
 })
 
 const applications = computed(() => applicationsResult.value?.applications ?? [])

@@ -13,7 +13,6 @@ const router = createRouter({
       path: '/',
       redirect: '/applications'
     },
-    // TODO update this to redirect to dashboard
     {
       path: '/deploy-application',
       name: 'Deploy Application',
@@ -23,6 +22,11 @@ const router = createRouter({
       path: '/applications',
       name: 'Applications',
       component: () => import('@/views/pages/ApplicationManagement.vue')
+    },
+    {
+      path: '/application/:id',
+      name: 'Application Details',
+      component: () => import('@/views/pages/ApplicationDetails.vue')
     },
     {
       path: '/persistent-volumes',
