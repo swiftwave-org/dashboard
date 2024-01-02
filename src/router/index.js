@@ -29,6 +29,11 @@ const router = createRouter({
       component: () => import('@/views/pages/ApplicationDetails.vue')
     },
     {
+      path: '/deployment/:id',
+      name: 'Deployment Details',
+      component: () => import('@/views/pages/DeploymentDetails.vue')
+    },
+    {
       path: '/persistent-volumes',
       name: 'Persistent Volumes',
       component: () => import('@/views/pages/PersistentVolumeManagement.vue')

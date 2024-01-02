@@ -9,11 +9,13 @@ import {
   faArrowDown,
   faArrowRight,
   faBox,
+  faCalendarDays,
   faChevronDown,
   faCircleCheck,
   faCircleXmark,
   faCloud,
   faCodeBranch,
+  faFingerprint,
   faHammer,
   faHardDrive,
   faLink,
@@ -58,7 +60,9 @@ library.add(
   faCircleCheck,
   faCircleXmark,
   faTrash,
-  faArrowDown
+  faArrowDown,
+  faCalendarDays,
+  faFingerprint
 )
 
 // Setup apollo client
