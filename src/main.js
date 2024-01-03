@@ -15,14 +15,14 @@ import {
   faCircleXmark,
   faCloud,
   faCodeBranch,
-  faFingerprint,
+  faFingerprint, faGear,
   faHammer,
   faHardDrive,
   faLink,
   faLocationArrow,
   faNetworkWired,
   faRightFromBracket,
-  faTrash,
+  faTrash, faTriangleExclamation,
   faUpload,
   faUsers
 } from '@fortawesome/free-solid-svg-icons'
@@ -62,7 +62,9 @@ library.add(
   faTrash,
   faArrowDown,
   faCalendarDays,
-  faFingerprint
+  faFingerprint,
+  faGear,
+  faTriangleExclamation
 )
 
 // Setup apollo client

@@ -26,7 +26,44 @@ const router = createRouter({
     {
       path: '/application/:id',
       name: 'Application Details',
-      component: () => import('@/views/pages/ApplicationDetails.vue')
+      component: () => import('@/views/pages/ApplicationDetails.vue'),
+      children: [
+        {
+          path: 'deployments',
+          name: 'Application Details Deployments',
+          component: () => import('@/views/pages/ApplicationDetails/DeploymentList.vue')
+        },
+        {
+          path: 'runtime_logs',
+          name: 'Application Details Runtime Logs',
+          component: () => import('@/views/pages/ApplicationDetails/RuntimeLogs.vue')
+        },
+        {
+          path: 'ingress_rules',
+          name: 'Application Details Ingress Rules',
+          component: () => import('@/views/pages/ApplicationDetails/IngressRules.vue')
+        },
+        {
+          path: 'update_source',
+          name: 'Application Details Update Source',
+          component: () => import('@/views/pages/ApplicationDetails/UpdateSourceCode.vue')
+        },
+        {
+          path: 'environment_variables',
+          name: 'Application Details Environment Variables',
+          component: () => import('@/views/pages/ApplicationDetails/EnvironmentVariables.vue')
+        },
+        {
+          path: 'persistent_volumes',
+          name: 'Application Details Persistent Volumes',
+          component: () => import('@/views/pages/ApplicationDetails/PersistentVolumes.vue')
+        },
+        {
+          path: 'deployment_config',
+          name: 'Application Details Deployment Config',
+          component: () => import('@/views/pages/ApplicationDetails/DeploymentConfig.vue')
+        }
+      ]
     },
     {
       path: '/deployment/:id',
