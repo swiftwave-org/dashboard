@@ -70,8 +70,7 @@ terminal.loadAddon(fitAddon)
 
 const {
   result: deploymentLogRaw,
-  loading: isDeploymentLogLoading,
-  onError: onDeploymentLogError
+  onError: onDeploymentLogError,
 } = useSubscription(gql`
   subscription ($id: String!) {
     fetchDeploymentLog(id: $id){
@@ -84,7 +83,9 @@ const {
   enabled: showDeploymentLog
 })
 
+
 onDeploymentLogError((err) => {
+  console.log(err)
   toast.error(err.message)
 })
 
@@ -141,8 +142,7 @@ onMounted(() => {
       <p><span class="font-medium">Build arguments :</span> <span v-html="buildArgs"></span></p>
     </div>
     <hr class="mt-4 mb-2">
-    <p class="font-medium text-lg inline-flex items-center gap-2">Deployment Logs
-      <StatusPulse v-if="isDeploymentLogLoading" type="success" />
+    <p class="font-medium text-lg inline-flex items-center gap-2">Deployment Logs [Will be auto-updated if the deployment is in progress]
     </p>
   </section>
   <div id="terminal" class="w-full max-w-7xl mt-3"></div>

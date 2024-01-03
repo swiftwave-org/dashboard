@@ -271,7 +271,7 @@ onIngressRulesError((err) => {
           </TableRow>
           <TableRow align="center">
             <Badge v-if="ingressRule.status === 'pending'" type="warning">Pending</Badge>
-            <Badge v-else-if="ingressRule.status === 'applied'" type="success">Issued</Badge>
+            <Badge v-else-if="ingressRule.status === 'applied'" type="success">Applied</Badge>
             <Badge v-else-if="ingressRule.status === 'failed'" type="danger">Failed</Badge>
             <Badge v-else-if="ingressRule.status === 'deleting'" type="danger">Deleting</Badge>
           </TableRow>
