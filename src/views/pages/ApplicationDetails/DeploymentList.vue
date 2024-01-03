@@ -3,7 +3,9 @@
 </script>
 
 <template>
-deployment list
+<div class="bg-green-400  h-full">
+
+</div>
 </template>
 
 <style scoped>
