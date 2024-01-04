@@ -34,6 +34,7 @@ const {
         id
         status
         upstreamType
+        dockerImage
         gitProvider
         repositoryName
         repositoryOwner

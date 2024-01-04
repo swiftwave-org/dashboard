@@ -17,7 +17,7 @@ const createdAtFormatted = computed(() => {
   return moment(props.application.latestDeployment.createdAt).format('DD/MM/YYYY HH:mm')
 })
 const viewApplicationDetails = () => {
-  router.push(`/application/${props.application.id}`)
+  router.push(`/application/${props.application.id}/deployments`)
 }
 </script>
 
