@@ -103,13 +103,12 @@ const onMountingPathChange = (key, value) => {
       </label>
       <div class="mt-1">
         <input
-          id="no_of_replicase"
-          autocomplete="off"
           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
           name="no_of_replicase"
           placeholder="No of Replicas"
-          type="text"
-          value="1" />
+          type="number"
+          v-model="stateRef.replicas"
+        />
       </div>
     </div>
     <!-- Environment Variables -->

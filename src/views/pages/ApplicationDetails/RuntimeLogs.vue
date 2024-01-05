@@ -24,7 +24,6 @@ terminal.loadAddon(fitAddon)
 
 const {
   result: deploymentLogRaw,
-  loading: isDeploymentLogLoading,
   onError: onDeploymentLogError
 } = useSubscription(gql`
   subscription ($id: String!) {

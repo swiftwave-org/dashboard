@@ -170,12 +170,14 @@ const applicationUpdater = NewApplicationUpdaterStore(applicationId)()
       <span class="font-medium mr-4">You have updated some of the configuration</span>
       <FilledButton
         type="primary"
+        :loading="applicationUpdater.isDeployRequestSubmitting"
         :click="applicationUpdater.applyConfigurationChanges"
       >
         Apply Changes
       </FilledButton>
       <FilledButton
         type="secondary"
+        :disabled="applicationUpdater.isDeployRequestSubmitting"
         :click="applicationUpdater.cancelConfigurationChanges"
       >
         Cancel
