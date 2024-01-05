@@ -7,6 +7,8 @@ import { computed } from 'vue'
 import Badge from '@/views/components/Badge.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ApplicationDetailsNavbar from '@/views/partials/ApplicationDetailsNavbar.vue'
+import NewApplicationUpdaterStore from '@/store/applicationUpdater.js'
+import FilledButton from '@/views/components/FilledButton.vue'
 
 // Get the application ID from the URL
 const router = useRouter()
@@ -67,6 +69,9 @@ const realtimeReplicaCountPercentage = computed(() => {
     return 0
   }
 })
+
+// Environment variables editor
+const applicationUpdater = NewApplicationUpdaterStore(applicationId)()
 
 </script>
 
@@ -157,6 +162,25 @@ const realtimeReplicaCountPercentage = computed(() => {
 
     <!--  Nested Router View  -->
     <RouterView />
+
+    <!--  Update Config Notify bar  -->
+    <div
+      v-if="applicationUpdater.isConfigurationUpdated"
+      class="mt-4 flex flex-row justify-end gap-2 items-center  border border-gray-300 p-2 rounded-md">
+      <span class="font-medium mr-4">You have updated some of the configuration</span>
+      <FilledButton
+        type="primary"
+        :click="applicationUpdater.applyConfigurationChanges"
+      >
+        Apply Changes
+      </FilledButton>
+      <FilledButton
+        type="secondary"
+        :click="applicationUpdater.cancelConfigurationChanges"
+      >
+        Cancel
+      </FilledButton>
+    </div>
   </section>
 
 </template>
