@@ -67,14 +67,18 @@ library.add(
   faTriangleExclamation
 )
 
+// Environment variables
+const GRAPHQL_HTTP_BASE_URL = import.meta.env.VITE_GRAPHQL_HTTP_BASE_URL;
+const GRAPHQL_WS_BASE_URL = import.meta.env.VITE_GRAPHQL_WS_BASE_URL;
+
 // Setup apollo client
 // create apollo link
 const httpLink = createHttpLink({
-  uri: 'https://ip-3-7-45-250.swiftwave.xyz:3333/graphql'
+  uri: `${GRAPHQL_HTTP_BASE_URL}/graphql`
 })
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'wss://ip-3-7-45-250.swiftwave.xyz:3333/graphql',
+  url: `${GRAPHQL_WS_BASE_URL}/graphql`,
   connectionParams: () => {
     const authStore = useAuthStore()
     return {

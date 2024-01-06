@@ -25,9 +25,12 @@ export const useAuthStore = defineStore('counter', () => {
     data.append('username', username)
     data.append('password', password)
 
+    // environment variable
+    const HTTP_BASE_URL = import.meta.env.VITE_HTTP_BASE_URL
+
     let config = {
       method: 'post',
-      url: 'https://ip-3-7-45-250.swiftwave.xyz:3333/auth/login',
+      url: `${HTTP_BASE_URL}/auth/login`,
       data: data
     }
 

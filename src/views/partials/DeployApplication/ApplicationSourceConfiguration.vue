@@ -105,13 +105,15 @@ const gitCredentials = computed(() => gitCredentialList.value?.gitCredentials ??
 
 onGitCredentialListError((err) => toast.error(err.message))
 
+
+const HTTP_BASE_URL = import.meta.env.VITE_HTTP_BASE_URL
 async function uploadTarFile(fileblob) {
   try {
     var data = new FormData()
     data.append('file', fileblob, 'file.tar')
     const res = await axios({
       method: 'post',
-      url: 'https://ip-3-7-45-250.swiftwave.xyz:3333/upload/code',
+      url: `${HTTP_BASE_URL}/upload/code`,
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: authStore.FetchBearerToken()
