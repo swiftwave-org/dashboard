@@ -14,8 +14,10 @@ import {
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router'
 
 const toast = useToast()
+const router = useRouter()
 const sectionNames = [
   'Application Name',
   'Select Source',
@@ -62,6 +64,9 @@ const {
       createApplication(input: $input) {
         id
         name
+        latestDeployment {
+          id
+        }
       }
     }
   `,
@@ -72,9 +77,19 @@ const {
   }
 )
 
-onDeployApplicationMutationDone(() => {
+onDeployApplicationMutationDone((result) => {
   toast.success('Application deployed successfully !')
-  //   TODO: Redirect to the application details page
+  console.log(result)
+  if(result.data.createApplication.latestDeployment === null) {
+    toast.warning('Application is not deployed yet, please wait for a while and refresh the page')
+    return
+  }
+  router.push({
+    name: 'Deployment Details',
+    params: {
+      id: result.data.createApplication.latestDeployment.id
+    }
+  })
 })
 
 onDeployApplicationMutationError((msg) => {
@@ -105,20 +120,23 @@ const finalizeApplicationSourceConfigurationAndMoveToNextTab = (configuration) =
   }
   newApplicationState.buildArgs = buildArgs
   newApplicationState.gitCredentialID = configuration.gitCredentialId === 0 ? null : configuration.gitCredentialId
+  newApplicationState.imageRegistryCredentialID = configuration.imageRegistryCredentialId === 0 ? null : configuration.imageRegistryCredentialId
   newApplicationState.gitProvider = getGitProvideFromGitRepoUrl(configuration.gitRepoUrl)
   newApplicationState.repositoryBranch = configuration.gitBranch
   newApplicationState.repositoryName = getGitRepoNameFromGitRepoUrl(configuration.gitRepoUrl)
   newApplicationState.repositoryOwner = getGitRepoOwnerFromGitRepoUrl(configuration.gitRepoUrl)
+  newApplicationState.sourceCodeCompressedFileName = configuration.sourceCodeFile
+  newApplicationState.dockerImage = configuration.dockerImage
   changeTab(3)
 }
 
 const finalizeApplicationAdditionalSettingsAndMoveToNextTab = (additionalSettings) => {
   // Store the configuration in the state
   // NOTE: Don't modify as configuration is a reference to the state of `ApplicationAdditionalSettings.vue`
-  newApplicationState.deploymentMode = additionalSettings.deploymentStrategy
+  newApplicationState.deploymentMode = additionalSettings.deploymentMode
   newApplicationState.replicas = additionalSettings.replicas
-  newApplicationState.environmentVariables = Object.values(additionalSettings.environmentVariablesMap)
-  newApplicationState.persistentVolumeBindings = Object.values(additionalSettings.persistentVolumeBindingsMap)
+  newApplicationState.environmentVariables = additionalSettings.environmentVariables
+  newApplicationState.persistentVolumeBindings = additionalSettings.persistentVolumeBindings
   changeTab(4)
 }
 </script>

@@ -24,4 +24,37 @@ const getGitRepoNameFromGitRepoUrl = (gitRepoUrl) => {
   return gitRepoUrlParts[gitRepoUrlParts.length - 1]
 }
 
-export { getGitProvideFromGitRepoUrl, getGitRepoOwnerFromGitRepoUrl, getGitRepoNameFromGitRepoUrl }
+const getGraphQlHttpBaseUrl = () => {
+  if (import.meta.env.VITE_GRAPHQL_HTTP_BASE_URL) {
+    return import.meta.env.VITE_GRAPHQL_HTTP_BASE_URL
+  }
+  return window.location.origin
+}
+
+const getGraphQlWsBaseUrl = () => {
+  if (import.meta.env.VITE_GRAPHQL_WS_BASE_URL) {
+    return import.meta.env.VITE_GRAPHQL_WS_BASE_URL
+  }
+  let protocol = 'ws'
+  if (window.location.protocol === 'https:') {
+    protocol = 'wss'
+  }
+  return `${protocol}://${window.location.host}`
+}
+
+const getHttpBaseUrl = () => {
+  if (import.meta.env.VITE_HTTP_BASE_URL) {
+    return import.meta.env.VITE_HTTP_BASE_URL
+  }
+  return window.location.origin
+}
+
+
+export {
+  getGitProvideFromGitRepoUrl,
+  getGitRepoOwnerFromGitRepoUrl,
+  getGitRepoNameFromGitRepoUrl,
+  getGraphQlHttpBaseUrl,
+  getGraphQlWsBaseUrl,
+  getHttpBaseUrl
+}

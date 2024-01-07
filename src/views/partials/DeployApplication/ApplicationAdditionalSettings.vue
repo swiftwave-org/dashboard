@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import PersistentVolumeBindingEditor from '@/views/partials/DeployApplication/PersistentVolumeBindingEditor.vue'
 import FilledButton from '@/views/components/FilledButton.vue'
 
-defineProps({
+const props = defineProps({
   finalizeApplicationAdditionalSettingsAndMoveToNextTab: {
     type: Function,
     required: true
@@ -83,6 +83,24 @@ const onPersistentVolumeChange = (key, value) => {
 const onMountingPathChange = (key, value) => {
   stateRef.persistentVolumeBindingsMap[key].mountingPath = value
 }
+
+const submitDetails = () => {
+  let environmentVariables = []
+  for (let key in stateRef.environmentVariablesMap) {
+    environmentVariables.push({
+      key: stateRef.environmentVariablesMap[key].name,
+      value: stateRef.environmentVariablesMap[key].value
+    })
+  }
+  let details = {
+    deploymentMode: stateRef.deploymentStrategy,
+    replicas: stateRef.replicas,
+    environmentVariables: environmentVariables,
+    persistentVolumeBindings: Object.values(stateRef.persistentVolumeBindingsMap)
+  }
+  props.finalizeApplicationAdditionalSettingsAndMoveToNextTab(details)
+}
+
 </script>
 
 <template>
@@ -103,13 +121,12 @@ const onMountingPathChange = (key, value) => {
       </label>
       <div class="mt-1">
         <input
-          id="no_of_replicase"
-          autocomplete="off"
           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
           name="no_of_replicase"
           placeholder="No of Replicas"
-          type="text"
-          value="1" />
+          type="number"
+          v-model="stateRef.replicas"
+        />
       </div>
     </div>
     <!-- Environment Variables -->
@@ -134,7 +151,7 @@ const onMountingPathChange = (key, value) => {
       class="mt-2" />
     <!-- Proceed to next -->
     <div class="mt-6 flex flex-row justify-end">
-      <FilledButton type="primary" @click="() => finalizeApplicationAdditionalSettingsAndMoveToNextTab(stateRef)"
+      <FilledButton type="primary" @click="submitDetails"
         >Confirm & Proceed to Next
       </FilledButton>
     </div>

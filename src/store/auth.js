@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
+import { getHttpBaseUrl } from '@/vendor/utils.js'
 
-export const useAuthStore = defineStore('counter', () => {
+export const useAuthStore = defineStore('auth_details', () => {
   const IsLoggedIn = ref(false)
   const AccessToken = ref('')
+  const IsLoggingInProgress = ref(false)
 
   function FetchBearerToken() {
     if (IsLoggedIn.value) {
@@ -14,9 +16,13 @@ export const useAuthStore = defineStore('counter', () => {
   }
 
   function SetCredential(token) {
-    IsLoggedIn.value = true
     AccessToken.value = token
     localStorage.setItem('token', token)
+    IsLoggedIn.value = true
+    IsLoggingInProgress.value = true
+    setTimeout(()=>{
+      IsLoggingInProgress.value = false
+    }, 1500)
   }
 
   async function Login(username, password) {
@@ -25,9 +31,12 @@ export const useAuthStore = defineStore('counter', () => {
     data.append('username', username)
     data.append('password', password)
 
+    // environment variable
+    const HTTP_BASE_URL = getHttpBaseUrl()
+
     let config = {
       method: 'post',
-      url: 'https://ip-3-7-45-250.swiftwave.xyz:3333/auth/login',
+      url: `${HTTP_BASE_URL}/auth/login`,
       data: data
     }
 
@@ -58,9 +67,12 @@ export const useAuthStore = defineStore('counter', () => {
     // logout
     IsLoggedIn.value = false
     localStorage.clear()
+    IsLoggingInProgress.value = true
     // redirect to /
-    window.location.href = '/'
+    setTimeout(()=>{
+      window.location.href = '/login'
+    }, 500)
   }
 
-  return { IsLoggedIn, FetchBearerToken, Login, Logout, SetCredential }
+  return { IsLoggedIn, IsLoggingInProgress, FetchBearerToken, Login, Logout, SetCredential }
 })

@@ -2,25 +2,27 @@ import { createApp, h, provide } from 'vue'
 import { createPinia } from 'pinia'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 
-import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, split } from '@apollo/client/core'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faArrowDown,
-  faArrowRight,
+  faArrowRight, faArrowUpRightFromSquare,
   faBox,
+  faCalendarDays,
   faChevronDown,
   faCircleCheck,
   faCircleXmark,
   faCloud,
   faCodeBranch,
+  faFingerprint, faGear,
   faHammer,
   faHardDrive,
   faLink,
   faLocationArrow,
   faNetworkWired,
-  faRightFromBracket,
-  faTrash,
+  faRightFromBracket, faSkullCrossbones,
+  faTrash, faTriangleExclamation,
   faUpload,
   faUsers
 } from '@fortawesome/free-solid-svg-icons'
@@ -34,6 +36,10 @@ import './assets/css/base.css'
 import 'vue-toastification/dist/index.css'
 import { faDocker } from '@fortawesome/free-brands-svg-icons/faDocker'
 import { faGit } from '@fortawesome/free-brands-svg-icons'
+import { createClient } from 'graphql-ws'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions' // <-- This one uses graphql-ws
+import { getMainDefinition } from '@apollo/client/utilities'
+import { getGraphQlHttpBaseUrl, getGraphQlWsBaseUrl } from '@/vendor/utils.js'
 
 // add icons to library
 library.add(
@@ -55,14 +61,34 @@ library.add(
   faCircleCheck,
   faCircleXmark,
   faTrash,
-  faArrowDown
+  faArrowDown,
+  faCalendarDays,
+  faFingerprint,
+  faGear,
+  faTriangleExclamation,
+  faSkullCrossbones,
+  faArrowUpRightFromSquare
 )
+
+// Environment variables
+const GRAPHQL_HTTP_BASE_URL = getGraphQlHttpBaseUrl();
+const GRAPHQL_WS_BASE_URL = getGraphQlWsBaseUrl();
 
 // Setup apollo client
 // create apollo link
-const apolloLink = createHttpLink({
-  uri: 'https://ip-3-7-45-250.swiftwave.xyz:3333/graphql'
+const httpLink = createHttpLink({
+  uri: `${GRAPHQL_HTTP_BASE_URL}/graphql`
 })
+
+const wsLink = new GraphQLWsLink(createClient({
+  url: `${GRAPHQL_WS_BASE_URL}/graphql`,
+  connectionParams: () => {
+    const authStore = useAuthStore()
+    return {
+      authorization: authStore.FetchBearerToken()
+    }
+  }
+}))
 
 // create auth middleware
 const apolloAuthMiddleware = new ApolloLink((operation, forward) => {
@@ -76,9 +102,32 @@ const apolloAuthMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation)
 })
 
+const link = split(({ query }) => {
+    const definition = getMainDefinition(query)
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    )
+  },
+  wsLink,
+  apolloAuthMiddleware.concat(httpLink)
+)
+
+
 // create apollo client
 const apolloClient = new ApolloClient({
-  link: apolloAuthMiddleware.concat(apolloLink),
+  link: link,
+  defaultOptions: {
+    query : {
+      fetchPolicy: 'network-only'
+    },
+    mutate: {
+      fetchPolicy: 'no-cache'
+    },
+    watchQuery: {
+      fetchPolicy: 'network-only'
+    }
+  },
   cache: new InMemoryCache()
 })
 
@@ -116,6 +165,6 @@ router.beforeEach(async (to) => {
     return { name: 'Login' }
   }
   if (authStore.IsLoggedIn && to.name === 'Login') {
-    return { name: '' }
+    return { name: 'Applications' }
   }
 })
