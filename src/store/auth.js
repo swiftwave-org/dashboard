@@ -6,6 +6,7 @@ import { getHttpBaseUrl } from '@/vendor/utils.js'
 export const useAuthStore = defineStore('auth_details', () => {
   const IsLoggedIn = ref(false)
   const AccessToken = ref('')
+  const IsLoggingInProgress = ref(false)
 
   function FetchBearerToken() {
     if (IsLoggedIn.value) {
@@ -15,9 +16,13 @@ export const useAuthStore = defineStore('auth_details', () => {
   }
 
   function SetCredential(token) {
-    IsLoggedIn.value = true
     AccessToken.value = token
     localStorage.setItem('token', token)
+    IsLoggedIn.value = true
+    IsLoggingInProgress.value = true
+    setTimeout(()=>{
+      IsLoggingInProgress.value = false
+    }, 1500)
   }
 
   async function Login(username, password) {
@@ -62,9 +67,12 @@ export const useAuthStore = defineStore('auth_details', () => {
     // logout
     IsLoggedIn.value = false
     localStorage.clear()
+    IsLoggingInProgress.value = true
     // redirect to /
-    window.location.href = '/'
+    setTimeout(()=>{
+      window.location.href = '/login'
+    }, 500)
   }
 
-  return { IsLoggedIn, FetchBearerToken, Login, Logout, SetCredential }
+  return { IsLoggedIn, IsLoggingInProgress, FetchBearerToken, Login, Logout, SetCredential }
 })

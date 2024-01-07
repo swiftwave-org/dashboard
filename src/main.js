@@ -165,6 +165,6 @@ router.beforeEach(async (to) => {
     return { name: 'Login' }
   }
   if (authStore.IsLoggedIn && to.name === 'Login') {
-    return { name: '' }
+    return { name: 'Applications' }
   }
 })
