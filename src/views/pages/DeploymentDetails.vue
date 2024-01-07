@@ -118,7 +118,7 @@ const isTerminalLoading = computed(() => {
   </div>
   <section v-else class="mx-auto w-full max-w-7xl">
     <div class="flex items-center gap-2">
-      <p class="font-medium text-xl">{{ deployment.application.name }}</p>
+      <RouterLink :to="`/application/${deployment?.application?.id}/deployments`"><p class="font-medium text-xl"><font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" class="text-lg mr-2" />{{ deployment.application.name }}</p></RouterLink>
       <Badge v-if="deployment.status === 'live'" type="success">{{ deployment.status }}</Badge>
       <Badge v-else-if="deployment.status === 'pending'" type="warning">{{ deployment.status }}</Badge>
       <Badge v-else-if="deployment.status === 'deployPending'" type="warning">{{ deployment.status }}</Badge>

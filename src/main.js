@@ -7,7 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faArrowDown,
-  faArrowRight,
+  faArrowRight, faArrowUpRightFromSquare,
   faBox,
   faCalendarDays,
   faChevronDown,
@@ -65,7 +65,8 @@ library.add(
   faFingerprint,
   faGear,
   faTriangleExclamation,
-  faSkullCrossbones
+  faSkullCrossbones,
+  faArrowUpRightFromSquare
 )
 
 // Environment variables
