@@ -104,6 +104,9 @@ const applicationUpdater = NewApplicationUpdaterStore(applicationId)()
           <Badge v-else-if="applicationDetails.latestDeployment.status === 'stopped'" type="secondary">
             {{ applicationDetails.latestDeployment.status }}
           </Badge>
+          <Badge v-else-if="applicationDetails.latestDeployment.status === 'stalled'" type="secondary">
+            {{ applicationDetails.latestDeployment.status }}
+          </Badge>
         </div>
         <div class="flex items-center gap-2 font-medium text-gray-800 mt-2">
           <font-awesome-icon v-if="applicationDetails.latestDeployment.upstreamType === 'git'"
