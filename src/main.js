@@ -21,7 +21,7 @@ import {
   faLink,
   faLocationArrow,
   faNetworkWired,
-  faRightFromBracket,
+  faRightFromBracket, faSkullCrossbones,
   faTrash, faTriangleExclamation,
   faUpload,
   faUsers
@@ -64,7 +64,8 @@ library.add(
   faCalendarDays,
   faFingerprint,
   faGear,
-  faTriangleExclamation
+  faTriangleExclamation,
+  faSkullCrossbones
 )
 
 // Environment variables
@@ -114,6 +115,17 @@ const link = split(({ query }) => {
 // create apollo client
 const apolloClient = new ApolloClient({
   link: link,
+  defaultOptions: {
+    query : {
+      fetchPolicy: 'network-only'
+    },
+    mutate: {
+      fetchPolicy: 'no-cache'
+    },
+    watchQuery: {
+      fetchPolicy: 'network-only'
+    }
+  },
   cache: new InMemoryCache()
 })
 

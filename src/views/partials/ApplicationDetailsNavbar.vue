@@ -66,6 +66,17 @@
         Deployment Configuration
       </div>
     </RouterLink>
+    <RouterLink
+      :to="{
+        name: 'Application Details Danger Zone',
+        params: { id: $route.params.id }
+      }"
+    >
+      <div  class="px-3 py-2 border border-black text-sm font-medium hover:bg-gray-200 min-w-max">
+        <font-awesome-icon icon="fa-solid fa-skull-crossbones" />
+        Danger Zone
+      </div>
+    </RouterLink>
   </div>
 </template>
 

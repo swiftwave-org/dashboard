@@ -11,6 +11,7 @@ const router = createRouter({
     },
     {
       path: '/',
+      name: 'Applications',
       redirect: '/applications'
     },
     {
@@ -62,6 +63,11 @@ const router = createRouter({
           path: 'deployment_config',
           name: 'Application Details Deployment Config',
           component: () => import('@/views/pages/ApplicationDetails/DeploymentConfig.vue')
+        },
+        {
+          path: 'danger_zone',
+          name: 'Application Details Danger Zone',
+          component: () => import('@/views/pages/ApplicationDetails/DangerZone.vue')
         }
       ]
     },
