@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { useToast } from 'vue-toastification'
-import StatusPulse from '@/views/components/StatusPulse.vue'
+
 
 const router = useRouter()
 const deploymentId = router.currentRoute.value.params.id
@@ -44,6 +44,8 @@ const {
   }
 `, {
   id: deploymentId
+}, {
+  pollInterval: 10000
 })
 
 const deployment = computed(() => deploymentRaw.value?.deployment ?? {})
