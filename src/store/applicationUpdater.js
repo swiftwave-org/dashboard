@@ -182,15 +182,19 @@ export default function newApplicationUpdater(applicationId) {
       triggerUpdateHook()
     }
 
+    // eslint-disable-next-line no-unused-vars
     const changeDeploymentStrategy = (switchStatus) => {
-      if (switchStatus) {
-        deploymentConfigurationDetails.deploymentMode = 'global'
-        deploymentConfigurationDetails.replicas = 0
-      } else {
-        deploymentConfigurationDetails.deploymentMode = 'replicated'
-        deploymentConfigurationDetails.replicas = 1
-      }
-      triggerUpdateHook()
+      alert("Sorry, for change deployment strategy you need to delete and re-create the application\nIn future, we will support this feature")
+
+      // TODO: will be supported in future
+      // if (switchStatus) {
+      //   deploymentConfigurationDetails.deploymentMode = 'global'
+      //   deploymentConfigurationDetails.replicas = 0
+      // } else {
+      //   deploymentConfigurationDetails.deploymentMode = 'replicated'
+      //   deploymentConfigurationDetails.replicas = 1
+      // }
+      // triggerUpdateHook()
     }
 
     const replicasCountChanged = () => {
