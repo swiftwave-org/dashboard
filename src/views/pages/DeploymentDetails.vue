@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { useToast } from 'vue-toastification'
+import StatusPulse from '@/views/components/StatusPulse.vue'
 
 
 const router = useRouter()
@@ -72,7 +73,7 @@ terminal.loadAddon(fitAddon)
 
 const {
   result: deploymentLogRaw,
-  onError: onDeploymentLogError,
+  onError: onDeploymentLogError
 } = useSubscription(gql`
   subscription ($id: String!) {
     fetchDeploymentLog(id: $id){
@@ -98,11 +99,15 @@ watch(deploymentLog, (value) => {
   }
 })
 
-
 onMounted(() => {
   terminal.open(document.getElementById('terminal'))
   fitAddon.fit()
   showDeploymentLog.value = true
+})
+
+const isTerminalLoading = computed(() => {
+  let status = deployment.value?.status ?? ''
+  return status === 'pending' || status === 'deployPending'
 })
 
 </script>
@@ -144,8 +149,10 @@ onMounted(() => {
       <p><span class="font-medium">Build arguments :</span> <span v-html="buildArgs"></span></p>
     </div>
     <hr class="mt-4 mb-2">
-    <p class="font-medium text-lg inline-flex items-center gap-2">Deployment Logs [Will be auto-updated if the deployment is in progress]
+    <p class="font-medium text-lg inline-flex items-center gap-2">Deployment Logs
+      <StatusPulse v-if="isTerminalLoading" type="success" />
     </p>
+    <p class="text-secondary-700 text-sm">If you feel that deployment log is not automatically updating, please refresh the page.</p>
   </section>
   <div id="terminal" class="w-full max-w-7xl mt-3"></div>
 </template>
