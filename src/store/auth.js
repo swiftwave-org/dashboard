@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
+import { getHttpBaseUrl } from '@/vendor/utils.js'
 
 export const useAuthStore = defineStore('counter', () => {
   const IsLoggedIn = ref(false)
@@ -26,7 +27,7 @@ export const useAuthStore = defineStore('counter', () => {
     data.append('password', password)
 
     // environment variable
-    const HTTP_BASE_URL = import.meta.env.VITE_HTTP_BASE_URL
+    const HTTP_BASE_URL = getHttpBaseUrl()
 
     let config = {
       method: 'post',

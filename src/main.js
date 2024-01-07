@@ -39,6 +39,7 @@ import { faGit } from '@fortawesome/free-brands-svg-icons'
 import { createClient } from 'graphql-ws'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions' // <-- This one uses graphql-ws
 import { getMainDefinition } from '@apollo/client/utilities'
+import { getGraphQlHttpBaseUrl, getGraphQlWsBaseUrl } from '@/vendor/utils.js'
 
 // add icons to library
 library.add(
@@ -70,8 +71,8 @@ library.add(
 )
 
 // Environment variables
-const GRAPHQL_HTTP_BASE_URL = import.meta.env.VITE_GRAPHQL_HTTP_BASE_URL;
-const GRAPHQL_WS_BASE_URL = import.meta.env.VITE_GRAPHQL_WS_BASE_URL;
+const GRAPHQL_HTTP_BASE_URL = getGraphQlHttpBaseUrl();
+const GRAPHQL_WS_BASE_URL = getGraphQlWsBaseUrl();
 
 // Setup apollo client
 // create apollo link
