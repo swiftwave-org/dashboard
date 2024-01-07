@@ -110,6 +110,8 @@ const finalizeApplicationSourceConfigurationAndMoveToNextTab = (configuration) =
   newApplicationState.repositoryBranch = configuration.gitBranch
   newApplicationState.repositoryName = getGitRepoNameFromGitRepoUrl(configuration.gitRepoUrl)
   newApplicationState.repositoryOwner = getGitRepoOwnerFromGitRepoUrl(configuration.gitRepoUrl)
+  newApplicationState.sourceCodeCompressedFileName = configuration.sourceCodeFile
+  newApplicationState.dockerImage = configuration.dockerImage
   changeTab(3)
 }
 

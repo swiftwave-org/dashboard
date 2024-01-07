@@ -61,7 +61,7 @@ const formatdate = (date) => {
   <p
     class="text-gray-900 font-semibold w-full text-center"
   >🛠 Click on a deployment to view more details 🛠</p>
-  <div class="flex mt-4 gap-2">
+  <div class="flex flex-col mt-4 gap-2">
     <RouterLink
       v-for="deployment in deployments"
       :key="deployment.id"
