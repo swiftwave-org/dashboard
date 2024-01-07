@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { getHttpBaseUrl } from '@/vendor/utils.js'
 
-export const useAuthStore = defineStore('counter', () => {
+export const useAuthStore = defineStore('auth_details', () => {
   const IsLoggedIn = ref(false)
   const AccessToken = ref('')
 
