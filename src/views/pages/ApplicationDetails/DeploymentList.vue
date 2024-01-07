@@ -84,6 +84,7 @@ const formatdate = (date) => {
           <Badge v-else-if="deployment.status === 'deploying'" type="warning">{{ deployment.status }}</Badge>
           <Badge v-else-if="deployment.status === 'failed'" type="danger">{{ deployment.status }}</Badge>
           <Badge v-else-if="deployment.status === 'stopped'" type="secondary">{{ deployment.status }}</Badge>
+          <Badge v-else-if="deployment.status === 'stalled'" type="secondary">{{ deployment.status }}</Badge>
         </div>
         <div class="flex flex-row gap-2 items-center">
           <font-awesome-icon v-if="deployment.upstreamType === 'git'" icon="fa-solid fa-code-branch" />
