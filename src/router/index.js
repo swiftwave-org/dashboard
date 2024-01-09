@@ -10,8 +10,7 @@ const router = createRouter({
       component: LoginView
     },
     {
-      path: '/',
-      name: 'Applications',
+      path: '',
       redirect: '/applications'
     },
     {
