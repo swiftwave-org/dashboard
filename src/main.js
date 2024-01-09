@@ -1,4 +1,4 @@
-import { createApp, h, provide } from 'vue'
+import { createApp, h, markRaw, provide } from 'vue'
 import { createPinia } from 'pinia'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 
@@ -140,8 +140,12 @@ const app = createApp({
   render: () => h(App)
 })
 app.component('font-awesome-icon', FontAwesomeIcon)
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(({store})=>{
+  store.$router = markRaw(router)
+})
 app.use(router)
+app.use(pinia)
 app.use(Toast, {
   position: 'top-right',
   timeout: 5000,
