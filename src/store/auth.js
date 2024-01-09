@@ -70,7 +70,11 @@ export const useAuthStore = defineStore('auth_details', () => {
     IsLoggingInProgress.value = true
     // redirect to /
     setTimeout(()=>{
-      window.location.href = '/login'
+      this.$router.
+        push({ name: 'Login' })
+        .then(()=>{
+          this.$router.go(0)
+        })
     }, 500)
   }
 
