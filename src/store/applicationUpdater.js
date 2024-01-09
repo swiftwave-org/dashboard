@@ -1,8 +1,13 @@
 import { defineStore } from 'pinia'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import {
+  getGitProvideFromGitRepoUrl,
+  getGitRepoNameFromGitRepoUrl,
+  getGitRepoOwnerFromGitRepoUrl
+} from '@/vendor/utils.js'
 
 export default function newApplicationUpdater(applicationId) {
   const storeName = 'application_updater_' + applicationId
@@ -47,7 +52,6 @@ export default function newApplicationUpdater(applicationId) {
     })
 
 
-
     const {
       result: applicationDetailsRaw,
       refetch: refetchApplicationDetails,
@@ -64,6 +68,22 @@ export default function newApplicationUpdater(applicationId) {
           persistentVolumeBindings {
             persistentVolumeID
             mountingPath
+          }
+          latestDeployment {
+            upstreamType
+            dockerfile
+            buildArgs {
+              key
+              value
+            }
+            gitProvider
+            gitCredentialID
+            repositoryName
+            repositoryOwner
+            repositoryBranch
+            imageRegistryCredentialID
+            dockerImage
+            sourceCodeCompressedFileName
           }
         }
       }
@@ -107,6 +127,17 @@ export default function newApplicationUpdater(applicationId) {
       const deploymentConfiguration = applicationDetailsRaw.value?.application ?? {}
       deploymentConfigurationDetails.deploymentMode = deploymentConfiguration.deploymentMode
       deploymentConfigurationDetails.replicas = deploymentConfiguration.replicas
+
+      sourceConfigurationRef.gitCredentialID = deploymentConfiguration.latestDeployment.gitCredentialID
+      sourceConfigurationRef.gitProvider = deploymentConfiguration.latestDeployment.gitProvider
+      sourceConfigurationRef.repositoryName = deploymentConfiguration.latestDeployment.repositoryName
+      sourceConfigurationRef.repositoryOwner = deploymentConfiguration.latestDeployment.repositoryOwner
+      sourceConfigurationRef.repositoryBranch = deploymentConfiguration.latestDeployment.repositoryBranch
+      sourceConfigurationRef.imageRegistryCredentialID = deploymentConfiguration.latestDeployment.imageRegistryCredentialID
+      sourceConfigurationRef.dockerImage = deploymentConfiguration.latestDeployment.dockerImage
+      sourceConfigurationRef.sourceCodeCompressedFileName = deploymentConfiguration.latestDeployment.sourceCodeCompressedFileName
+      sourceConfigurationRef.dockerfile = deploymentConfiguration.latestDeployment.dockerfile
+
       // reset isConfigurationUpdated
       isConfigurationUpdated.value = false
     }
@@ -124,6 +155,19 @@ export default function newApplicationUpdater(applicationId) {
     const deploymentConfigurationDetails = reactive({
       deploymentMode: '',
       replicas: 0
+    })
+
+    const sourceConfigurationRef = reactive({
+      gitCredentialID: 0, // TODO null
+      gitProvider: "",
+      repositoryName: "",
+      repositoryOwner: "",
+      repositoryBranch: "",
+      imageRegistryCredentialID: 0,
+      dockerImage: "",
+      sourceCodeCompressedFileName: "",
+      dockerfile: "",
+      buildArgs: {}
     })
 
     const addEnvironmentVariable = () => {
@@ -184,7 +228,7 @@ export default function newApplicationUpdater(applicationId) {
 
     // eslint-disable-next-line no-unused-vars
     const changeDeploymentStrategy = (switchStatus) => {
-      alert("Sorry, for change deployment strategy you need to delete and re-create the application\nIn future, we will support this feature")
+      alert('Sorry, for change deployment strategy you need to delete and re-create the application\nIn future, we will support this feature')
 
       // TODO: will be supported in future
       // if (switchStatus) {
@@ -203,11 +247,11 @@ export default function newApplicationUpdater(applicationId) {
 
     // someInfoUpdated
     const triggerUpdateHook = () => {
-      isConfigurationUpdated.value = checkIfApplicationDetailsAreChanged();
+      isConfigurationUpdated.value = checkIfApplicationDetailsAreChanged()
     }
 
-    const { result: applicationExistingDetailsResult,
-    onResult: onApplicationExistingDetailsResult
+    const {
+      result: applicationExistingDetailsResult
     } = useQuery(gql`
       query ($id: String!) {
         application(id: $id) {
@@ -247,11 +291,7 @@ export default function newApplicationUpdater(applicationId) {
       nextFetchPolicy: 'no-cache'
     })
 
-    onApplicationExistingDetailsResult(()=>{
-      console.log(mergeChangesWithExistingApplicationDetails())
-    })
-
-    function checkIfApplicationDetailsAreChanged (){
+    function checkIfApplicationDetailsAreChanged() {
       const applicationExistingDetails = applicationExistingDetailsResult.value?.application ?? {}
 
       // check if deployment mode is changed
@@ -305,10 +345,52 @@ export default function newApplicationUpdater(applicationId) {
           return true
         }
       }
+
+      // check if any source configuration is changed
+      if (sourceConfigurationRef.gitCredentialID !== applicationExistingDetails.latestDeployment.gitCredentialID) {
+        return true
+      }
+      if (sourceConfigurationRef.gitProvider !== applicationExistingDetails.latestDeployment.gitProvider) {
+        return true
+      }
+      if (sourceConfigurationRef.repositoryName !== applicationExistingDetails.latestDeployment.repositoryName) {
+        return true
+      }
+      if (sourceConfigurationRef.repositoryOwner !== applicationExistingDetails.latestDeployment.repositoryOwner) {
+        return true
+      }
+      if (sourceConfigurationRef.repositoryBranch !== applicationExistingDetails.latestDeployment.repositoryBranch) {
+        return true
+      }
+      if (sourceConfigurationRef.imageRegistryCredentialID !== applicationExistingDetails.latestDeployment.imageRegistryCredentialID) {
+        return true
+      }
+      if (sourceConfigurationRef.dockerImage !== applicationExistingDetails.latestDeployment.dockerImage) {
+        return true
+      }
+      if (sourceConfigurationRef.sourceCodeCompressedFileName !== applicationExistingDetails.latestDeployment.sourceCodeCompressedFileName) {
+        return true
+      }
+      if (sourceConfigurationRef.dockerfile !== applicationExistingDetails.latestDeployment.dockerfile) {
+        return true
+      }
+      // check if build args are changed
+      let existingBuildArgs = {};
+      (applicationExistingDetails.latestDeployment.buildArgs??[]).forEach((buildArg) => {
+        existingBuildArgs[buildArg.key] = buildArg.value
+      })
+      if (Object.keys(existingBuildArgs).length !== Object.keys(sourceConfigurationRef.buildArgs).length) {
+        return true
+      }
+      for (const key in existingBuildArgs) {
+        if (existingBuildArgs[key] !== sourceConfigurationRef.buildArgs[key]) {
+          return true
+        }
+      }
       return false
     }
 
-    const mergeChangesWithExistingApplicationDetails = ()=>{
+    const mergeChangesWithExistingApplicationDetails = () => {
       const applicationExistingDetails = applicationExistingDetailsResult.value?.application ?? {}
       if (applicationExistingDetails.length === 0) {
         alert('Failed to fetch application details\nTry again after re-loading the page')
@@ -316,14 +398,13 @@ export default function newApplicationUpdater(applicationId) {
 
       return {
         name: applicationExistingDetails.name,
-        upstreamType: applicationExistingDetails.latestDeployment.upstreamType,
+        upstreamType: applicationExistingDetails.latestDeployment.upstreamType, // TODO Not allowed to change
         deploymentMode: deploymentConfigurationDetails.deploymentMode,
         replicas: deploymentConfigurationDetails.replicas,
-        dockerfile: applicationExistingDetails.latestDeployment.dockerfile,
-        buildArgs: applicationExistingDetails.latestDeployment.buildArgs.map((keyValuePair) => {
+        buildArgs: Object.entries(sourceConfigurationRef.buildArgs).map(([k,v]) => {
           return {
-            key: keyValuePair.key,
-            value: keyValuePair.value
+            key: k,
+            value: v
           }
         }),
         environmentVariables: environmentVariableDetails.keys.map((key) => {
@@ -338,15 +419,41 @@ export default function newApplicationUpdater(applicationId) {
             mountingPath: persistentVolumeBindingsDetails.map[key].mountingPath
           }
         }),
-        gitCredentialID: applicationExistingDetails.latestDeployment.gitCredentialID,
-        gitProvider: applicationExistingDetails.latestDeployment.gitProvider,
-        repositoryName: applicationExistingDetails.latestDeployment.repositoryName,
-        repositoryOwner: applicationExistingDetails.latestDeployment.repositoryOwner,
-        repositoryBranch: applicationExistingDetails.latestDeployment.repositoryBranch,
-        imageRegistryCredentialID: applicationExistingDetails.latestDeployment.imageRegistryCredentialID,
-        dockerImage: applicationExistingDetails.latestDeployment.dockerImage,
-        sourceCodeCompressedFileName: applicationExistingDetails.latestDeployment.sourceCodeCompressedFileName
+        // update this part
+        gitCredentialID: sourceConfigurationRef.gitCredentialID,
+        gitProvider: sourceConfigurationRef.gitProvider,
+        repositoryName: sourceConfigurationRef.repositoryName,
+        repositoryOwner: sourceConfigurationRef.repositoryOwner,
+        repositoryBranch: sourceConfigurationRef.repositoryBranch,
+        imageRegistryCredentialID: sourceConfigurationRef.imageRegistryCredentialID,
+        dockerImage: sourceConfigurationRef.dockerImage,
+        sourceCodeCompressedFileName: sourceConfigurationRef.sourceCodeCompressedFileName,
+        dockerfile: sourceConfigurationRef.dockerfile
       }
+    }
+
+    const gitRepoURL = computed(() => {
+      const applicationExistingDetails = applicationExistingDetailsResult.value?.application ?? {}
+      if (applicationExistingDetails.length === 0) {
+        return ''
+      }
+      return applicationExistingDetails.latestDeployment.gitProvider + '.com/' +
+        applicationExistingDetails.latestDeployment.repositoryOwner + '/' +
+        applicationExistingDetails.latestDeployment.repositoryName
+    })
+
+    const updateApplicationSource = (source) => {
+      sourceConfigurationRef.gitCredentialID = source.gitCredentialId
+      sourceConfigurationRef.gitProvider = getGitProvideFromGitRepoUrl(source.gitRepoUrl)
+      sourceConfigurationRef.repositoryName = getGitRepoNameFromGitRepoUrl(source.gitRepoUrl)
+      sourceConfigurationRef.repositoryOwner = getGitRepoOwnerFromGitRepoUrl(source.gitRepoUrl)
+      sourceConfigurationRef.repositoryBranch = source.gitBranch
+      sourceConfigurationRef.imageRegistryCredentialID = source.imageRegistryCredentialId
+      sourceConfigurationRef.dockerImage = source.dockerImage
+      sourceConfigurationRef.sourceCodeCompressedFileName = source.sourceCodeCompressedFileName
+      sourceConfigurationRef.dockerfile = source.dockerFile
+      sourceConfigurationRef.buildArgs = source.buildArgs
+      triggerUpdateHook()
     }
 
 
@@ -368,7 +475,10 @@ export default function newApplicationUpdater(applicationId) {
       deploymentConfigurationDetails,
       changeDeploymentStrategy,
       replicasCountChanged,
-      isDeployRequestSubmitting
+      isDeployRequestSubmitting,
+      gitRepoURL,
+      applicationExistingDetailsResult,
+      updateApplicationSource
     }
   })
 }
