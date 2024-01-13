@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, onMounted } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
 import SideBar from '@/views/partials/SideBar.vue'
 import LoadingPage from '@/views/pages/LoadingPage.vue'
@@ -13,6 +13,12 @@ onBeforeMount(() => {
   if (token !== null) {
     authStore.SetCredential(token)
   }
+})
+
+onMounted(() => {
+  authStore.StartAuthChecker(() => {
+    authStore.Logout()
+  })
 })
 </script>
 

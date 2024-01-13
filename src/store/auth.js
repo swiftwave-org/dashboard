@@ -78,5 +78,40 @@ export const useAuthStore = defineStore('auth_details', () => {
     }, 500)
   }
 
-  return { IsLoggedIn, IsLoggingInProgress, FetchBearerToken, Login, Logout, SetCredential }
+  async function CheckAuthStatus() {
+    try {
+      const token = localStorage.getItem('token')
+      if (token) {
+        const HTTP_BASE_URL = getHttpBaseUrl()
+        let config = {
+          method: 'get',
+          url: `${HTTP_BASE_URL}/verify-auth`,
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+        const res = await axios.request(config)
+        return res.status === 200;
+
+      }
+    } catch (e) {
+      return false
+    }
+  }
+
+  async function logoutOnInvalidToken(callback){
+    if(!IsLoggedIn.value){
+      return
+    }
+    const isTokenValid = await CheckAuthStatus()
+    if(!isTokenValid){
+      callback()
+    }
+  }
+
+  function StartAuthChecker(callback) {
+    setInterval(()=>logoutOnInvalidToken(callback), 5000)
+  }
+
+  return { IsLoggedIn, IsLoggingInProgress, FetchBearerToken, Login, Logout, SetCredential, StartAuthChecker }
 })
