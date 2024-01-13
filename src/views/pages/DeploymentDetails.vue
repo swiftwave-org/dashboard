@@ -184,7 +184,7 @@ onCancelDeploymentError((err) => {
     </div>
     <div
       v-if="deployment.status === 'pending'"
-      class="flex flex-row justify-between items-center bg-red-100 p-2 rounded-md">
+      class="flex flex-row justify-between items-center bg-red-100 py-2 px-3 rounded-md">
       <div>
         <p class="font-medium text-lg inline-flex items-center gap-2">Cancel Deployment</p>
         <p class="text-secondary-700 text-sm">If you are feeling deployment has been stuck for a long time, you can
