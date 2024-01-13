@@ -1,7 +1,7 @@
 <script setup>
 import 'xterm/css/xterm.css'
 
-import { useQuery, useSubscription } from '@vue/apollo-composable'
+import { useMutation, useQuery, useSubscription } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useRouter } from 'vue-router'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -11,6 +11,7 @@ import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { useToast } from 'vue-toastification'
 import StatusPulse from '@/views/components/StatusPulse.vue'
+import FilledButton from '@/views/components/FilledButton.vue'
 
 
 const router = useRouter()
@@ -110,6 +111,34 @@ const isTerminalLoading = computed(() => {
   return status === 'pending' || status === 'deployPending'
 })
 
+// Cancel deployment
+const {
+  mutate: cancelDeployment,
+  loading: cancelDeploymentLoading,
+  onError: onCancelDeploymentError,
+  onDone: onCancelDeploymentDone
+} = useMutation(gql`
+mutation ($id: String!) {
+  cancelDeployment(id: $id)
+}`, {
+  fetchPolicy: 'no-cache',
+  variables: {
+    id: deploymentId
+  }
+})
+
+onCancelDeploymentDone((val)=>{
+  if(val.data.cancelDeployment){
+    toast.success('Deployment cancellation request sent.')
+  } else {
+    toast.error('Deployment cancellation request failed.')
+  }
+})
+
+onCancelDeploymentError((err) => {
+  toast.error(err.message)
+})
+
 </script>
 
 <template>
@@ -118,7 +147,12 @@ const isTerminalLoading = computed(() => {
   </div>
   <section v-else class="mx-auto w-full max-w-7xl">
     <div class="flex items-center gap-2">
-      <RouterLink :to="`/application/${deployment?.application?.id}/deployments`"><p class="font-medium text-xl"><font-awesome-icon icon="fa-solid fa-arrow-up-right-from-square" class="text-lg mr-2" />{{ deployment.application.name }}</p></RouterLink>
+      <RouterLink :to="`/application/${deployment?.application?.id}/deployments`">
+        <p class="font-medium text-xl">
+          <font-awesome-icon class="text-lg mr-2" icon="fa-solid fa-arrow-up-right-from-square" />
+          {{ deployment.application.name }}
+        </p>
+      </RouterLink>
       <Badge v-if="deployment.status === 'live'" type="success">{{ deployment.status }}</Badge>
       <Badge v-else-if="deployment.status === 'pending'" type="warning">{{ deployment.status }}</Badge>
       <Badge v-else-if="deployment.status === 'deployPending'" type="warning">{{ deployment.status }}</Badge>
@@ -144,15 +178,27 @@ const isTerminalLoading = computed(() => {
       <font-awesome-icon icon="fa-solid fa-fingerprint" />
       <p>{{ deployment.id }}</p>
     </div>
-    <div class="flex items-center gap-2 font-normal text-gray-800 mt-2">
+    <div class="flex items-center gap-2 font-normal text-gray-800 mt-2 mb-2">
       <font-awesome-icon icon="fa-solid fa-hammer" />
       <p><span class="font-medium">Build arguments :</span> <span v-html="buildArgs"></span></p>
     </div>
-    <hr class="mt-4 mb-2">
+    <div
+      v-if="deployment.status === 'pending'"
+      class="flex flex-row justify-between items-center bg-red-100 p-2 rounded-md">
+      <div>
+        <p class="font-medium text-lg inline-flex items-center gap-2">Cancel Deployment</p>
+        <p class="text-secondary-700 text-sm">If you are feeling deployment has been stuck for a long time, you can
+          cancel the deployment.</p>
+      </div>
+      <FilledButton type="danger" @click="cancelDeployment" :loading="cancelDeploymentLoading">Request Cancellation</FilledButton>
+    </div>
+
+    <hr class="mt-2 mb-2">
     <p class="font-medium text-lg inline-flex items-center gap-2">Deployment Logs
       <StatusPulse v-if="isTerminalLoading" type="success" />
     </p>
-    <p class="text-secondary-700 text-sm">If you feel that deployment log is not automatically updating, please refresh the page.</p>
+    <p class="text-secondary-700 text-sm">If you feel that deployment log is not automatically updating, please refresh
+      the page.</p>
   </section>
   <div id="terminal" class="w-full max-w-7xl mt-3"></div>
 </template>
