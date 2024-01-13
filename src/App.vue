@@ -4,6 +4,7 @@ import { onBeforeMount } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
 import SideBar from '@/views/partials/SideBar.vue'
 import LoadingPage from '@/views/pages/LoadingPage.vue'
+import NotAvailableOnMobile from '@/views/pages/NotAvailableOnMobile.vue'
 
 const authStore = useAuthStore()
 
@@ -23,6 +24,7 @@ onBeforeMount(() => {
       <RouterView />
     </div>
   </div>
+  <NotAvailableOnMobile />
 </template>
 
 <style scoped>
