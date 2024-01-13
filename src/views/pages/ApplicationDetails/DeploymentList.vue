@@ -61,7 +61,7 @@ const formatdate = (date) => {
   <p
     class="text-gray-900 font-semibold w-full text-center"
   >🛠 Click on a deployment to view more details 🛠</p>
-  <div class="flex flex-col mt-4 gap-2">
+  <div class="flex flex-col mt-4 gap-2 max-h-[60vh] overflow-y-auto px-2 scrollbox">
     <RouterLink
       v-for="deployment in deployments"
       :key="deployment.id"
@@ -74,7 +74,7 @@ const formatdate = (date) => {
       class="w-full"
     >
       <div
-        class="border-2 border-gray-500 rounded-md shadow p-4 w-full hover:bg-gray-100 cursor-pointer hover:transform hover:scale-[102%] transition-all duration-200 ease-in-out">
+        class="border-2 border-gray-500 rounded-md shadow p-4 w-full hover:bg-gray-100 cursor-pointer hover:border-4 hover:border-primary-300 transition-all duration-100 ease-in-out">
         <div class="flex items-center gap-2 font-bold">
           <font-awesome-icon icon="fa-solid fa-fingerprint" />
           <p class="mr-1">{{ deployment.id }}</p>
@@ -103,8 +103,21 @@ const formatdate = (date) => {
       </div>
     </RouterLink>
   </div>
+  <p class="text-secondary-700 text-sm w-full text-center mt-4">Scroll down to view more deployments(if any)</p>
 </template>
 
 <style scoped>
+.scrollbox::-webkit-scrollbar {
+  width: 12px;
+  @apply mx-2;
+}
+
+.scrollbox::-webkit-scrollbar-track {
+  @apply bg-gray-200 rounded-full;
+}
+
+.scrollbox::-webkit-scrollbar-thumb {
+  @apply bg-primary-500 rounded-full;
+}
 
 </style>

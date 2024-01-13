@@ -1,9 +1,10 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, onMounted } from 'vue'
 import { useAuthStore } from '@/store/auth.js'
 import SideBar from '@/views/partials/SideBar.vue'
 import LoadingPage from '@/views/pages/LoadingPage.vue'
+import NotAvailableOnMobile from '@/views/pages/NotAvailableOnMobile.vue'
 
 const authStore = useAuthStore()
 
@@ -12,6 +13,12 @@ onBeforeMount(() => {
   if (token !== null) {
     authStore.SetCredential(token)
   }
+})
+
+onMounted(() => {
+  authStore.StartAuthChecker(() => {
+    authStore.Logout()
+  })
 })
 </script>
 
@@ -23,6 +30,7 @@ onBeforeMount(() => {
       <RouterView />
     </div>
   </div>
+  <NotAvailableOnMobile />
 </template>
 
 <style scoped>

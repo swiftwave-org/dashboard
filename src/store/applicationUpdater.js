@@ -8,10 +8,12 @@ import {
   getGitRepoNameFromGitRepoUrl,
   getGitRepoOwnerFromGitRepoUrl
 } from '@/vendor/utils.js'
+import { useRouter } from 'vue-router'
 
 export default function newApplicationUpdater(applicationId) {
   const storeName = 'application_updater_' + applicationId
   return defineStore(storeName, () => {
+    const router = useRouter()
     const isConfigurationUpdated = ref(false)
     const applyConfigurationChanges = () => {
       const appState = mergeChangesWithExistingApplicationDetails()
@@ -49,6 +51,7 @@ export default function newApplicationUpdater(applicationId) {
     onDeployApplicationMutationDone(() => {
       refetchApplicationDetails()
       alert('Application updated successfully')
+      router.push({ name: 'Application Details Deployments', params: { id: applicationId }})
     })
 
 
