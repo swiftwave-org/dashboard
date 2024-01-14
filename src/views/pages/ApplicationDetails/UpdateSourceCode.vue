@@ -36,6 +36,7 @@ const stateRef = reactive({
   gitCredentialId: 0,
   gitRepoUrl: '',
   gitBranch: '',
+  codePath: '',
   imageRegistryCredentialId: 0,
   dockerImage: '',
   isUploadingSourceCode: false,
@@ -69,6 +70,7 @@ function prefillDetails(){
       applicationExistingDetailsResult.value.application.latestDeployment.repositoryName;
     stateRef.gitBranch = applicationExistingDetailsResult.value.application.latestDeployment.repositoryBranch;
     stateRef.gitCredentialId = applicationExistingDetailsResult.value.application.latestDeployment.gitCredentialID;
+    stateRef.codePath = applicationExistingDetailsResult.value.application.latestDeployment.codePath;
     stateRef.isDockerConfigurationGenerated = true;
     stateRef.detectedServiceName = "Taken from existing deployment";
     stateRef.dockerFile = applicationExistingDetailsResult.value.application.latestDeployment.dockerfile;
@@ -272,6 +274,7 @@ const generateConfiguration = () => {
       repositoryBranch: stateRef.gitBranch === '' ? null : stateRef.gitBranch,
       repositoryName: getGitRepoNameFromGitRepoUrl(stateRef.gitRepoUrl),
       repositoryOwner: getGitRepoOwnerFromGitRepoUrl(stateRef.gitRepoUrl),
+      codePath: stateRef.codePath,
       customDockerFile: '',
       sourceCodeCompressedFileName: stateRef.sourceCodeCompressedFileName === '' ? null : stateRef.sourceCodeCompressedFileName
     }
@@ -336,9 +339,25 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
           </div>
         </div>
 
+        <!-- Code Path -->
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-700" for="name">Code Path</label>
+          <div class="mt-1">
+            <input
+              id="name"
+              v-model="stateRef.codePath"
+              autocomplete="off"
+              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+              name="name"
+              placeholder="Absolute path of code (optional)"
+              type="text" />
+            <p class="mt-1 text-xs text-gray-800">* You need to specify this if your code is not in root directory of git</p>
+          </div>
+        </div>
+
         <!-- Git Credentials -->
         <div class="mt-4">
-          <label class="block text-sm font-medium text-gray-700" for="git_credential">Pick Git Credential</label>
+          <label class="block text-sm font-medium text-gray-700" for="git_credential">Pick Git Credential (Optional)</label>
           <div class="mt-1">
             <select
               id="git_credential"
@@ -424,7 +443,7 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
         class="mt-6 w-full"
         type="primary"
         @click="generateConfiguration"
-      >Generate Configuration
+      >Re-Generate Configuration
       </FilledButton>
     </div>
 
