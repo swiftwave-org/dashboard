@@ -47,6 +47,7 @@ const newApplicationState = reactive({
   repositoryName: '',
   repositoryOwner: '',
   repositoryBranch: '',
+  codePath: '',
   imageRegistryCredentialID: 0,
   dockerImage: '',
   sourceCodeCompressedFileName: ''
@@ -125,6 +126,7 @@ const finalizeApplicationSourceConfigurationAndMoveToNextTab = (configuration) =
   newApplicationState.repositoryBranch = configuration.gitBranch
   newApplicationState.repositoryName = getGitRepoNameFromGitRepoUrl(configuration.gitRepoUrl)
   newApplicationState.repositoryOwner = getGitRepoOwnerFromGitRepoUrl(configuration.gitRepoUrl)
+  newApplicationState.codePath = configuration.codePath
   newApplicationState.sourceCodeCompressedFileName = configuration.sourceCodeFile
   newApplicationState.dockerImage = configuration.dockerImage
   changeTab(3)

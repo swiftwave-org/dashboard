@@ -84,6 +84,7 @@ export default function newApplicationUpdater(applicationId) {
             repositoryName
             repositoryOwner
             repositoryBranch
+            codePath
             imageRegistryCredentialID
             dockerImage
             sourceCodeCompressedFileName
@@ -136,6 +137,7 @@ export default function newApplicationUpdater(applicationId) {
       sourceConfigurationRef.repositoryName = deploymentConfiguration.latestDeployment.repositoryName
       sourceConfigurationRef.repositoryOwner = deploymentConfiguration.latestDeployment.repositoryOwner
       sourceConfigurationRef.repositoryBranch = deploymentConfiguration.latestDeployment.repositoryBranch
+      sourceConfigurationRef.codePath = deploymentConfiguration.latestDeployment.codePath
       sourceConfigurationRef.imageRegistryCredentialID = deploymentConfiguration.latestDeployment.imageRegistryCredentialID
       sourceConfigurationRef.dockerImage = deploymentConfiguration.latestDeployment.dockerImage
       sourceConfigurationRef.sourceCodeCompressedFileName = deploymentConfiguration.latestDeployment.sourceCodeCompressedFileName
@@ -166,6 +168,7 @@ export default function newApplicationUpdater(applicationId) {
       repositoryName: "",
       repositoryOwner: "",
       repositoryBranch: "",
+      codePath: "",
       imageRegistryCredentialID: 0,
       dockerImage: "",
       sourceCodeCompressedFileName: "",
@@ -281,6 +284,7 @@ export default function newApplicationUpdater(applicationId) {
             repositoryName
             repositoryOwner
             repositoryBranch
+            codePath
             imageRegistryCredentialID
             dockerImage
             sourceCodeCompressedFileName
@@ -365,6 +369,9 @@ export default function newApplicationUpdater(applicationId) {
       if (sourceConfigurationRef.repositoryBranch !== applicationExistingDetails.latestDeployment.repositoryBranch) {
         return true
       }
+      if (sourceConfigurationRef.codePath !== applicationExistingDetails.latestDeployment.codePath) {
+        return true
+      }
       if (sourceConfigurationRef.imageRegistryCredentialID !== applicationExistingDetails.latestDeployment.imageRegistryCredentialID) {
         return true
       }
@@ -428,6 +435,7 @@ export default function newApplicationUpdater(applicationId) {
         repositoryName: sourceConfigurationRef.repositoryName,
         repositoryOwner: sourceConfigurationRef.repositoryOwner,
         repositoryBranch: sourceConfigurationRef.repositoryBranch,
+        codePath: sourceConfigurationRef.codePath,
         imageRegistryCredentialID: sourceConfigurationRef.imageRegistryCredentialID,
         dockerImage: sourceConfigurationRef.dockerImage,
         sourceCodeCompressedFileName: sourceConfigurationRef.sourceCodeCompressedFileName,
@@ -451,6 +459,7 @@ export default function newApplicationUpdater(applicationId) {
       sourceConfigurationRef.repositoryName = getGitRepoNameFromGitRepoUrl(source.gitRepoUrl)
       sourceConfigurationRef.repositoryOwner = getGitRepoOwnerFromGitRepoUrl(source.gitRepoUrl)
       sourceConfigurationRef.repositoryBranch = source.gitBranch
+      sourceConfigurationRef.codePath = source.codePath
       sourceConfigurationRef.imageRegistryCredentialID = source.imageRegistryCredentialId
       sourceConfigurationRef.dockerImage = source.dockerImage
       sourceConfigurationRef.sourceCodeCompressedFileName = source.sourceCodeCompressedFileName

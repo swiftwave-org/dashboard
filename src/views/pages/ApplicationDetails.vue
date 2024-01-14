@@ -41,6 +41,7 @@ const {
         repositoryName
         repositoryOwner
         repositoryBranch
+        codePath
         createdAt
       }
       deployments {
