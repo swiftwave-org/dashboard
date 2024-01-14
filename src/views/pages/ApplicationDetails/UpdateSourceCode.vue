@@ -12,7 +12,7 @@ import BuildArgInput from '@/views/partials/BuildArgInput.vue'
 import {
   getGitProvideFromGitRepoUrl,
   getGitRepoNameFromGitRepoUrl,
-  getGitRepoOwnerFromGitRepoUrl
+  getGitRepoOwnerFromGitRepoUrl, getHttpBaseUrl
 } from '@/vendor/utils.js'
 import newApplicationUpdater from '@/store/applicationUpdater.js'
 import { useRouter } from 'vue-router'
@@ -158,7 +158,7 @@ const gitCredentials = computed(() => gitCredentialList.value?.gitCredentials ??
 onGitCredentialListError((err) => toast.error(err.message))
 
 
-const HTTP_BASE_URL = import.meta.env.VITE_HTTP_BASE_URL
+const HTTP_BASE_URL = getHttpBaseUrl()
 async function uploadTarFile(fileblob) {
   try {
     var data = new FormData()
