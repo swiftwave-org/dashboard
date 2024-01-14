@@ -91,7 +91,7 @@ onImageRegistryCredentialDeleteSuccess(() => {
 })
 
 const deleteImageRegistryCredentialWithConfirmation = (imageRegistryCredential) => {
-  if (confirm(`Are you sure you want to delete Image Registry Credential ${imageRegistryCredential.name}?`)) {
+  if (confirm(`Are you sure you want to delete Image Registry Credential ?\nExisting deployments using this Image Registry Credential can't use this credential anymore.`)) {
     deleteImageRegistryCredential({ id: imageRegistryCredential.id })
   }
 }
