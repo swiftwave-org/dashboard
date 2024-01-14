@@ -91,7 +91,7 @@ onGitCredentialDeleteSuccess(() => {
 })
 
 const deleteGitCredentialWithConfirmation = (gitCredential) => {
-  if (confirm(`Are you sure you want to delete Git Credential ${gitCredential.name}?`)) {
+  if (confirm(`Are you sure you want to delete Git Credential ${gitCredential.name}?\nExisting deployments using this Git Credential can't use this credential anymore.`)) {
     deleteGitCredential({ id: gitCredential.id })
   }
 }
