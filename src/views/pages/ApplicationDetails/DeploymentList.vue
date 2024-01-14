@@ -119,5 +119,4 @@ const formatdate = (date) => {
 .scrollbox::-webkit-scrollbar-thumb {
   @apply bg-primary-500 rounded-full;
 }
-
 </style>
