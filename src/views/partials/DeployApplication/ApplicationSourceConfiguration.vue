@@ -33,11 +33,11 @@ const toast = useToast()
 const sourceCodeFileFieldRef = ref(null)
 const stateRef = reactive({
   sourceCodeFile: '',
-  gitCredentialId: 0,
+  gitCredentialID: 0,
   gitRepoUrl: '',
   gitBranch: '',
   codePath: '',
-  imageRegistryCredentialId: 0,
+  imageRegistryCredentialID: 0,
   dockerImage: '',
   isUploadingSourceCode: false,
   detectedServiceName: '',
@@ -215,10 +215,10 @@ const generateConfiguration = () => {
     stateRef.isDockerConfigurationGenerated = true
   } else {
     stateRef.gitRepoUrl = stateRef.gitRepoUrl.trim().replace('https://', '').replace('http://', '')
-    let gitCredentialId = parseInt(stateRef.gitCredentialId.toString())
+    let gitCredentialID = parseInt(stateRef.gitCredentialID.toString())
     generateConfigurationVariables.value.input = {
       sourceType: props.applicationSourceType,
-      gitCredentialID: gitCredentialId === 0 ? null : gitCredentialId,
+      gitCredentialID: gitCredentialID === 0 ? null : gitCredentialID,
       gitProvider: getGitProvideFromGitRepoUrl(stateRef.gitRepoUrl),
       repositoryBranch: stateRef.gitBranch === '' ? null : stateRef.gitBranch,
       repositoryName: getGitRepoNameFromGitRepoUrl(stateRef.gitRepoUrl),
@@ -310,9 +310,9 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
           <div class="mt-1">
             <select
               id="git_credential"
-              v-model="stateRef.gitCredentialId"
+              v-model="stateRef.gitCredentialID"
               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
-              <option disabled selected value="0">Select a credential</option>
+              <option selected value="0">No Credential</option>
               <option v-for="credential in gitCredentials" :key="credential.id" :value="credential.id">
                 {{ credential.name }}
               </option>
@@ -375,9 +375,9 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
           <div class="mt-1">
             <select
               id="image_registry_credential"
-              v-model="stateRef.imageRegistryCredentialId"
+              v-model="stateRef.imageRegistryCredentialID"
               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
-              <option selected value="0">Select a credential</option>
+              <option selected value="0">No Credential</option>
               <option v-for="credential in imageRegistryCredentials" :key="credential.id" :value="credential.id">
                 {{ credential.username }} - {{ credential.url }}
               </option>

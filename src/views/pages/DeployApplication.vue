@@ -120,8 +120,10 @@ const finalizeApplicationSourceConfigurationAndMoveToNextTab = (configuration) =
     })
   }
   newApplicationState.buildArgs = buildArgs
-  newApplicationState.gitCredentialID = configuration.gitCredentialId === 0 ? null : configuration.gitCredentialId
-  newApplicationState.imageRegistryCredentialID = configuration.imageRegistryCredentialId === 0 ? null : configuration.imageRegistryCredentialId
+  newApplicationState.gitCredentialID = parseInt(configuration.gitCredentialID)
+  newApplicationState.imageRegistryCredentialID = parseInt(configuration.imageRegistryCredentialID)
+  newApplicationState.gitCredentialID = configuration.gitCredentialID === 0 ? null : configuration.gitCredentialID
+  newApplicationState.imageRegistryCredentialID = configuration.imageRegistryCredentialID === 0 ? null : configuration.imageRegistryCredentialID
   newApplicationState.gitProvider = getGitProvideFromGitRepoUrl(configuration.gitRepoUrl)
   newApplicationState.repositoryBranch = configuration.gitBranch
   newApplicationState.repositoryName = getGitRepoNameFromGitRepoUrl(configuration.gitRepoUrl)
