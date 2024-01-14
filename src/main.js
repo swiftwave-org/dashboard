@@ -18,6 +18,7 @@ import {
   faFingerprint, faGear,
   faHammer,
   faHardDrive,
+  faKey,
   faLink,
   faLocationArrow,
   faNetworkWired,
@@ -67,7 +68,8 @@ library.add(
   faGear,
   faTriangleExclamation,
   faSkullCrossbones,
-  faArrowUpRightFromSquare
+  faArrowUpRightFromSquare,
+  faKey
 )
 
 // Environment variables
