@@ -17,8 +17,10 @@ export default function newApplicationUpdater(applicationId) {
     const isConfigurationUpdated = ref(false)
     const applyConfigurationChanges = () => {
       const appState = mergeChangesWithExistingApplicationDetails()
-      appState.gitCredentialID = appState.gitCredentialId === 0 ? null : appState.gitCredentialId
-      appState.imageRegistryCredentialID = appState.imageRegistryCredentialId === 0 ? null : appState.imageRegistryCredentialId
+      appState.gitCredentialID = parseInt(appState.gitCredentialID)
+      appState.imageRegistryCredentialID = parseInt(appState.imageRegistryCredentialID)
+      appState.gitCredentialID = appState.gitCredentialID === 0 ? null : appState.gitCredentialID
+      appState.imageRegistryCredentialID = appState.imageRegistryCredentialID === 0 ? null : appState.imageRegistryCredentialID
       deployApplication({
         input: appState,
         id: applicationId
@@ -454,13 +456,13 @@ export default function newApplicationUpdater(applicationId) {
     })
 
     const updateApplicationSource = (source) => {
-      sourceConfigurationRef.gitCredentialID = source.gitCredentialId
+      sourceConfigurationRef.gitCredentialID = source.gitCredentialID
       sourceConfigurationRef.gitProvider = getGitProvideFromGitRepoUrl(source.gitRepoUrl)
       sourceConfigurationRef.repositoryName = getGitRepoNameFromGitRepoUrl(source.gitRepoUrl)
       sourceConfigurationRef.repositoryOwner = getGitRepoOwnerFromGitRepoUrl(source.gitRepoUrl)
       sourceConfigurationRef.repositoryBranch = source.gitBranch
       sourceConfigurationRef.codePath = source.codePath
-      sourceConfigurationRef.imageRegistryCredentialID = source.imageRegistryCredentialId
+      sourceConfigurationRef.imageRegistryCredentialID = source.imageRegistryCredentialID
       sourceConfigurationRef.dockerImage = source.dockerImage
       sourceConfigurationRef.sourceCodeCompressedFileName = source.sourceCodeCompressedFileName
       sourceConfigurationRef.dockerfile = source.dockerFile
