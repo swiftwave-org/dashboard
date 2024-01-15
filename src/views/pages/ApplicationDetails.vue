@@ -44,11 +44,6 @@ const {
         codePath
         createdAt
       }
-      deployments {
-        id
-        status
-        createdAt
-      }
     }
   }
 `, {

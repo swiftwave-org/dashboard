@@ -67,6 +67,11 @@ const router = createRouter({
           path: 'danger_zone',
           name: 'Application Details Danger Zone',
           component: () => import('@/views/pages/ApplicationDetails/DangerZone.vue')
+        },
+        {
+          path: 'webhook_ci',
+          name: 'Application Details Webhook CI',
+          component: () => import('@/views/pages/ApplicationDetails/WebhookCI.vue')
         }
       ]
     },
