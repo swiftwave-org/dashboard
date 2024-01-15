@@ -68,6 +68,16 @@
     </RouterLink>
     <RouterLink
       :to="{
+        name: 'Application Details Webhook CI',
+        params: { id: $route.params.id }
+      }"
+    >
+      <div  class="px-3 py-2 border border-black text-sm font-medium hover:bg-gray-200 min-w-max">
+        Webhook CI
+      </div>
+    </RouterLink>
+    <RouterLink
+      :to="{
         name: 'Application Details Danger Zone',
         params: { id: $route.params.id }
       }"
