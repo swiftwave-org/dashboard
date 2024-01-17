@@ -222,7 +222,7 @@ onRedirectRulesError((err) => {
           </TableRow>
           <TableRow align="center">
             <Badge v-if="redirectRule.status === 'pending'" type="warning">Pending</Badge>
-            <Badge v-else-if="redirectRule.status === 'applied'" type="success">Issued</Badge>
+            <Badge v-else-if="redirectRule.status === 'applied'" type="success">Applied</Badge>
             <Badge v-else-if="redirectRule.status === 'failed'" type="danger">Failed</Badge>
             <Badge v-else-if="redirectRule.status === 'deleting'" type="danger">Deleting</Badge>
           </TableRow>
