@@ -1,6 +1,7 @@
 <script setup>
 import TableRow from '@/views/components/Table/TableRow.vue'
 import TextButton from '@/views/components/TextButton.vue'
+import SecuredText from '@/views/components/SecuredText.vue'
 
 defineProps({
   imageRegistryCredential: {
@@ -25,7 +26,7 @@ defineProps({
       <div class="text-sm text-gray-900">{{ imageRegistryCredential.username }}</div>
     </TableRow>
     <TableRow align="left">
-      <div class="text-sm text-gray-900">{{ imageRegistryCredential.password }}</div>
+      <SecuredText>{{ imageRegistryCredential.password }}</SecuredText>
     </TableRow>
     <TableRow align="right">
       <TextButton
