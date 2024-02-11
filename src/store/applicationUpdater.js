@@ -91,6 +91,8 @@ export default function newApplicationUpdater(applicationId) {
             dockerImage
             sourceCodeCompressedFileName
           }
+          capabilities
+          sysctls
         }
       }
     `, {
@@ -291,6 +293,8 @@ export default function newApplicationUpdater(applicationId) {
             dockerImage
             sourceCodeCompressedFileName
           }
+          capabilities
+          sysctls
         }
       }
     `, {
@@ -441,7 +445,9 @@ export default function newApplicationUpdater(applicationId) {
         imageRegistryCredentialID: sourceConfigurationRef.imageRegistryCredentialID,
         dockerImage: sourceConfigurationRef.dockerImage,
         sourceCodeCompressedFileName: sourceConfigurationRef.sourceCodeCompressedFileName,
-        dockerfile: sourceConfigurationRef.dockerfile
+        dockerfile: sourceConfigurationRef.dockerfile,
+        capabilities: applicationExistingDetails.capabilities,
+        sysctls: applicationExistingDetails.sysctls
       }
     }
 

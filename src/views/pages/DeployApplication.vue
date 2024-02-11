@@ -50,7 +50,9 @@ const newApplicationState = reactive({
   codePath: '',
   imageRegistryCredentialID: 0,
   dockerImage: '',
-  sourceCodeCompressedFileName: ''
+  sourceCodeCompressedFileName: '',
+  capabilities: [],
+  sysctls: []
 })
 
 // Deploy application
