@@ -17,6 +17,8 @@ import {
   faCloud,
   faCodeBranch,
   faCopy,
+  faEye,
+  faEyeSlash,
   faFingerprint,
   faGear,
   faHammer,
@@ -25,8 +27,10 @@ import {
   faLink,
   faLocationArrow,
   faNetworkWired,
-  faRightFromBracket, faSkullCrossbones,
-  faTrash, faTriangleExclamation,
+  faRightFromBracket,
+  faSkullCrossbones,
+  faTrash,
+  faTriangleExclamation,
   faUpload,
   faUsers
 } from '@fortawesome/free-solid-svg-icons'
@@ -73,7 +77,9 @@ library.add(
   faSkullCrossbones,
   faArrowUpRightFromSquare,
   faKey,
-  faCopy
+  faCopy,
+  faEye,
+  faEyeSlash
 )
 
 // Environment variables
