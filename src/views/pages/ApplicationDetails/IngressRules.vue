@@ -72,10 +72,17 @@ onIngressRulesError((err) => {
       <tr v-for="ingressRule in ingressRules" :key="ingressRule.id">
         <TableRow align="left">
           <div class="text-sm text-gray-900">
-            <a :href="ingressRule.protocol+'://' + ingressRule.domain.name + ':' + ingressRule.port.toString()"
+            <a v-if="ingressRule.protocol === 'http' || ingressRule.protocol === 'https'"
+               :href="ingressRule.protocol+'://' + ingressRule.domain.name + ':' + ingressRule.port.toString()"
                target="_blank"
             >{{ ingressRule.protocol }}://{{ ingressRule.domain.name }}:{{ ingressRule.port }}</a
-            >&nbsp;&nbsp;
+            >
+            <a v-else-if="ingressRule.protocol === 'tcp'"
+               href="javascript:void(0);">tcp://&lt;server-ip&gt;:{{ ingressRule.port }}</a>
+            <a v-else-if="ingressRule.protocol === 'udp'"
+               href="javascript:void(0);">udp://&lt;server-ip&gt;:{{ ingressRule.port }}</a>
+            <a v-else href="javascript:void(0);"><i>Unknown</i></a>
+            &nbsp;&nbsp;
             <font-awesome-icon icon="fa-solid fa-arrow-right" />&nbsp;&nbsp;
             <a target="_blank">{{ ingressRule.application.name }}:{{ ingressRule.targetPort }}</a>
           </div>
@@ -94,8 +101,8 @@ onIngressRulesError((err) => {
     Want to add or delete Ingress Rules?
     <FilledButton
       :click="() => router.push({ name: 'Ingress Rules' })"
-      type="primary"
       slim
+      type="primary"
     >Manage Ingress Rules
     </FilledButton>
   </div>
