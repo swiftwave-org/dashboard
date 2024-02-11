@@ -28,7 +28,7 @@ const newIngressRuleDetails = reactive({
   domainId: 0,
   port: 80,
   applicationId: '',
-  targetPort: 80,
+  targetPort: 80
 })
 
 const {
@@ -62,11 +62,10 @@ onIngressRuleCreateFail((err) => {
 })
 
 const onChangeProtocol = () => {
-  if(newIngressRuleDetails.protocol === "https"){
-    newIngressRuleDetails.port = 443;
-  }
-  else if(newIngressRuleDetails.protocol === "http") {
-    newIngressRuleDetails.port = 80;
+  if (newIngressRuleDetails.protocol === 'https') {
+    newIngressRuleDetails.port = 443
+  } else if (newIngressRuleDetails.protocol === 'http') {
+    newIngressRuleDetails.port = 80
   }
 }
 
@@ -190,8 +189,8 @@ onIngressRulesError((err) => {
             <div class="mt-2 flex space-x-2">
               <select
                 v-model="newIngressRuleDetails.protocol"
-                @change="onChangeProtocol"
-                class="w-4/12 block rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                class="w-4/12 block rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                @change="onChangeProtocol">
                 <option value="http">HTTP</option>
                 <option value="https">HTTPS</option>
                 <option value="tcp">TCP</option>
@@ -223,7 +222,9 @@ onIngressRulesError((err) => {
                 v-model="newIngressRuleDetails.applicationId"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
                 <option value="">Select application name</option>
-                <option v-for="application in applications" :key="application.id" :value="application.id">{{ application.name }}</option>
+                <option v-for="application in applications" :key="application.id" :value="application.id">
+                  {{ application.name }}
+                </option>
               </select>
               <input
                 v-model="newIngressRuleDetails.targetPort"
@@ -277,10 +278,18 @@ onIngressRulesError((err) => {
           </TableRow>
           <TableRow align="center">
             <div class="text-sm text-gray-900">
-              <a :href="ingressRule.protocol+'://' + ingressRule.domain.name + ':' + ingressRule.port.toString()" target="_blank"
+              <a v-if="ingressRule.protocol === 'http' || ingressRule.protocol === 'https'"
+                 :href="ingressRule.protocol+'://' + ingressRule.domain.name + ':' + ingressRule.port.toString()"
+                 target="_blank"
               >{{ ingressRule.protocol }}://{{ ingressRule.domain.name }}:{{ ingressRule.port }}</a
-              >&nbsp;&nbsp; <font-awesome-icon icon="fa-solid fa-arrow-right" />&nbsp;&nbsp;
-              <a target="_blank">{{ ingressRule.application.name }}:{{ ingressRule.targetPort }}</a>
+              >
+              <a v-else-if="ingressRule.protocol === 'tcp'"
+                 href="javascript:void(0);">tcp://&lt;server-ip&gt;:{{ ingressRule.port }}</a>
+              <a v-else-if="ingressRule.protocol === 'udp'"
+                 href="javascript:void(0);">udp://&lt;server-ip&gt;:{{ ingressRule.port }}</a>
+              <a v-else href="javascript:void(0);"><i>Unknown</i></a>
+              &nbsp;&nbsp;<font-awesome-icon icon="fa-solid fa-arrow-right" />&nbsp;&nbsp;
+              <a href="javascript:void(0);">{{ ingressRule.application.name }}:{{ ingressRule.targetPort }}</a>
             </div>
           </TableRow>
           <TableRow align="right">
