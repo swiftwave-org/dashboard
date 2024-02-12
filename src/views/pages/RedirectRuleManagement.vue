@@ -26,7 +26,6 @@ const closeModal = () => {
 const newRedirectRuleDetails = reactive({
   domainId: 0,
   protocol: 'http',
-  port: 80,
   redirectURL: ''
 })
 
@@ -125,9 +124,9 @@ const {
         domain {
           name
         }
+        protocol
         redirectURL
         status
-        port
       }
     }
   `,
@@ -142,6 +141,11 @@ const redirectRules = computed(() => redirectRulesRaw.value?.redirectRules ?? []
 onRedirectRulesError((err) => {
   toast.error(err.message)
 })
+
+const redirectRuleFrontURL = (redirectRule) => {
+  return `${redirectRule.protocol}://${redirectRule.domain.name}`;
+}
+
 </script>
 
 <template>
@@ -151,14 +155,18 @@ onRedirectRulesError((err) => {
       <template v-slot:header>Create Redirect Rule</template>
       <template v-slot:body>
         Enter the details of the new redirect rule.
-        <form @submit.prevent="">
-          <div class="mb-5 mt-4 rounded border-s-4 border-gray-500 bg-gray-50 p-4" role="alert">
-            <p>Only port <strong>80</strong> is supported for now.</p>
-          </div>
+        <form @submit.prevent="createRedirectRule">
           <!-- Domains -->
           <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-700" for="domain">Domain</label>
-            <div class="mt-1">
+            <label class="block text-sm font-medium text-gray-700" for="domain">Select Domain and Protocol</label>
+            <div class="mt-2 flex space-x-2">
+              <select
+                class="w-3/12 block rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                v-model="newRedirectRuleDetails.protocol"
+              >
+                <option value="http">HTTP</option>
+                <option value="https">HTTPS</option>
+              </select>
               <select
                 id="domain"
                 v-model="newRedirectRuleDetails.domainId"
@@ -228,8 +236,8 @@ onRedirectRulesError((err) => {
           </TableRow>
           <TableRow align="center">
             <div class="text-sm text-gray-900">
-              <a :href="'//' + redirectRule.domain.name + ':' + redirectRule.port.toString()" target="_blank"
-                >{{ redirectRule.domain.name }}:{{ redirectRule.port }}</a
+              <a :href="redirectRuleFrontURL(redirectRule)" target="_blank"
+                >{{ redirectRuleFrontURL(redirectRule) }}</a
               >&nbsp;&nbsp; <font-awesome-icon icon="fa-solid fa-arrow-right" />&nbsp;&nbsp;
               <a :href="redirectRule.redirectURL" target="_blank">{{ redirectRule.redirectURL }}</a>
             </div>
