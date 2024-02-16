@@ -24,15 +24,18 @@ import {
   faHammer,
   faHardDrive,
   faKey,
-  faLink, faListCheck,
+  faLink,
+  faListCheck,
   faLocationArrow,
-  faNetworkWired, faPlus,
+  faNetworkWired,
+  faPlus,
   faRightFromBracket,
   faSkullCrossbones,
   faTrash,
   faTriangleExclamation,
   faUpload,
-  faUsers
+  faUsers,
+  faXmark
 } from '@fortawesome/free-solid-svg-icons'
 
 import { useAuthStore } from '@/store/auth.js'
@@ -81,12 +84,13 @@ library.add(
   faEye,
   faEyeSlash,
   faPlus,
-  faListCheck
+  faListCheck,
+  faXmark
 )
 
 // Environment variables
-const GRAPHQL_HTTP_BASE_URL = getGraphQlHttpBaseUrl();
-const GRAPHQL_WS_BASE_URL = getGraphQlWsBaseUrl();
+const GRAPHQL_HTTP_BASE_URL = getGraphQlHttpBaseUrl()
+const GRAPHQL_WS_BASE_URL = getGraphQlWsBaseUrl()
 
 // Setup apollo client
 // create apollo link
@@ -94,15 +98,17 @@ const httpLink = createHttpLink({
   uri: `${GRAPHQL_HTTP_BASE_URL}/graphql`
 })
 
-const wsLink = new GraphQLWsLink(createClient({
-  url: `${GRAPHQL_WS_BASE_URL}/graphql`,
-  connectionParams: () => {
-    const authStore = useAuthStore()
-    return {
-      authorization: authStore.FetchBearerToken()
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: `${GRAPHQL_WS_BASE_URL}/graphql`,
+    connectionParams: () => {
+      const authStore = useAuthStore()
+      return {
+        authorization: authStore.FetchBearerToken()
+      }
     }
-  }
-}))
+  })
+)
 
 // create auth middleware
 const apolloAuthMiddleware = new ApolloLink((operation, forward) => {
@@ -116,23 +122,20 @@ const apolloAuthMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation)
 })
 
-const link = split(({ query }) => {
+const link = split(
+  ({ query }) => {
     const definition = getMainDefinition(query)
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    )
+    return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
   },
   wsLink,
   apolloAuthMiddleware.concat(httpLink)
 )
 
-
 // create apollo client
 const apolloClient = new ApolloClient({
   link: link,
   defaultOptions: {
-    query : {
+    query: {
       fetchPolicy: 'network-only'
     },
     mutate: {
@@ -155,7 +158,7 @@ const app = createApp({
 })
 app.component('font-awesome-icon', FontAwesomeIcon)
 const pinia = createPinia()
-pinia.use(({store})=>{
+pinia.use(({ store }) => {
   store.$router = markRaw(router)
 })
 app.use(router)
