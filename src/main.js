@@ -24,9 +24,9 @@ import {
   faHammer,
   faHardDrive,
   faKey,
-  faLink,
+  faLink, faListCheck,
   faLocationArrow,
-  faNetworkWired,
+  faNetworkWired, faPlus,
   faRightFromBracket,
   faSkullCrossbones,
   faTrash,
@@ -79,7 +79,9 @@ library.add(
   faKey,
   faCopy,
   faEye,
-  faEyeSlash
+  faEyeSlash,
+  faPlus,
+  faListCheck
 )
 
 // Environment variables
