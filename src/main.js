@@ -13,6 +13,7 @@ import {
   faCalendarDays,
   faChevronDown,
   faCircleCheck,
+  faCircleDown,
   faCircleXmark,
   faCloud,
   faCodeBranch,
@@ -30,6 +31,7 @@ import {
   faNetworkWired,
   faPlus,
   faRightFromBracket,
+  faRotateRight,
   faSkullCrossbones,
   faTrash,
   faTriangleExclamation,
@@ -85,7 +87,9 @@ library.add(
   faEyeSlash,
   faPlus,
   faListCheck,
-  faXmark
+  faXmark,
+  faCircleDown,
+  faRotateRight
 )
 
 // Environment variables

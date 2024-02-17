@@ -7,10 +7,10 @@ import gql from 'graphql-tag'
 import Table from '@/views/components/Table/Table.vue'
 import TableHeader from '@/views/components/Table/TableHeader.vue'
 import TableMessage from '@/views/components/Table/TableMessage.vue'
-import TableRow from '@/views/components/Table/TableRow.vue'
 import { computed, reactive, ref } from 'vue'
-import TextButton from '@/views/components/TextButton.vue'
 import ModalDialog from '@/views/components/ModalDialog.vue'
+import PersistentVolumeRow from '@/views/partials/PersistentVolumeRow.vue'
+import PersistentVolumeBackups from '@/views/partials/PersistentVolumeBackups.vue'
 
 const toast = useToast()
 const isModalOpen = ref(false)
@@ -111,10 +111,27 @@ const persistentVolumes = computed(() => persistentVolumesRaw.value?.persistentV
 onPersistentVolumesError((err) => {
   toast.error(err.message)
 })
+
+// Backup drawer
+const selectedPersistentVolumeId = ref(-1)
+const selectedPersistentVolumeName = ref('')
+const isBackupDrawerOpen = ref(false)
+const closeBackupDrawer = () => (isBackupDrawerOpen.value = false)
+const openBackupDrawerForVolume = (id, name) => {
+  selectedPersistentVolumeId.value = id
+  selectedPersistentVolumeName.value = name
+  isBackupDrawerOpen.value = true
+}
 </script>
 
 <template>
   <section class="mx-auto w-full max-w-7xl">
+    <!-- Drawer for persistent volume backups -->
+    <PersistentVolumeBackups
+      :is-drawer-open="isBackupDrawerOpen"
+      :close-drawer="closeBackupDrawer"
+      :persistent-volume-id="selectedPersistentVolumeId"
+      :persistent-volume-name="selectedPersistentVolumeName" />
     <!-- Modal for create persistent volumes -->
     <ModalDialog :close-modal="closeModal" :is-open="isModalOpen">
       <template v-slot:header>Add New Persistent Volume</template>
@@ -156,8 +173,11 @@ onPersistentVolumesError((err) => {
     <!-- Table -->
     <Table class="mt-8">
       <template v-slot:header>
-        <TableHeader align="left">Volume Name</TableHeader>
-        <TableHeader align="center">ID</TableHeader>
+        <TableHeader align="left">ID</TableHeader>
+        <TableHeader align="center">Volume Name</TableHeader>
+        <TableHeader align="center">Size</TableHeader>
+        <TableHeader align="center">PV Backup</TableHeader>
+        <TableHeader align="center">PV Restore</TableHeader>
         <TableHeader align="right">Actions</TableHeader>
       </template>
       <template v-slot:message>
@@ -167,17 +187,12 @@ onPersistentVolumesError((err) => {
         </TableMessage>
       </template>
       <template v-slot:body>
-        <tr v-for="volume in persistentVolumes" :key="volume.id">
-          <TableRow align="left">
-            <div class="text-sm font-medium text-gray-900">{{ volume.name }}</div>
-          </TableRow>
-          <TableRow align="center">
-            <div class="text-sm text-gray-900">{{ volume.id }}</div>
-          </TableRow>
-          <TableRow align="right">
-            <TextButton :click="() => deletePersistentVolumeWithConfirmation(volume)" type="danger">Delete</TextButton>
-          </TableRow>
-        </tr>
+        <PersistentVolumeRow
+          :delete-persistent-volume-with-confirmation="deletePersistentVolumeWithConfirmation"
+          v-for="volume in persistentVolumes"
+          :key="volume.id"
+          :show-backups="() => openBackupDrawerForVolume(volume.id, volume.name)"
+          :volume="volume" />
       </template>
     </Table>
   </section>
