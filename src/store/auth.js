@@ -20,9 +20,9 @@ export const useAuthStore = defineStore('auth_details', () => {
     localStorage.setItem('token', token)
     IsLoggedIn.value = true
     IsLoggingInProgress.value = true
-    setTimeout(()=>{
+    setTimeout(() => {
       IsLoggingInProgress.value = false
-    }, 1500)
+    }, 1000)
   }
 
   async function Login(username, password) {
@@ -69,12 +69,10 @@ export const useAuthStore = defineStore('auth_details', () => {
     localStorage.clear()
     IsLoggingInProgress.value = true
     // redirect to /
-    setTimeout(()=>{
-      this.$router.
-        push({ name: 'Login' })
-        .then(()=>{
-          this.$router.go(0)
-        })
+    setTimeout(() => {
+      this.$router.push({ name: 'Login' }).then(() => {
+        this.$router.go(0)
+      })
     }, 500)
   }
 
@@ -87,30 +85,29 @@ export const useAuthStore = defineStore('auth_details', () => {
           method: 'get',
           url: `${HTTP_BASE_URL}/verify-auth`,
           headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         }
         const res = await axios.request(config)
-        return res.status === 200;
-
+        return res.status === 200
       }
     } catch (e) {
       return false
     }
   }
 
-  async function logoutOnInvalidToken(callback){
-    if(!IsLoggedIn.value){
+  async function logoutOnInvalidToken(callback) {
+    if (!IsLoggedIn.value) {
       return
     }
     const isTokenValid = await CheckAuthStatus()
-    if(!isTokenValid){
+    if (!isTokenValid) {
       callback()
     }
   }
 
   function StartAuthChecker(callback) {
-    setInterval(()=>logoutOnInvalidToken(callback), 5000)
+    setInterval(() => logoutOnInvalidToken(callback), 5000)
   }
 
   return { IsLoggedIn, IsLoggingInProgress, FetchBearerToken, Login, Logout, SetCredential, StartAuthChecker }
