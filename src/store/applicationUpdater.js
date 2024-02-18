@@ -167,7 +167,7 @@ export default function newApplicationUpdater(applicationId) {
     })
 
     const sourceConfigurationRef = reactive({
-      gitCredentialID: 0, // TODO null
+      gitCredentialID: 0,
       gitProvider: "",
       repositoryName: "",
       repositoryOwner: "",

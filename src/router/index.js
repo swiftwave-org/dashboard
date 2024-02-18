@@ -114,6 +114,11 @@ const router = createRouter({
       path: '/ingress-rules',
       name: 'Ingress Rules',
       component: () => import('@/views/pages/IngressRuleManagement.vue')
+    },
+    {
+      path: '/pv-backup-download/:backup_id',
+      name: 'Download Persistent Volume Backup',
+      component: () => import('@/views/pages/DownloadPVBackup.vue')
     }
   ]
 })
