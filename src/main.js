@@ -20,6 +20,7 @@ import {
   faCopy,
   faEye,
   faEyeSlash,
+  faFile,
   faFingerprint,
   faGear,
   faHammer,
@@ -89,7 +90,8 @@ library.add(
   faListCheck,
   faXmark,
   faCircleDown,
-  faRotateRight
+  faRotateRight,
+  faFile
 )
 
 // Environment variables

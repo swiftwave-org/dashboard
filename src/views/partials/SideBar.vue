@@ -1,9 +1,9 @@
 <script setup>
 import { useAuthStore } from '@/store/auth.js'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import Logo from '@/assets/images/logo-full-inverse.png'
 import ChangePasswordModal from '@/views/partials/ChangePasswordModal.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const authStore = useAuthStore()
 const isChangePasswordModalOpen = ref(false)
@@ -13,10 +13,22 @@ const openChangePasswordModal = () => {
 const closeChangePasswordModal = () => {
   isChangePasswordModalOpen.value = false
 }
+
+const router = useRouter()
+
+const isShowSideBar = computed(() => {
+  if (!authStore.IsLoggedIn) {
+    return false
+  } else {
+    return !['Download Persistent Volume Backup'].includes(router.currentRoute.value.name)
+  }
+})
 </script>
 
 <template>
-  <aside v-if="authStore.IsLoggedIn" class="flex h-screen flex-col overflow-y-auto border-r bg-primary-600 px-5 py-8 scrollbox">
+  <aside
+    v-if="isShowSideBar"
+    class="scrollbox flex h-screen flex-col overflow-y-auto border-r bg-primary-600 px-5 py-8">
     <RouterLink to="/">
       <img :src="Logo" alt="logo" class="max-w-[10vw]" />
     </RouterLink>
@@ -91,9 +103,8 @@ const closeChangePasswordModal = () => {
             <span class="mx-2 text-sm font-medium">Manage Users</span>
           </RouterLink>
           <div
-            class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
-            @click="openChangePasswordModal"
-          >
+            class="flex transform cursor-pointer items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+            @click="openChangePasswordModal">
             <font-awesome-icon icon="fa-solid fa-key" />
             <span class="mx-2 text-sm font-medium">Change Password</span>
           </div>
@@ -106,13 +117,8 @@ const closeChangePasswordModal = () => {
         </div>
       </nav>
     </div>
-    <ChangePasswordModal
-      :is-modal-open="isChangePasswordModalOpen"
-      :close-modal="closeChangePasswordModal"
-    />
+    <ChangePasswordModal :is-modal-open="isChangePasswordModalOpen" :close-modal="closeChangePasswordModal" />
   </aside>
-
-
 </template>
 
 <style scoped>
@@ -128,5 +134,4 @@ const closeChangePasswordModal = () => {
   @apply rounded-full shadow-[inset_0_0_10px_10px_white];
   border: solid 3px transparent;
 }
-
 </style>

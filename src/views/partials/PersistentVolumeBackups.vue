@@ -8,6 +8,7 @@ import Badge from '@/views/components/Badge.vue'
 import { round } from 'lodash'
 import FilledButton from '@/views/components/FilledButton.vue'
 import DotLoader from '@/views/components/DotLoader.vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   isDrawerOpen: Boolean,
@@ -17,6 +18,7 @@ const props = defineProps({
 })
 
 const toast = useToast()
+const router = useRouter()
 const persistentVolumeNameRef = ref(props.persistentVolumeName)
 const backups = ref([])
 
@@ -80,6 +82,11 @@ onPersistentVolumeBackupsResult((result) => {
 onPersistentVolumeBackupsError((err) => {
   toast.error(err.message)
 })
+
+const downloadBackup = (backup_id) => {
+  const downloadRoute = window.location.origin + `/pv-backup-download/${backup_id}`
+  window.open(downloadRoute, '_blank')
+}
 </script>
 
 <template>
@@ -111,7 +118,11 @@ onPersistentVolumeBackupsError((err) => {
           <div v-if="backup.status === 'success'" class="mt-1">
             Completed at {{ new Date(backup.completedAt).toLocaleString() }}
           </div>
-          <FilledButton v-if="backup.status === 'success'" class="mt-2 w-full" slim>
+          <FilledButton
+            v-if="backup.status === 'success'"
+            class="mt-2 w-full"
+            slim
+            :click="() => downloadBackup(backup.id)">
             <font-awesome-icon icon="fa-solid fa-circle-down" class="mr-2" />
             Download Backup
           </FilledButton>
