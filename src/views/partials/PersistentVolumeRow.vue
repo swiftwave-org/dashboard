@@ -21,6 +21,14 @@ const props = defineProps({
   showBackups: {
     type: Function,
     required: true
+  },
+  showRestores: {
+    type: Function,
+    required: true
+  },
+  restoreNow: {
+    type: Function,
+    required: true
   }
 })
 
@@ -151,11 +159,11 @@ const createBackup = () => {
       </FilledButton>
     </TableRow>
     <TableRow align="center" flex>
-      <FilledButton slim type="primary">
+      <FilledButton slim type="primary" :click="restoreNow">
         <font-awesome-icon icon="fa-solid fa-upload" class="mr-2" />
         Restore Now
       </FilledButton>
-      <FilledButton slim type="secondary">
+      <FilledButton slim type="secondary" :click="showRestores">
         <font-awesome-icon icon="fa-solid fa-list-check" class="mr-2" />
         Restore History
       </FilledButton>
