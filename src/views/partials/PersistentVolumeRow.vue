@@ -115,7 +115,7 @@ const createBackup = () => {
 <template>
   <Teleport to="body">
     <ModalDialog :close-modal="closeBackupCreateModal" :is-open="isBackupCreateModalOpen">
-      <template v-slot:header>Create Redirect Rule</template>
+      <template v-slot:header>Backup Volume</template>
       <template v-slot:body>
         <form @submit.prevent="createPersistentVolumeBackup">
           <!-- Domains -->
