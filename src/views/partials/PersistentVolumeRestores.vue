@@ -89,6 +89,7 @@ onPersistentVolumeRestoresError((err) => {
         <font-awesome-icon icon="fa-solid fa-rotate-right" class="mr-2" />
         Refresh List
       </FilledButton>
+      <div class="mb-2 text-sm text-gray-500">{{ restores.length }} restores found for this volume</div>
       <div class="my-4 flex justify-center" v-if="isPersistentVolumeRestoresLoading">
         <DotLoader />
       </div>
