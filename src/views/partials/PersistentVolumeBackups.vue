@@ -84,7 +84,7 @@ onPersistentVolumeBackupsError((err) => {
 })
 
 const downloadBackup = (backup_id) => {
-  const downloadRoute = window.location.origin + `/pv-backup-download/${backup_id}`
+  const downloadRoute = window.location.origin + import.meta.env.BASE_URL + `pv-backup-download/${backup_id}`
   window.open(downloadRoute, '_blank')
 }
 </script>
