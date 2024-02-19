@@ -8,7 +8,6 @@ import Badge from '@/views/components/Badge.vue'
 import { round } from 'lodash'
 import FilledButton from '@/views/components/FilledButton.vue'
 import DotLoader from '@/views/components/DotLoader.vue'
-import { useRouter } from 'vue-router'
 
 const props = defineProps({
   isDrawerOpen: Boolean,
@@ -18,7 +17,6 @@ const props = defineProps({
 })
 
 const toast = useToast()
-const router = useRouter()
 const persistentVolumeNameRef = ref(props.persistentVolumeName)
 const backups = ref([])
 
