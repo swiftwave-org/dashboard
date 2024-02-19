@@ -8,7 +8,6 @@ import Badge from '@/views/components/Badge.vue'
 import { round } from 'lodash'
 import FilledButton from '@/views/components/FilledButton.vue'
 import DotLoader from '@/views/components/DotLoader.vue'
-import { useRouter } from 'vue-router'
 
 const props = defineProps({
   isDrawerOpen: Boolean,
@@ -18,7 +17,6 @@ const props = defineProps({
 })
 
 const toast = useToast()
-const router = useRouter()
 const persistentVolumeNameRef = ref(props.persistentVolumeName)
 const backups = ref([])
 
@@ -76,7 +74,7 @@ const fetchPersistentVolumeBackups = async () => {
 }
 
 onPersistentVolumeBackupsResult((result) => {
-  backups.value = result.data.persistentVolume.backups
+  backups.value = result.data?.persistentVolume?.backups || []
 })
 
 onPersistentVolumeBackupsError((err) => {
@@ -84,7 +82,7 @@ onPersistentVolumeBackupsError((err) => {
 })
 
 const downloadBackup = (backup_id) => {
-  const downloadRoute = window.location.origin + `/pv-backup-download/${backup_id}`
+  const downloadRoute = window.location.origin + import.meta.env.BASE_URL + `pv-backup-download/${backup_id}`
   window.open(downloadRoute, '_blank')
 }
 </script>
@@ -98,6 +96,7 @@ const downloadBackup = (backup_id) => {
         <font-awesome-icon icon="fa-solid fa-rotate-right" class="mr-2" />
         Refresh List
       </FilledButton>
+      <div class="mb-2 text-sm text-gray-500">{{ backups.length }} backups found for this volume</div>
       <div class="my-4 flex justify-center" v-if="isPersistentVolumeBackupsLoading">
         <DotLoader />
       </div>
