@@ -14,6 +14,7 @@ import {
   faChevronDown,
   faCircleCheck,
   faCircleDown,
+  faCircleStop,
   faCircleXmark,
   faCloud,
   faCodeBranch,
@@ -29,7 +30,9 @@ import {
   faLink,
   faListCheck,
   faLocationArrow,
+  faMoon,
   faNetworkWired,
+  faPlay,
   faPlus,
   faRightFromBracket,
   faRotateRight,
@@ -91,7 +94,10 @@ library.add(
   faXmark,
   faCircleDown,
   faRotateRight,
-  faFile
+  faFile,
+  faMoon,
+  faPlay,
+  faCircleStop
 )
 
 // Environment variables
