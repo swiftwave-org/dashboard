@@ -37,12 +37,20 @@ const viewApplicationDetails = () => {
       <Badge v-else-if="application.latestDeployment.status === 'failed'" type="danger">Failed</Badge>
     </TableRow>
     <!-- Replicas -->
-    <TableRow v-if="application.realtimeInfo.InfoFound" align="center">
+    <TableRow v-if="!application.isSleeping && application.realtimeInfo.InfoFound" align="center">
       <div v-if="application.deploymentMode === 'replicated'" class="text-sm text-gray-900">
         {{ application.realtimeInfo.RunningReplicas }} / {{ application.realtimeInfo.DesiredReplicas }}
       </div>
       <div v-else-if="application.deploymentMode === 'global'" class="text-sm text-gray-900">Global</div>
       <div v-else class="text-sm text-gray-900">----</div>
+    </TableRow>
+    <TableRow v-else-if="application.isSleeping" align="center">
+      <Badge type="warning">
+        <div class="flex flex-row items-center gap-1.5">
+          <font-awesome-icon icon="fa-solid fa-moon" />
+          Sleeping
+        </div>
+      </Badge>
     </TableRow>
     <TableRow v-else align="center">
       <div class="text-sm text-gray-900">----</div>
