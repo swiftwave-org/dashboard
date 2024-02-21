@@ -1,5 +1,4 @@
 <script setup>
-
 import PageBar from '@/views/components/PageBar.vue'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { useRouter } from 'vue-router'
@@ -23,37 +22,41 @@ const {
   result: applicationsResult,
   loading: isApplicationsLoading,
   onError: onApplicationsError
-} = useQuery(gql`
-  query {
-    applications{
-      id
-      name
-      deploymentMode
-      replicas
-      realtimeInfo {
-        InfoFound
-        DesiredReplicas
-        RunningReplicas
-        DeploymentMode
-      }
-      latestDeployment {
-        status
-        upstreamType
-        gitProvider
-        createdAt
+} = useQuery(
+  gql`
+    query {
+      applications {
+        id
+        name
+        deploymentMode
+        replicas
+        isSleeping
+        realtimeInfo {
+          InfoFound
+          DesiredReplicas
+          RunningReplicas
+          DeploymentMode
+        }
+        latestDeployment {
+          status
+          upstreamType
+          gitProvider
+          createdAt
+        }
       }
     }
+  `,
+  null,
+  {
+    pollInterval: 10000
   }
-`, null, {
-  pollInterval: 10000
-})
+)
 
 onApplicationsError((err) => {
   toast.error(err.message)
 })
 
 const applications = computed(() => applicationsResult.value?.applications ?? [])
-
 </script>
 
 <template>
@@ -82,21 +85,13 @@ const applications = computed(() => applicationsResult.value?.applications ?? []
           No deployed applications found.<br />
           Click on the "Deploy New" button to deploy a new application.
         </TableMessage>
-        <TableMessage v-if="isApplicationsLoading">
-          Loading deployed applications...
-        </TableMessage>
+        <TableMessage v-if="isApplicationsLoading"> Loading deployed applications... </TableMessage>
       </template>
       <template v-slot:body>
-        <ApplicationListRow
-          v-for="application in applications"
-          :key="application.id"
-          :application="application"
-        />
+        <ApplicationListRow v-for="application in applications" :key="application.id" :application="application" />
       </template>
     </Table>
   </section>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
