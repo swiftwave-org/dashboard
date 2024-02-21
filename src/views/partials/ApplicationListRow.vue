@@ -49,29 +49,23 @@ const viewApplicationDetails = () => {
     </TableRow>
     <!-- END Replicas -->
     <TableRow align="center">
-      <span
-        v-if="application.latestDeployment.upstreamType === 'git'"
-        class="text-sm text-gray-700 uppercase"
-      > <font-awesome-icon icon="fa-solid fa-code-branch" class="mx-2" /> {{ application.latestDeployment.gitProvider }} </span>
-      <span
-        v-else-if="application.latestDeployment.upstreamType === 'image'"
-        class="text-sm text-gray-700"
-      ><font-awesome-icon class="mx-2" icon="fa-brands fa-docker"  />Docker Image</span>
-      <span
-        v-else-if="application.latestDeployment.upstreamType === 'sourceCode'"
-        class="text-sm text-gray-700"
+      <span v-if="application.latestDeployment.upstreamType === 'git'" class="text-sm uppercase text-gray-700">
+        <font-awesome-icon icon="fa-solid fa-code-branch" class="mx-2" /> {{ application.latestDeployment.gitProvider }}
+      </span>
+      <span v-else-if="application.latestDeployment.upstreamType === 'image'" class="text-sm text-gray-700"
+        ><font-awesome-icon class="mx-2" icon="fa-brands fa-docker" />Docker Image</span
       >
+      <span v-else-if="application.latestDeployment.upstreamType === 'sourceCode'" class="text-sm text-gray-700">
         <font-awesome-icon class="mx-2" icon="fa-solid fa-upload" />
-        Source Code</span>
+        Source Code</span
+      >
       <span v-else class="text-sm text-gray-700">N/A</span>
     </TableRow>
     <TableRow align="center">
       <span class="text-sm text-gray-700"> {{ createdAtFormatted }} </span>
     </TableRow>
-    <TableRow align="right" class="flex">
-      <FilledButton
-        :click="viewApplicationDetails"
-        slim type="primary">View Details</FilledButton>
+    <TableRow align="right" flex>
+      <FilledButton :click="viewApplicationDetails" slim type="primary">View Details</FilledButton>
     </TableRow>
   </tr>
 </template>
