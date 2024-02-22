@@ -15,6 +15,7 @@ import PersistentVolumeRestores from '@/views/partials/PersistentVolumeRestores.
 import { getHttpBaseUrl } from '@/vendor/utils.js'
 import axios from 'axios'
 import { useAuthStore } from '@/store/auth.js'
+import Badge from '@/views/components/Badge.vue'
 
 const toast = useToast()
 const authStore = useAuthStore()
@@ -28,7 +29,13 @@ const closeModal = () => {
 
 // Create persistent volume
 const newPersistentVolumeDetails = reactive({
-  name: ''
+  name: '',
+  type: 'local',
+  nfsConfig: {
+    host: '',
+    path: '',
+    version: 4
+  }
 })
 
 const {
@@ -107,6 +114,12 @@ const {
     persistentVolumes {
       id
       name
+      type
+      nfsConfig {
+        host
+        path
+        version
+      }
     }
   }
 `)
@@ -181,6 +194,29 @@ const uploadAndRestoreNow = () => {
       isRestoreNowButtonLoading.value = false
     })
 }
+
+const isVolumeDetailsModalOpen = ref(false)
+const selectedVolumeDetails = reactive({
+  name: '',
+  type: '',
+  nfsConfig: {
+    host: '',
+    path: '',
+    version: 0
+  }
+})
+const closeVolumeDetailsModal = () => {
+  isVolumeDetailsModalOpen.value = false
+}
+
+const showDetails = (volume) => {
+  selectedVolumeDetails.name = volume.name
+  selectedVolumeDetails.type = volume.type
+  selectedVolumeDetails.nfsConfig.host = volume.nfsConfig.host
+  selectedVolumeDetails.nfsConfig.path = volume.nfsConfig.path
+  selectedVolumeDetails.nfsConfig.version = volume.nfsConfig.version
+  isVolumeDetailsModalOpen.value = true
+}
 </script>
 
 <template>
@@ -216,6 +252,59 @@ const uploadAndRestoreNow = () => {
                 placeholder="Name of persistent volume"
                 type="text" />
             </div>
+          </div>
+          <!--    Type Field      -->
+          <div class="mt-2">
+            <label class="block text-sm font-medium text-gray-700">Type</label>
+            <select
+              v-model="newPersistentVolumeDetails.type"
+              class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+              <option value="local">Local</option>
+              <option value="nfs">NFS</option>
+            </select>
+          </div>
+          <!--   NFS Server Host    -->
+          <div class="mt-2" v-if="newPersistentVolumeDetails.type === 'nfs'">
+            <label class="block text-sm font-medium text-gray-700">NFS Server Host</label>
+            <div class="mt-1">
+              <input
+                v-model="newPersistentVolumeDetails.nfsConfig.host"
+                autocomplete="off"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                placeholder="NFS Server Host"
+                type="text" />
+            </div>
+            <p class="mt-2 text-sm text-gray-500">
+              Example:
+              <span class="text-gray-700"> nfs-server.example.com </span>
+            </p>
+          </div>
+          <!--    NFS Share Path      -->
+          <div class="mt-2" v-if="newPersistentVolumeDetails.type === 'nfs'">
+            <label class="block text-sm font-medium text-gray-700">NFS Share Path</label>
+            <div class="mt-1">
+              <input
+                v-model="newPersistentVolumeDetails.nfsConfig.path"
+                autocomplete="off"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                placeholder="NFS Share Path"
+                type="text" />
+            </div>
+            <p class="mt-2 text-sm text-gray-500">
+              Example:
+              <span class="text-gray-700"> /mnt/nfs_share </span>
+            </p>
+          </div>
+          <!--  Version -->
+          <div class="mt-2" v-if="newPersistentVolumeDetails.type === 'nfs'">
+            <label class="block text-sm font-medium text-gray-700">NFS Version</label>
+            <select
+              v-model="newPersistentVolumeDetails.nfsConfig.version"
+              class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+              <option value="2">NFS v3</option>
+              <option value="3">NFS v3</option>
+              <option value="4">NFS v4</option>
+            </select>
           </div>
         </form>
       </template>
@@ -262,6 +351,51 @@ const uploadAndRestoreNow = () => {
       </template>
     </ModalDialog>
 
+    <!--  Show Volume Details  -->
+    <ModalDialog :close-modal="closeVolumeDetailsModal" :is-open="isVolumeDetailsModalOpen">
+      <template v-slot:header>Volume Details</template>
+      <template v-slot:body>
+        <div class="mt-4 flex w-full flex-row gap-2">
+          <div class="w-1/2">
+            <label class="block text-sm font-medium text-gray-700">Volume Name</label>
+            <div class="mt-1">
+              <p
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                {{ selectedVolumeDetails.name }}
+              </p>
+            </div>
+          </div>
+          <div class="w-1/2">
+            <label class="block text-sm font-medium text-gray-700">Volume Type</label>
+            <div class="mt-1">
+              <Badge type="warning">{{ selectedVolumeDetails.type }}</Badge>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4" v-if="selectedVolumeDetails.type === 'nfs'">
+          <label class="block text-sm font-medium text-gray-700">NFS Config</label>
+          <div class="mt-1">
+            <p
+              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+              {{ selectedVolumeDetails.nfsConfig.host }}:{{ selectedVolumeDetails.nfsConfig.path }}
+            </p>
+          </div>
+        </div>
+        <div class="mt-4" v-if="selectedVolumeDetails.type === 'nfs'">
+          <label class="block text-sm font-medium text-gray-700">NFS Version</label>
+          <div class="mt-1">
+            <p
+              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+              {{ selectedVolumeDetails.nfsConfig.version }}
+            </p>
+          </div>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <FilledButton :click="closeVolumeDetailsModal" type="primary">Close</FilledButton>
+      </template>
+    </ModalDialog>
+
     <!-- Top Page bar   -->
     <PageBar>
       <template v-slot:title>Persistent Volume</template>
@@ -274,8 +408,8 @@ const uploadAndRestoreNow = () => {
     <!-- Table -->
     <Table class="mt-8">
       <template v-slot:header>
-        <TableHeader align="left">ID</TableHeader>
-        <TableHeader align="center">Volume Name</TableHeader>
+        <TableHeader align="left">Volume Name</TableHeader>
+        <TableHeader align="center">Details</TableHeader>
         <TableHeader align="center">Size</TableHeader>
         <TableHeader align="center">PV Backup</TableHeader>
         <TableHeader align="center">PV Restore</TableHeader>
@@ -295,6 +429,7 @@ const uploadAndRestoreNow = () => {
           :show-backups="() => openBackupDrawerForVolume(volume.id, volume.name)"
           :show-restores="() => openRestoreDrawerForVolume(volume.id, volume.name)"
           :restore-now="() => openRestoreNowModal(volume.id, volume.name)"
+          :show-details="() => showDetails(volume)"
           :volume="volume" />
       </template>
     </Table>
