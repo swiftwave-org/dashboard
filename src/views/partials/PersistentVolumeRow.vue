@@ -29,6 +29,10 @@ const props = defineProps({
   restoreNow: {
     type: Function,
     required: true
+  },
+  showDetails: {
+    type: Function,
+    required: true
   }
 })
 
@@ -137,10 +141,10 @@ const createBackup = () => {
   </Teleport>
   <tr :key="volume.id">
     <TableRow align="left">
-      <div class="text-sm text-gray-900">{{ volume.id }}</div>
+      <div class="text-sm font-medium text-gray-900">{{ volume.name }}</div>
     </TableRow>
     <TableRow align="center">
-      <div class="text-sm font-medium text-gray-900">{{ volume.name }}</div>
+      <FilledButton slim type="secondary" :click="showDetails"> Show Details</FilledButton>
     </TableRow>
     <TableRow align="center" flex>
       <p v-show="sizeFetched">{{ persistentVolumeSize }} MB</p>

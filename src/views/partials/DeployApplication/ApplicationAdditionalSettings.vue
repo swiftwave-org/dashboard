@@ -100,11 +100,10 @@ const submitDetails = () => {
   }
   props.finalizeApplicationAdditionalSettingsAndMoveToNextTab(details)
 }
-
 </script>
 
 <template>
-  <TabPanel :key="3" class="flex h-full w-full flex-col p-6">
+  <TabPanel :key="3" class="flex w-full flex-col p-6">
     <!-- Deployment Configuration -->
     <p class="mt-6 text-lg font-medium text-gray-900">Deployment Configuration</p>
     <div class="mt-3 flex flex-row items-center">
@@ -125,8 +124,7 @@ const submitDetails = () => {
           name="no_of_replicase"
           placeholder="No of Replicas"
           type="number"
-          v-model="stateRef.replicas"
-        />
+          v-model="stateRef.replicas" />
       </div>
     </div>
     <!-- Environment Variables -->
@@ -151,9 +149,7 @@ const submitDetails = () => {
       class="mt-2" />
     <!-- Proceed to next -->
     <div class="mt-6 flex flex-row justify-end">
-      <FilledButton type="primary" @click="submitDetails"
-        >Confirm & Proceed to Next
-      </FilledButton>
+      <FilledButton type="primary" @click="submitDetails">Confirm & Proceed to Next </FilledButton>
     </div>
   </TabPanel>
 </template>
