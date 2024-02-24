@@ -233,7 +233,8 @@ onWakeApplicationError((error) => {
             class="w-full"
             type="primary"
             :loading="wakeApplicationLoading"
-            :click="wakeApplication">
+            :click="wakeApplication"
+            :disabled="applicationDetails.latestDeployment.status !== 'live'">
             <font-awesome-icon class="mr-2" icon="fa-solid fa-play" />
             Resume App
           </FilledButton>
@@ -242,7 +243,8 @@ onWakeApplicationError((error) => {
             class="w-full"
             type="primary"
             :loading="sleepApplicationLoading"
-            :click="sleepApplication">
+            :click="sleepApplication"
+            :disabled="applicationDetails.latestDeployment.status !== 'live'">
             <font-awesome-icon class="mr-2" icon="fa-solid fa-circle-stop" />
             Pause App
           </FilledButton>
