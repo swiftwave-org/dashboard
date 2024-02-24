@@ -138,7 +138,6 @@ export default function newApplicationUpdater(applicationId) {
       const deploymentConfiguration = applicationDetailsRaw.value?.application ?? {}
       deploymentConfigurationDetails.deploymentMode = deploymentConfiguration.deploymentMode
       deploymentConfigurationDetails.replicas = deploymentConfiguration.replicas
-      
       sourceConfigurationRef.command = deploymentConfiguration.command
       sourceConfigurationRef.gitCredentialID = deploymentConfiguration.latestDeployment.gitCredentialID
       sourceConfigurationRef.gitProvider = deploymentConfiguration.latestDeployment.gitProvider
