@@ -195,7 +195,7 @@ app.mount('#app')
 router.beforeEach(async (to) => {
   const authStore = useAuthStore()
   if (!authStore.IsLoggedIn && to.name !== 'Login') {
-    return { name: 'Login' }
+    return { name: 'Login', query: { redirect: to.path } }
   }
   if (authStore.IsLoggedIn && to.name === 'Login') {
     return { name: 'Applications' }
