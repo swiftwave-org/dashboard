@@ -66,6 +66,7 @@ export default function newApplicationUpdater(applicationId) {
           application(id: $id) {
             deploymentMode
             replicas
+            command
             environmentVariables {
               key
               value
@@ -137,8 +138,7 @@ export default function newApplicationUpdater(applicationId) {
       const deploymentConfiguration = applicationDetailsRaw.value?.application ?? {}
       deploymentConfigurationDetails.deploymentMode = deploymentConfiguration.deploymentMode
       deploymentConfigurationDetails.replicas = deploymentConfiguration.replicas
-
-      sourceConfigurationRef.command = deploymentConfiguration.latestDeployment.command
+      sourceConfigurationRef.command = deploymentConfiguration.command
       sourceConfigurationRef.gitCredentialID = deploymentConfiguration.latestDeployment.gitCredentialID
       sourceConfigurationRef.gitProvider = deploymentConfiguration.latestDeployment.gitProvider
       sourceConfigurationRef.repositoryName = deploymentConfiguration.latestDeployment.repositoryName
