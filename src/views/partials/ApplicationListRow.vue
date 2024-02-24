@@ -57,8 +57,9 @@ const viewApplicationDetails = () => {
     </TableRow>
     <!-- END Replicas -->
     <TableRow align="center">
-      <span v-if="application.latestDeployment.upstreamType === 'git'" class="text-sm uppercase text-gray-700">
-        <font-awesome-icon icon="fa-solid fa-code-branch" class="mx-2" /> {{ application.latestDeployment.gitProvider }}
+      <span v-if="application.latestDeployment.upstreamType === 'git'" class="text-sm capitalize text-gray-700">
+        <font-awesome-icon icon="fa-solid fa-code-branch" class="mx-2" />
+        {{ application.latestDeployment.gitProvider }}
       </span>
       <span v-else-if="application.latestDeployment.upstreamType === 'image'" class="text-sm text-gray-700"
         ><font-awesome-icon class="mx-2" icon="fa-brands fa-docker" />Docker Image</span
