@@ -52,8 +52,8 @@ export default function newApplicationUpdater(applicationId) {
 
     onDeployApplicationMutationDone(() => {
       refetchApplicationDetails()
-      alert('Application updated successfully')
       router.push({ name: 'Application Details Deployments', params: { id: applicationId } })
+      alert('Application updated successfully\nNOTE: Wait for a few seconds to apply new changes')
     })
 
     const {
