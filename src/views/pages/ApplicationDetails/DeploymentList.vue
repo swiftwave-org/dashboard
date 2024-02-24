@@ -1,6 +1,4 @@
 <script setup>
-
-
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useQuery } from '@vue/apollo-composable'
@@ -13,10 +11,7 @@ const router = useRouter()
 const toast = useToast()
 
 // Fetch ingress rules
-const {
-  result: ingressRulesRaw,
-  onError: onDeploymentsError
-} = useQuery(
+const { result: ingressRulesRaw, onError: onDeploymentsError } = useQuery(
   gql`
     query ($id: String!) {
       application(id: $id) {
@@ -49,19 +44,15 @@ onDeploymentsError((err) => {
   toast.error(err.message)
 })
 
-
 const formatdate = (date) => {
   const x = new Date(date)
   return x.toLocaleString()
 }
-
 </script>
 
 <template>
-  <p
-    class="text-gray-900 font-semibold w-full text-center"
-  >🛠 Click on a deployment to view more details 🛠</p>
-  <div class="flex flex-col mt-4 gap-2 max-h-[60vh] overflow-y-auto px-2 scrollbox">
+  <p class="w-full text-center font-semibold text-gray-900">🛠 Click on a deployment to view more details 🛠</p>
+  <div class="scrollbox mt-4 flex max-h-[60vh] flex-col gap-2 overflow-y-auto px-2">
     <RouterLink
       v-for="deployment in deployments"
       :key="deployment.id"
@@ -71,10 +62,9 @@ const formatdate = (date) => {
           id: deployment.id
         }
       }"
-      class="w-full"
-    >
+      class="w-full">
       <div
-        class="border-2 border-gray-500 rounded-md shadow p-4 w-full hover:bg-gray-100 cursor-pointer hover:border-4 hover:border-primary-300 transition-all duration-100 ease-in-out">
+        class="w-full cursor-pointer rounded-md border-2 border-gray-500 p-4 shadow transition-all duration-100 ease-in-out hover:border-primary-300 hover:bg-gray-100">
         <div class="flex items-center gap-2 font-bold">
           <font-awesome-icon icon="fa-solid fa-fingerprint" />
           <p class="mr-1">{{ deployment.id }}</p>
@@ -86,13 +76,16 @@ const formatdate = (date) => {
           <Badge v-else-if="deployment.status === 'stopped'" type="secondary">{{ deployment.status }}</Badge>
           <Badge v-else-if="deployment.status === 'stalled'" type="secondary">{{ deployment.status }}</Badge>
         </div>
-        <div class="flex flex-row gap-2 items-center">
+        <div class="flex flex-row items-center gap-2">
           <font-awesome-icon v-if="deployment.upstreamType === 'git'" icon="fa-solid fa-code-branch" />
           <font-awesome-icon v-if="deployment.upstreamType === 'image'" icon="fa-brands fa-docker" />
           <font-awesome-icon v-if="deployment.upstreamType === 'sourceCode'" icon="fa-solid fa-upload" />
 
-          <p v-if="deployment.upstreamType === 'git'">{{ deployment.gitProvider }}@{{ deployment.repositoryOwner
-            }}/{{ deployment.repositoryName }}:{{ deployment.repositoryBranch }}</p>
+          <p v-if="deployment.upstreamType === 'git'">
+            {{ deployment.gitProvider }}@{{ deployment.repositoryOwner }}/{{ deployment.repositoryName }}:{{
+              deployment.repositoryBranch
+            }}
+          </p>
           <p v-if="deployment.upstreamType === 'image'">{{ deployment.dockerImage }}</p>
           <p v-if="deployment.upstreamType === 'sourceCode'">Source-code uploaded manually</p>
         </div>
@@ -103,7 +96,7 @@ const formatdate = (date) => {
       </div>
     </RouterLink>
   </div>
-  <p class="text-secondary-700 text-sm w-full text-center mt-4">Scroll down to view more deployments(if any)</p>
+  <p class="mt-4 w-full text-center text-sm text-secondary-700">Scroll down to view more deployments(if any)</p>
 </template>
 
 <style scoped>
@@ -113,10 +106,10 @@ const formatdate = (date) => {
 }
 
 .scrollbox::-webkit-scrollbar-track {
-  @apply bg-gray-200 rounded-full;
+  @apply rounded-full bg-gray-200;
 }
 
 .scrollbox::-webkit-scrollbar-thumb {
-  @apply bg-primary-500 rounded-full;
+  @apply rounded-full bg-primary-500;
 }
 </style>
