@@ -36,6 +36,7 @@ const changeTab = (index) => {
 const newApplicationState = reactive({
   name: '',
   upstreamType: '',
+  command: '',
   deploymentMode: '',
   replicas: 0,
   dockerfile: '',
@@ -83,7 +84,7 @@ const {
 onDeployApplicationMutationDone((result) => {
   toast.success('Application deployed successfully !')
   console.log(result)
-  if(result.data.createApplication.latestDeployment === null) {
+  if (result.data.createApplication.latestDeployment === null) {
     toast.warning('Application is not deployed yet, please wait for a while and refresh the page')
     return
   }
@@ -121,11 +122,13 @@ const finalizeApplicationSourceConfigurationAndMoveToNextTab = (configuration) =
       value: configuration.buildArgs[key]
     })
   }
+  newApplicationState.command = configuration.command
   newApplicationState.buildArgs = buildArgs
   newApplicationState.gitCredentialID = parseInt(configuration.gitCredentialID)
   newApplicationState.imageRegistryCredentialID = parseInt(configuration.imageRegistryCredentialID)
   newApplicationState.gitCredentialID = configuration.gitCredentialID === 0 ? null : configuration.gitCredentialID
-  newApplicationState.imageRegistryCredentialID = configuration.imageRegistryCredentialID === 0 ? null : configuration.imageRegistryCredentialID
+  newApplicationState.imageRegistryCredentialID =
+    configuration.imageRegistryCredentialID === 0 ? null : configuration.imageRegistryCredentialID
   newApplicationState.gitProvider = getGitProvideFromGitRepoUrl(configuration.gitRepoUrl)
   newApplicationState.repositoryBranch = configuration.gitBranch
   newApplicationState.repositoryName = getGitRepoNameFromGitRepoUrl(configuration.gitRepoUrl)

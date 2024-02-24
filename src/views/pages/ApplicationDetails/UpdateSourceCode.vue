@@ -12,7 +12,8 @@ import BuildArgInput from '@/views/partials/BuildArgInput.vue'
 import {
   getGitProvideFromGitRepoUrl,
   getGitRepoNameFromGitRepoUrl,
-  getGitRepoOwnerFromGitRepoUrl, getHttpBaseUrl
+  getGitRepoOwnerFromGitRepoUrl,
+  getHttpBaseUrl
 } from '@/vendor/utils.js'
 import newApplicationUpdater from '@/store/applicationUpdater.js'
 import { useRouter } from 'vue-router'
@@ -22,10 +23,9 @@ const authStore = useAuthStore()
 const toast = useToast()
 const applicationUpdater = newApplicationUpdater(router.currentRoute.value.params.id)()
 
-
 const applicationSourceType = computed(() => {
   if (applicationExistingDetailsResult.value) {
-    return applicationExistingDetailsResult.value?.application?.latestDeployment?.upstreamType??""
+    return applicationExistingDetailsResult.value?.application?.latestDeployment?.upstreamType ?? ''
   } else {
     return null
   }
@@ -37,6 +37,7 @@ const stateRef = reactive({
   gitRepoUrl: '',
   gitBranch: '',
   codePath: '',
+  command: '',
   imageRegistryCredentialID: 0,
   dockerImage: '',
   isUploadingSourceCode: false,
@@ -48,54 +49,66 @@ const stateRef = reactive({
   isDockerConfigurationGenerated: false
 })
 
-watch(stateRef, () => {
-  applicationUpdater.updateApplicationSource(stateRef)
-}, {deep: true})
+watch(
+  stateRef,
+  () => {
+    applicationUpdater.updateApplicationSource(stateRef)
+  },
+  { deep: true }
+)
 
-
-watch(()=>applicationUpdater.isConfigurationUpdated, (updateStatus) => {
-  if(updateStatus === false){
-    prefillDetails()
+watch(
+  () => applicationUpdater.isConfigurationUpdated,
+  (updateStatus) => {
+    if (updateStatus === false) {
+      prefillDetails()
+    }
   }
-})
+)
 
 const applicationExistingDetailsResult = computed(() => {
-  return applicationUpdater.applicationExistingDetailsResult??{}
+  return applicationUpdater.applicationExistingDetailsResult ?? {}
 })
 
-function prefillDetails(){
-  if(applicationExistingDetailsResult.value && applicationExistingDetailsResult.value.application) {
-    stateRef.gitRepoUrl = applicationExistingDetailsResult.value.application.latestDeployment.gitProvider + '.com/' +
-      applicationExistingDetailsResult.value.application.latestDeployment.repositoryOwner + '/' +
-      applicationExistingDetailsResult.value.application.latestDeployment.repositoryName;
-    stateRef.gitBranch = applicationExistingDetailsResult.value.application.latestDeployment.repositoryBranch;
-    stateRef.gitCredentialID = applicationExistingDetailsResult.value.application.latestDeployment.gitCredentialID;
-    stateRef.codePath = applicationExistingDetailsResult.value.application.latestDeployment.codePath;
-    stateRef.isDockerConfigurationGenerated = true;
-    stateRef.detectedServiceName = "Taken from existing deployment";
-    stateRef.dockerFile = applicationExistingDetailsResult.value.application.latestDeployment.dockerfile;
-    const buildArgs = applicationExistingDetailsResult.value.application.latestDeployment.buildArgs;
-    stateRef.buildArgs = {};
-    stateRef.dockerBuildArgs = [];
+function prefillDetails() {
+  if (applicationExistingDetailsResult.value && applicationExistingDetailsResult.value.application) {
+    stateRef.command = applicationExistingDetailsResult.value.application.command
+    stateRef.gitRepoUrl =
+      applicationExistingDetailsResult.value.application.latestDeployment.gitProvider +
+      '.com/' +
+      applicationExistingDetailsResult.value.application.latestDeployment.repositoryOwner +
+      '/' +
+      applicationExistingDetailsResult.value.application.latestDeployment.repositoryName
+    stateRef.gitBranch = applicationExistingDetailsResult.value.application.latestDeployment.repositoryBranch
+    stateRef.gitCredentialID = applicationExistingDetailsResult.value.application.latestDeployment.gitCredentialID
+    stateRef.codePath = applicationExistingDetailsResult.value.application.latestDeployment.codePath
+    stateRef.isDockerConfigurationGenerated = true
+    stateRef.detectedServiceName = 'Taken from existing deployment'
+    stateRef.dockerFile = applicationExistingDetailsResult.value.application.latestDeployment.dockerfile
+    const buildArgs = applicationExistingDetailsResult.value.application.latestDeployment.buildArgs
+    stateRef.buildArgs = {}
+    stateRef.dockerBuildArgs = []
     for (const buildArg of buildArgs) {
       stateRef.buildArgs[buildArg.key] = buildArg.value
       stateRef.dockerBuildArgs.push({
         key: buildArg.key,
-        description: "",
+        description: '',
         value: buildArg.value
       })
     }
-    stateRef.sourceCodeCompressedFileName = applicationExistingDetailsResult.value.application.latestDeployment.sourceCodeCompressedFileName;
-    stateRef.dockerImage = applicationExistingDetailsResult.value.application.latestDeployment.dockerImage;
-    stateRef.imageRegistryCredentialID = applicationExistingDetailsResult.value.application.latestDeployment.imageRegistryCredentialID;
+    stateRef.sourceCodeCompressedFileName =
+      applicationExistingDetailsResult.value.application.latestDeployment.sourceCodeCompressedFileName
+    stateRef.dockerImage = applicationExistingDetailsResult.value.application.latestDeployment.dockerImage
+    stateRef.imageRegistryCredentialID =
+      applicationExistingDetailsResult.value.application.latestDeployment.imageRegistryCredentialID
   }
 }
 
-watch(applicationExistingDetailsResult, ()=>{
+watch(applicationExistingDetailsResult, () => {
   prefillDetails()
 })
 
-onMounted(()=> {
+onMounted(() => {
   prefillDetails()
 })
 
@@ -157,8 +170,8 @@ const gitCredentials = computed(() => gitCredentialList.value?.gitCredentials ??
 
 onGitCredentialListError((err) => toast.error(err.message))
 
-
 const HTTP_BASE_URL = getHttpBaseUrl()
+
 async function uploadTarFile(fileblob) {
   try {
     var data = new FormData()
@@ -276,7 +289,8 @@ const generateConfiguration = () => {
       repositoryOwner: getGitRepoOwnerFromGitRepoUrl(stateRef.gitRepoUrl),
       codePath: stateRef.codePath,
       customDockerFile: '',
-      sourceCodeCompressedFileName: stateRef.sourceCodeCompressedFileName === '' ? null : stateRef.sourceCodeCompressedFileName
+      sourceCodeCompressedFileName:
+        stateRef.sourceCodeCompressedFileName === '' ? null : stateRef.sourceCodeCompressedFileName
     }
     if (generateConfigurationLoad() === false) {
       generateConfigurationRefetch()
@@ -302,7 +316,7 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
 </script>
 
 <template>
-  <div :key="2" class="mt-5 flex w-full flex-row justify-evenly p-6 mb-5">
+  <div :key="2" class="mb-5 mt-5 flex w-full flex-row justify-between p-6">
     <div class="w-1/2 max-w-md">
       <!--  Git as Source  -->
       <div v-if="applicationSourceType === 'git'" class="w-full">
@@ -351,13 +365,17 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
               name="name"
               placeholder="Absolute path of code (optional)"
               type="text" />
-            <p class="mt-1 text-xs text-gray-800">* You need to specify this if your code is not in root directory of git</p>
+            <p class="mt-1 text-xs text-gray-800">
+              * You need to specify this if your code is not in root directory of git
+            </p>
           </div>
         </div>
 
         <!-- Git Credentials -->
         <div class="mt-4">
-          <label class="block text-sm font-medium text-gray-700" for="git_credential">Pick Git Credential (Optional)</label>
+          <label class="block text-sm font-medium text-gray-700" for="git_credential"
+            >Pick Git Credential (Optional)</label
+          >
           <div class="mt-1">
             <select
               id="git_credential"
@@ -378,7 +396,7 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
         <!--    Source Code -->
         <div class="mt-4">
           <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white" for="source_code"
-          >Select Folder</label
+            >Select Folder</label
           >
           <div class="mx-auto max-w-md space-y-8">
             <input
@@ -397,7 +415,7 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
           class="mt-4 w-full"
           type="secondary"
           @click="uploadSourceCode"
-        >Upload Code
+          >Upload Code
         </FilledButton>
       </div>
       <!--  Docker Source  -->
@@ -405,7 +423,7 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
         <!-- Docker Image URL-->
         <div class="mt-6">
           <label class="block text-sm font-medium text-gray-700" for="docker_image"
-          >Docker Image <span class="text-red-600"> *</span>
+            >Docker Image <span class="text-red-600"> *</span>
           </label>
           <div class="mt-1">
             <input
@@ -421,7 +439,7 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
         <!-- Image Registry Credentials -->
         <div class="mt-4">
           <label class="block text-sm font-medium text-gray-700" for="image_registry_credential"
-          >Pick Image Registry Credential (Optional)
+            >Pick Image Registry Credential (Optional)
           </label>
           <div class="mt-1">
             <select
@@ -443,7 +461,7 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
         class="mt-6 w-full"
         type="primary"
         @click="generateConfiguration"
-      >Re-Generate Configuration
+        >Re-Generate Configuration
       </FilledButton>
     </div>
 
@@ -457,10 +475,27 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
         <span class="font-normal text-primary-600">{{ stateRef.detectedServiceName }}</span>
       </p>
       <FilledButton v-if="applicationSourceType !== 'image'" class="mt-4 w-full" @click="openDockerFileEditor"
-      >View / Modify Dockerfile
+        >View / Modify Dockerfile
       </FilledButton>
+      <!-- Docker Command-->
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700" for="docker_command"
+          >Docker Image Command (Optional)
+        </label>
+        <div class="mt-1">
+          <input
+            id="docker_command"
+            v-model="stateRef.command"
+            autocomplete="off"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+            name="docker_command"
+            placeholder="Enter Docker Command"
+            type="text" />
+          <p class="mt-1 text-xs text-gray-800">* It's just to override the default command of docker image</p>
+        </div>
+      </div>
       <div v-if="stateRef.dockerBuildArgs.length !== 0">
-        <p class="mt-6 font-medium text-gray-700">🐳 Docker Build Args</p>
+        <p class="mt-4 font-medium text-gray-700">🐳 Docker Build Args</p>
         <div class="w-full">
           <BuildArgInput
             v-for="buildArg in stateRef.dockerBuildArgs"

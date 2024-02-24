@@ -20,7 +20,11 @@ const login = async () => {
   authenticationStatus.message = res.message
   authenticationStatus.visible = true
   if (res.success) {
-    // TODO: update this to redirect to dashboard
+    // check if `redirect` is in the query
+    if (router.currentRoute.value.query.redirect) {
+      await router.push(router.currentRoute.value.query.redirect)
+      return
+    }
     await router.push({ name: 'Applications' })
   }
 }

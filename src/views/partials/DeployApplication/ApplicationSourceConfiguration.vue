@@ -13,7 +13,8 @@ import BuildArgInput from '@/views/partials/BuildArgInput.vue'
 import {
   getGitProvideFromGitRepoUrl,
   getGitRepoNameFromGitRepoUrl,
-  getGitRepoOwnerFromGitRepoUrl, getHttpBaseUrl
+  getGitRepoOwnerFromGitRepoUrl,
+  getHttpBaseUrl
 } from '@/vendor/utils.js'
 
 const props = defineProps({
@@ -32,6 +33,7 @@ const toast = useToast()
 
 const sourceCodeFileFieldRef = ref(null)
 const stateRef = reactive({
+  command: '',
   sourceCodeFile: '',
   gitCredentialID: 0,
   gitRepoUrl: '',
@@ -106,8 +108,8 @@ const gitCredentials = computed(() => gitCredentialList.value?.gitCredentials ??
 
 onGitCredentialListError((err) => toast.error(err.message))
 
-
 const HTTP_BASE_URL = getHttpBaseUrl()
+
 async function uploadTarFile(fileblob) {
   try {
     var data = new FormData()
@@ -300,13 +302,17 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
               name="name"
               placeholder="Absolute path of code (optional)"
               type="text" />
-            <p class="mt-1 text-xs text-gray-800">* You need to specify this if your code is not in root directory of git</p>
+            <p class="mt-1 text-xs text-gray-800">
+              * You need to specify this if your code is not in root directory of git
+            </p>
           </div>
         </div>
 
         <!-- Git Credentials -->
         <div class="mt-4">
-          <label class="block text-sm font-medium text-gray-700" for="git_credential">Pick Git Credential (Optional)</label>
+          <label class="block text-sm font-medium text-gray-700" for="git_credential"
+            >Pick Git Credential (Optional)</label
+          >
           <div class="mt-1">
             <select
               id="git_credential"
@@ -408,8 +414,25 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
       <FilledButton v-if="applicationSourceType !== 'image'" class="mt-4 w-full" @click="openDockerFileEditor"
         >View / Modify Dockerfile
       </FilledButton>
+      <!-- Docker Command-->
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700" for="docker_command"
+          >Docker Image Command (Optional)
+        </label>
+        <div class="mt-1">
+          <input
+            id="docker_command"
+            v-model="stateRef.command"
+            autocomplete="off"
+            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+            name="docker_command"
+            placeholder="Enter Docker Command"
+            type="text" />
+          <p class="mt-1 text-xs text-gray-800">* It's just to override the default command of docker image</p>
+        </div>
+      </div>
       <div v-if="stateRef.dockerBuildArgs.length !== 0">
-        <p class="mt-6 font-medium text-gray-700">🐳 Docker Build Args</p>
+        <p class="mt-4 font-medium text-gray-700">🐳 Docker Build Args</p>
         <div class="w-full">
           <BuildArgInput
             v-for="buildArg in stateRef.dockerBuildArgs"
@@ -420,7 +443,7 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
             :value="stateRef.buildArgs[buildArg.key]" />
         </div>
       </div>
-      <FilledButton :click="() => finalizeApplicationSourceConfigurationAndMoveToNextTab(stateRef)" class="mt-10 w-full"
+      <FilledButton :click="() => finalizeApplicationSourceConfigurationAndMoveToNextTab(stateRef)" class="mt-8 w-full"
         >Confirm & Proceed to Next Step
       </FilledButton>
     </div>
