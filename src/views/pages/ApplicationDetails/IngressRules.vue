@@ -1,5 +1,4 @@
 <script setup>
-
 import TableMessage from '@/views/components/Table/TableMessage.vue'
 import Badge from '@/views/components/Badge.vue'
 import TableRow from '@/views/components/Table/TableRow.vue'
@@ -8,18 +7,23 @@ import TableHeader from '@/views/components/Table/TableHeader.vue'
 import gql from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import FilledButton from '@/views/components/FilledButton.vue'
+import CreateIngressRuleModal from '@/views/partials/CreateIngressRuleModal.vue'
 
 const router = useRouter()
 const toast = useToast()
 
+// Create new ingress rule
+const newIngressRuleModalRef = ref(null)
+const openNewIngressRuleModal = () => {
+  if (!newIngressRuleModalRef.value?.openModal) return
+  newIngressRuleModalRef.value.openModal(router.currentRoute.value.params.id)
+}
+
 // Fetch ingress rules
-const {
-  result: ingressRulesRaw,
-  onError: onIngressRulesError
-} = useQuery(
+const { result: ingressRulesRaw, onError: onIngressRulesError } = useQuery(
   gql`
     query ($id: String!) {
       application(id: $id) {
@@ -52,10 +56,11 @@ const ingressRules = computed(() => ingressRulesRaw.value?.application?.ingressR
 onIngressRulesError((err) => {
   toast.error(err.message)
 })
-
 </script>
 
 <template>
+  <!-- Create Ingress Rule Modal -->
+  <CreateIngressRuleModal ref="newIngressRuleModalRef" />
   <!-- Table -->
   <Table class="mt-8">
     <template v-slot:header>
@@ -72,15 +77,18 @@ onIngressRulesError((err) => {
       <tr v-for="ingressRule in ingressRules" :key="ingressRule.id">
         <TableRow align="left">
           <div class="text-sm text-gray-900">
-            <a v-if="ingressRule.protocol === 'http' || ingressRule.protocol === 'https'"
-               :href="ingressRule.protocol+'://' + ingressRule.domain.name + ':' + ingressRule.port.toString()"
-               target="_blank"
-            >{{ ingressRule.protocol }}://{{ ingressRule.domain.name }}:{{ ingressRule.port }}</a
+            <a
+              v-if="ingressRule.protocol === 'http' || ingressRule.protocol === 'https'"
+              :href="ingressRule.protocol + '://' + ingressRule.domain.name + ':' + ingressRule.port.toString()"
+              target="_blank"
+              >{{ ingressRule.protocol }}://{{ ingressRule.domain.name }}:{{ ingressRule.port }}</a
             >
-            <a v-else-if="ingressRule.protocol === 'tcp'"
-               href="javascript:void(0);">tcp://&lt;server-ip&gt;:{{ ingressRule.port }}</a>
-            <a v-else-if="ingressRule.protocol === 'udp'"
-               href="javascript:void(0);">udp://&lt;server-ip&gt;:{{ ingressRule.port }}</a>
+            <a v-else-if="ingressRule.protocol === 'tcp'" href="javascript:void(0);"
+              >tcp://&lt;server-ip&gt;:{{ ingressRule.port }}</a
+            >
+            <a v-else-if="ingressRule.protocol === 'udp'" href="javascript:void(0);"
+              >udp://&lt;server-ip&gt;:{{ ingressRule.port }}</a
+            >
             <a v-else href="javascript:void(0);"><i>Unknown</i></a>
             &nbsp;&nbsp;
             <font-awesome-icon icon="fa-solid fa-arrow-right" />&nbsp;&nbsp;
@@ -97,17 +105,10 @@ onIngressRulesError((err) => {
     </template>
   </Table>
   <!-- More actions  -->
-  <div class="flex items-center mt-4 justify-center gap-3">
-    Want to add or delete Ingress Rules?
-    <FilledButton
-      :click="() => router.push({ name: 'Ingress Rules' })"
-      slim
-      type="primary"
-    >Manage Ingress Rules
-    </FilledButton>
+  <div class="mt-4 flex items-center justify-center gap-3">
+    Expose your application to the world
+    <FilledButton slim type="primary" :click="openNewIngressRuleModal">Add Ingress Rule</FilledButton>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
