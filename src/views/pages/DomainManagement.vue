@@ -3,7 +3,7 @@ import PageBar from '@/views/components/PageBar.vue'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { useLazyQuery, useMutation, useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { computed, reactive, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import TableMessage from '@/views/components/Table/TableMessage.vue'
 import Table from '@/views/components/Table/Table.vue'
@@ -12,15 +12,9 @@ import ModalDialog from '@/views/components/ModalDialog.vue'
 import DomainListRow from '@/views/partials/DomainListRow.vue'
 import Disclosure from '@/views/components/Disclosure.vue'
 import moment from 'moment'
+import CreateDomainModal from '@/views/partials/CreateDomainModal.vue'
 
 const toast = useToast()
-const isNewDomainModalOpen = ref(false)
-const openNewDomainModal = () => {
-  isNewDomainModalOpen.value = true
-}
-const closeDomainModal = () => {
-  isNewDomainModalOpen.value = false
-}
 
 const isDetailsModalOpen = ref(false)
 const openDetailsModal = () => {
@@ -29,43 +23,6 @@ const openDetailsModal = () => {
 const closeDetailsModal = () => {
   isDetailsModalOpen.value = false
 }
-
-// Register Domain state
-const newDomainDetails = reactive({
-  name: ''
-})
-
-const {
-  mutate: registerDomain,
-  loading: isDomainRegistering,
-  onDone: onDomainRegisterSuccess,
-  onError: onDomainRegisterFail
-} = useMutation(
-  gql`
-    mutation ($input: DomainInput!) {
-      addDomain(input: $input) {
-        id
-        name
-      }
-    }
-  `,
-  {
-    variables: {
-      input: newDomainDetails
-    }
-  }
-)
-
-onDomainRegisterSuccess(() => {
-  closeDomainModal()
-  newDomainDetails.name = ''
-  toast.success('Domain registered successfully')
-  refetchDomainList()
-})
-
-onDomainRegisterFail((err) => {
-  toast.error(err.message)
-})
 
 // Fetch domains from the server
 const {
@@ -236,39 +193,16 @@ onIssueSslDone(() => {
 onIssueSslError((err) => {
   toast.error(err.message)
 })
+
+// Create Domain
+const createDomainModal = ref(null)
+const openNewDomainModal = computed(() => createDomainModal.value?.openModal ?? (() => {}))
 </script>
 
 <template>
   <section class="mx-auto w-full max-w-7xl">
     <!-- Modal for add domain -->
-    <ModalDialog :close-modal="closeDomainModal" :is-open="isNewDomainModalOpen">
-      <template v-slot:header>Register New Domain</template>
-      <template v-slot:body>
-        Enter the domain or subdomain name you want to register.
-        <form @submit.prevent="">
-          <!--  Name Field   -->
-          <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-700" for="name">
-              Domain Name (example: example.com)
-            </label>
-            <div class="mt-1">
-              <input
-                id="name"
-                v-model="newDomainDetails.name"
-                autocomplete="off"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                name="name"
-                placeholder="example.com or test.example.com"
-                type="text" />
-            </div>
-          </div>
-        </form>
-      </template>
-      <template v-slot:footer>
-        <FilledButton :click="registerDomain" :loading="isDomainRegistering" type="primary">Register</FilledButton>
-      </template>
-    </ModalDialog>
-
+    <CreateDomainModal :callback-on-create="refetchDomainList" ref="createDomainModal" />
     <!-- Modal for show ssl details domain -->
     <ModalDialog :close-modal="closeDetailsModal" :is-open="isDetailsModalOpen">
       <template v-slot:header>SSL details of the Domain</template>
