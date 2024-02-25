@@ -94,7 +94,7 @@ const openPersistentVolumeModal = computed(() => createPersistentVolumeModalRef.
           Want to add more persistent volume bindings ?
         </p>
         <p class="inline-flex items-center">
-          <FilledButton slim @click="openPersistentVolumeModal" class="mr-2">Create Persistent Volume </FilledButton>
+          <FilledButton slim @click="openPersistentVolumeModal" class="mr-2">Create New Persistent Volume</FilledButton>
           Need a new persistent volume ?
         </p>
       </div>
