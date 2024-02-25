@@ -51,8 +51,8 @@ const environmentVariablesKeys = toRef(props, 'environmentVariablesKeys')
         <FilledButton class="mt-3 max-w-fit" @click="addEnvironmentVariable">Add Environment Variable</FilledButton>
       </TableMessage>
       <div v-else class="flex flex-row gap-3 px-6 py-2 text-sm text-gray-600">
-        Want to add more environment variables ?
         <FilledButton slim @click="addEnvironmentVariable">Add Environment Variable</FilledButton>
+        Want to add more environment variables ?
       </div>
     </template>
     <template v-slot:body>
