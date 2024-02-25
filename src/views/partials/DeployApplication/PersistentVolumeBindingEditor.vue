@@ -4,10 +4,11 @@ import TableMessage from '@/views/components/Table/TableMessage.vue'
 import TableHeader from '@/views/components/Table/TableHeader.vue'
 import FilledButton from '@/views/components/FilledButton.vue'
 import TableRow from '@/views/components/Table/TableRow.vue'
-import { computed, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useToast } from 'vue-toastification'
+import CreatePersistentVolumeModal from '@/views/partials/CreatePersistentVolumeModal.vue'
 
 const toast = useToast()
 const props = defineProps({
@@ -39,7 +40,11 @@ const props = defineProps({
 
 const persistentVolumeBindingKeys = toRef(props, 'persistentVolumeBindingKeys')
 
-const { result: persistentVolumesResult, onError: onPersistentVolumesError } = useQuery(
+const {
+  result: persistentVolumesResult,
+  onError: onPersistentVolumesError,
+  refetch: refetchPersistentVolumes
+} = useQuery(
   gql`
     query {
       persistentVolumes {
@@ -59,9 +64,14 @@ onPersistentVolumesError((err) => {
 })
 
 const persistentVolumes = computed(() => persistentVolumesResult.value?.persistentVolumes ?? [])
+
+// Create persistent volume
+const createPersistentVolumeModalRef = ref(null)
+const openPersistentVolumeModal = computed(() => createPersistentVolumeModalRef.value?.openModal ?? (() => {}))
 </script>
 
 <template>
+  <CreatePersistentVolumeModal :callback-on-create="refetchPersistentVolumes" ref="createPersistentVolumeModalRef" />
   <Table>
     <template v-slot:header>
       <TableHeader align="center">Variable Name</TableHeader>
@@ -76,9 +86,17 @@ const persistentVolumes = computed(() => persistentVolumesResult.value?.persiste
           >Add Persistent Volume Binding
         </FilledButton>
       </TableMessage>
-      <div v-else class="flex flex-row gap-3 px-6 py-2 text-sm text-gray-600">
-        Want to add more persistent volume bindings ?
-        <FilledButton slim @click="addPersistentVolumeBinding">Add Persistent Volume Binding</FilledButton>
+      <div v-else class="flex flex-col gap-2 px-6 py-2 text-sm text-gray-600">
+        <p class="m-0 inline-flex items-center p-0">
+          <FilledButton slim @click="addPersistentVolumeBinding" class="mr-2"
+            >Add Persistent Volume Binding
+          </FilledButton>
+          Want to add more persistent volume bindings ?
+        </p>
+        <p class="inline-flex items-center">
+          <FilledButton slim @click="openPersistentVolumeModal" class="mr-2">Create Persistent Volume </FilledButton>
+          Need a new persistent volume ?
+        </p>
       </div>
     </template>
     <template v-slot:body>
