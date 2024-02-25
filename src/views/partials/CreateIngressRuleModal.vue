@@ -26,9 +26,11 @@ const openModal = (appId) => {
   newIngressRuleDetails.applicationId = ''
   newIngressRuleDetails.targetPort = 80
   isModalOpen.value = true
-  if (appId) {
+  if (typeof appId === 'string' && appId !== '') {
     specificApplicationId.value = appId
     newIngressRuleDetails.applicationId = appId
+  } else {
+    specificApplicationId.value = ''
   }
   fetchApplications()
   fetchDomains()
