@@ -10,6 +10,7 @@ import Table from '@/views/components/Table/Table.vue'
 import TableHeader from '@/views/components/Table/TableHeader.vue'
 import UserListRow from '@/views/partials/UserListRow.vue'
 import TableMessage from '@/views/components/Table/TableMessage.vue'
+import { preventSpaceInput } from '@/vendor/utils.js'
 
 const toast = useToast()
 const isModalOpen = ref(false)
@@ -114,24 +115,19 @@ onUserListFetchFailed((err) => {
 <template>
   <section class="mx-auto w-full max-w-7xl">
     <!-- Modal for new user -->
-    <ModalDialog
-      :close-modal="closeModal"
-      :is-open="isModalOpen">
+    <ModalDialog :close-modal="closeModal" :is-open="isModalOpen">
       <template v-slot:header>Create new user</template>
       <template v-slot:body>
         Enter the username and password for the new user.
         <form @submit.prevent="createUser">
           <!-- Username Field -->
           <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="username">
-              Username
-            </label>
+            <label class="block text-sm font-medium text-gray-700" for="username"> Username </label>
             <div class="mt-1">
               <input
                 id="username"
                 v-model="newUser.username"
+                @keydown="preventSpaceInput"
                 autocomplete="off"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                 name="username"
@@ -141,11 +137,7 @@ onUserListFetchFailed((err) => {
           </div>
           <!-- Password Field -->
           <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="password">
-              Password
-            </label>
+            <label class="block text-sm font-medium text-gray-700" for="password"> Password </label>
             <div class="mt-1">
               <input
                 id="password"
@@ -160,12 +152,7 @@ onUserListFetchFailed((err) => {
         </form>
       </template>
       <template v-slot:footer>
-        <FilledButton
-          :click="createUser"
-          :loading="isUserCreating"
-          type="primary"
-          >Create
-        </FilledButton>
+        <FilledButton :click="createUser" :loading="isUserCreating" type="primary">Create </FilledButton>
       </template>
     </ModalDialog>
 
@@ -177,11 +164,7 @@ onUserListFetchFailed((err) => {
         features
       </template>
       <template v-slot:buttons>
-        <FilledButton
-          :click="openModal"
-          type="primary">
-          Create User
-        </FilledButton>
+        <FilledButton :click="openModal" type="primary"> Create User </FilledButton>
       </template>
     </PageBar>
 
@@ -195,7 +178,7 @@ onUserListFetchFailed((err) => {
         <TableHeader align="right">Actions</TableHeader>
       </template>
       <template v-slot:message>
-        <TableMessage v-if="!users"> Loading users... </TableMessage>
+        <TableMessage v-if="!users"> Loading users...</TableMessage>
         <TableMessage v-else-if="users.length === 0">
           No users found.<br />
           Click on the "Create User" button to create a new user.

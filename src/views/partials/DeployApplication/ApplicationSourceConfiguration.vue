@@ -16,6 +16,8 @@ import {
   getGitRepoOwnerFromGitRepoUrl,
   getHttpBaseUrl
 } from '@/vendor/utils.js'
+import CreateImageRegistryCredentialModal from '@/views/partials/CreateImageRegistryCredentialModal.vue'
+import CreateGitCredentialModal from '@/views/partials/CreateGitCredentialModal.vue'
 
 const props = defineProps({
   applicationSourceType: {
@@ -71,7 +73,11 @@ const enableGenerateConfigurationButton = computed(() => {
 })
 
 // List Image Registry Credentials query
-const { result: imageRegistryCredentialList, onError: onImageRegistryCredentialListError } = useQuery(
+const {
+  result: imageRegistryCredentialList,
+  onError: onImageRegistryCredentialListError,
+  refetch: refetchImageRegistryCredentialList
+} = useQuery(
   gql`
     query {
       imageRegistryCredentials {
@@ -90,7 +96,11 @@ const imageRegistryCredentials = computed(() => imageRegistryCredentialList.valu
 
 onImageRegistryCredentialListError((err) => toast.error(err.message))
 // Fetch git credentials
-const { result: gitCredentialList, onError: onGitCredentialListError } = useQuery(
+const {
+  result: gitCredentialList,
+  onError: onGitCredentialListError,
+  refetch: refetchGitCredentialList
+} = useQuery(
   gql`
     query {
       gitCredentials {
@@ -250,9 +260,25 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
     generateConfigurationRefetch()
   }
 }
+
+// Create Git Credential
+const createGitCredentialModalRef = ref(null)
+const openCreateGitCredentialModal = computed(() => createGitCredentialModalRef.value?.openModal ?? (() => {}))
+
+// Create Image Registry Credential
+const createImageRegistryCredentialModalRef = ref(null)
+const openCreateImageRegistryCredentialModal = computed(
+  () => createImageRegistryCredentialModalRef.value?.openModal ?? (() => {})
+)
 </script>
 
 <template>
+  <!--  Modals -->
+  <CreateGitCredentialModal ref="createGitCredentialModalRef" :callback-on-create="refetchGitCredentialList" />
+  <CreateImageRegistryCredentialModal
+    ref="createImageRegistryCredentialModalRef"
+    :callback-on-create="refetchImageRegistryCredentialList" />
+
   <TabPanel :key="2" class="mt-5 flex h-full w-full flex-row justify-evenly p-6">
     <div class="w-1/2 max-w-md">
       <!--  Git as Source  -->
@@ -260,7 +286,9 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
         <p class="text-xl font-medium">Git Repository Information</p>
         <!-- Git Repository URL -->
         <div class="mt-6">
-          <label class="block text-sm font-medium text-gray-700" for="git_repo_url">Git Repository URL</label>
+          <label class="block text-sm font-medium text-gray-700" for="git_repo_url"
+            >Git Repository URL<span class="text-red-600"> *</span></label
+          >
           <div class="mt-1">
             <input
               id="git_repo_url"
@@ -277,7 +305,9 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
 
         <!-- Git Branch -->
         <div class="mt-4">
-          <label class="block text-sm font-medium text-gray-700" for="name">Git Branch</label>
+          <label class="block text-sm font-medium text-gray-700" for="name"
+            >Git Branch<span class="text-red-600"> *</span></label
+          >
           <div class="mt-1">
             <input
               id="name"
@@ -324,6 +354,12 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
               </option>
             </select>
           </div>
+          <p class="mt-2 flex items-center text-sm">
+            Need to add credential for private repo ?
+            <a @click="openCreateGitCredentialModal" class="ml-1.5 cursor-pointer font-bold text-primary-600"
+              >Click Here</a
+            >
+          </p>
         </div>
       </div>
 
@@ -389,6 +425,12 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
               </option>
             </select>
           </div>
+          <p class="mt-2 flex items-center text-sm">
+            Need to add credential for private registry ?
+            <a @click="openCreateImageRegistryCredentialModal" class="ml-1.5 cursor-pointer font-bold text-primary-600"
+              >Click Here</a
+            >
+          </p>
         </div>
       </div>
 
