@@ -5,6 +5,7 @@ import { reactive, ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useToast } from 'vue-toastification'
+import { preventSpaceInput } from '@/vendor/utils.js'
 
 const props = defineProps({
   callbackOnCreate: {
@@ -90,6 +91,7 @@ defineExpose({
               <input
                 id="name"
                 v-model="newDomainDetails.name"
+                @keydown="preventSpaceInput"
                 autocomplete="off"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                 name="name"

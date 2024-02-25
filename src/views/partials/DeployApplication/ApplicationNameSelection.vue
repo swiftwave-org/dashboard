@@ -1,17 +1,18 @@
 <script setup>
-defineProps({
-  finalApplicationNameAndMoveToNextTab: {
-    type: Function,
-    required: true
-  }
-})
-
+import { preventSpaceInput } from '@/vendor/utils.js'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { TabPanel } from '@headlessui/vue'
 import { ref } from 'vue'
 import { useLazyQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { debounce } from 'lodash'
+
+defineProps({
+  finalApplicationNameAndMoveToNextTab: {
+    type: Function,
+    required: true
+  }
+})
 
 // state
 const newApplicationName = ref('')
@@ -63,6 +64,7 @@ const isExistApplicationNameCheck = debounce(() => {
           id="application_name"
           v-model="newApplicationName"
           :disabled="isExistApplicationNameLoading"
+          @keydown="preventSpaceInput"
           autocomplete="off"
           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
           v-on:input="isExistApplicationNameCheck" />

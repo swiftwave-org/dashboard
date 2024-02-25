@@ -49,6 +49,11 @@ const getHttpBaseUrl = () => {
   return window.location.origin
 }
 
+const preventSpaceInput = (event) => {
+  if (event.keyCode === 32 || event.keyCode === 9 || event.keyCode === 13) {
+    event.preventDefault()
+  }
+}
 
 export {
   getGitProvideFromGitRepoUrl,
@@ -56,5 +61,6 @@ export {
   getGitRepoNameFromGitRepoUrl,
   getGraphQlHttpBaseUrl,
   getGraphQlWsBaseUrl,
-  getHttpBaseUrl
+  getHttpBaseUrl,
+  preventSpaceInput
 }

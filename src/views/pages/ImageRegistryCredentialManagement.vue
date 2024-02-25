@@ -10,6 +10,7 @@ import gql from 'graphql-tag'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import TableMessage from '@/views/components/Table/TableMessage.vue'
 import ImageRegistryCredentialListRow from '@/views/partials/ImageRegistryCredentialListRow.vue'
+import { preventSpaceInput } from '@/vendor/utils.js'
 
 const toast = useToast()
 const isModalOpen = ref(false)
@@ -91,7 +92,11 @@ onImageRegistryCredentialDeleteSuccess(() => {
 })
 
 const deleteImageRegistryCredentialWithConfirmation = (imageRegistryCredential) => {
-  if (confirm(`Are you sure you want to delete Image Registry Credential ?\nExisting deployments using this Image Registry Credential can't use this credential anymore.`)) {
+  if (
+    confirm(
+      `Are you sure you want to delete Image Registry Credential ?\nExisting deployments using this Image Registry Credential can't use this credential anymore.`
+    )
+  ) {
     deleteImageRegistryCredential({ id: imageRegistryCredential.id })
   }
 }
@@ -127,20 +132,14 @@ onImageRegistryCredentialListError((err) => {
 <template>
   <section class="mx-auto w-full max-w-7xl">
     <!-- Modal for create -->
-    <ModalDialog
-      :close-modal="closeModal"
-      :is-open="isModalOpen">
+    <ModalDialog :close-modal="closeModal" :is-open="isModalOpen">
       <template v-slot:header>Add Image Registry Credential</template>
       <template v-slot:body>
         Enter the necessary information for configuring the new Image Registry Credential.
         <form @submit.prevent="">
           <!--  Url Field   -->
           <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="url">
-              URL (example: ghcr.io)
-            </label>
+            <label class="block text-sm font-medium text-gray-700" for="url"> URL (example: ghcr.io) </label>
             <div class="mt-1">
               <input
                 id="url"
@@ -154,15 +153,12 @@ onImageRegistryCredentialListError((err) => {
           </div>
           <!-- Username Field -->
           <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="username">
-              Image Registry Username
-            </label>
+            <label class="block text-sm font-medium text-gray-700" for="username"> Image Registry Username </label>
             <div class="mt-1">
               <input
                 id="username"
                 v-model="newImageRegistryCredential.username"
+                @keydown="preventSpaceInput"
                 autocomplete="off"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                 name="username"
@@ -172,11 +168,7 @@ onImageRegistryCredentialListError((err) => {
           </div>
           <!-- Password Field -->
           <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="password">
-              Image Registry Password
-            </label>
+            <label class="block text-sm font-medium text-gray-700" for="password"> Image Registry Password </label>
             <div class="mt-1">
               <input
                 id="password"
@@ -191,10 +183,7 @@ onImageRegistryCredentialListError((err) => {
         </form>
       </template>
       <template v-slot:footer>
-        <FilledButton
-          :click="createImageRegistryCredential"
-          :loading="isImageRegistryCredentialCreating"
-          type="primary"
+        <FilledButton :click="createImageRegistryCredential" :loading="isImageRegistryCredentialCreating" type="primary"
           >Add Now
         </FilledButton>
       </template>
@@ -205,11 +194,7 @@ onImageRegistryCredentialListError((err) => {
       <template v-slot:title>Image Registry Credentials</template>
       <template v-slot:subtitle> Manage Image Registry Credentials and usage in deployments</template>
       <template v-slot:buttons>
-        <FilledButton
-          :click="openModal"
-          type="primary"
-          >Add New
-        </FilledButton>
+        <FilledButton :click="openModal" type="primary">Add New</FilledButton>
       </template>
     </PageBar>
 
@@ -221,9 +206,7 @@ onImageRegistryCredentialListError((err) => {
         <TableHeader align="left">Password</TableHeader>
         <TableHeader align="right">Actions</TableHeader>
       </template>
-      <template
-        v-if="imageRegistryCredentials.length === 0"
-        v-slot:message>
+      <template v-if="imageRegistryCredentials.length === 0" v-slot:message>
         <TableMessage>
           No Image Registry Credentials found.<br />
           Click on the Add New button to create a new Image Registry Credential.

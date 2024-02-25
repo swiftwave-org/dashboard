@@ -10,6 +10,7 @@ import gql from 'graphql-tag'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import GitCredentialListRow from '@/views/partials/GitCredentialListRow.vue'
 import TableMessage from '@/views/components/Table/TableMessage.vue'
+import { preventSpaceInput } from '@/vendor/utils.js'
 
 const toast = useToast()
 const isModalOpen = ref(false)
@@ -91,7 +92,11 @@ onGitCredentialDeleteSuccess(() => {
 })
 
 const deleteGitCredentialWithConfirmation = (gitCredential) => {
-  if (confirm(`Are you sure you want to delete Git Credential ${gitCredential.name}?\nExisting deployments using this Git Credential can't use this credential anymore.`)) {
+  if (
+    confirm(
+      `Are you sure you want to delete Git Credential ${gitCredential.name}?\nExisting deployments using this Git Credential can't use this credential anymore.`
+    )
+  ) {
     deleteGitCredential({ id: gitCredential.id })
   }
 }
@@ -127,18 +132,14 @@ onGitCredentialListError((err) => {
 <template>
   <section class="mx-auto w-full max-w-7xl">
     <!-- Modal for create -->
-    <ModalDialog
-      :close-modal="closeModal"
-      :is-open="isModalOpen">
+    <ModalDialog :close-modal="closeModal" :is-open="isModalOpen">
       <template v-slot:header>Add Git Credential</template>
       <template v-slot:body>
         Enter the necessary information for configuring the new Git Credential.
         <form @submit.prevent="">
           <!--  Name Field   -->
           <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="name">
+            <label class="block text-sm font-medium text-gray-700" for="name">
               Name (Provide a name to identify the credential)
             </label>
             <div class="mt-1">
@@ -154,15 +155,12 @@ onGitCredentialListError((err) => {
           </div>
           <!-- Username Field -->
           <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="username">
-              Git Username
-            </label>
+            <label class="block text-sm font-medium text-gray-700" for="username"> Git Username </label>
             <div class="mt-1">
               <input
                 id="username"
                 v-model="newGitCredential.username"
+                @keydown="preventSpaceInput"
                 autocomplete="off"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                 name="username"
@@ -172,11 +170,7 @@ onGitCredentialListError((err) => {
           </div>
           <!-- Password Field -->
           <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="password">
-              Git Password
-            </label>
+            <label class="block text-sm font-medium text-gray-700" for="password"> Git Password </label>
             <div class="mt-1">
               <input
                 id="password"
@@ -191,10 +185,7 @@ onGitCredentialListError((err) => {
         </form>
       </template>
       <template v-slot:footer>
-        <FilledButton
-          :click="createGitCredential"
-          :loading="isGitCredentialCreating"
-          type="primary"
+        <FilledButton :click="createGitCredential" :loading="isGitCredentialCreating" type="primary"
           >Add Now
         </FilledButton>
       </template>
@@ -205,11 +196,7 @@ onGitCredentialListError((err) => {
       <template v-slot:title>Git Credentials</template>
       <template v-slot:subtitle> Manage Git Credentials and usage in deployments</template>
       <template v-slot:buttons>
-        <FilledButton
-          :click="openModal"
-          type="primary"
-          >Add New
-        </FilledButton>
+        <FilledButton :click="openModal" type="primary">Add New</FilledButton>
       </template>
     </PageBar>
 
@@ -221,9 +208,7 @@ onGitCredentialListError((err) => {
         <TableHeader align="left">Password</TableHeader>
         <TableHeader align="right">Actions</TableHeader>
       </template>
-      <template
-        v-if="gitCredentials.length === 0"
-        v-slot:message>
+      <template v-if="gitCredentials.length === 0" v-slot:message>
         <TableMessage>
           No Git Credentials found.<br />
           Click on the Add New button to create a new Git Credential.
