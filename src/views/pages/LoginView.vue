@@ -55,12 +55,6 @@ const login = async () => {
           >{{ authenticationStatus.message }}</strong
         >
       </div>
-      <div
-        v-else-if="!authenticationStatus.visible"
-        class="mb-5 rounded border-s-4 border-gray-500 bg-gray-50 p-4"
-        role="alert">
-        <p>You can create <strong>admin</strong> from <strong>SwiftWave CLI</strong></p>
-      </div>
 
       <!--   Login Form   -->
       <form class="space-y-6" @submit.prevent="login">
@@ -90,6 +84,12 @@ const login = async () => {
               required
               type="password" />
           </div>
+        </div>
+        <div
+          v-if="!authenticationStatus.visible"
+          class="mb-5 rounded border-s-4 border-gray-500 bg-gray-50 p-2"
+          role="alert">
+          <p>Login session will be active for next <strong>6 hours</strong></p>
         </div>
         <div>
           <FilledButton :click="login" class="w-full"> Sign in</FilledButton>

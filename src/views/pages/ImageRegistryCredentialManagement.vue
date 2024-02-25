@@ -1,67 +1,23 @@
 <script setup>
 import PageBar from '@/views/components/PageBar.vue'
 import FilledButton from '@/views/components/FilledButton.vue'
-import ModalDialog from '@/views/components/ModalDialog.vue'
 import { useToast } from 'vue-toastification'
-import { computed, reactive, ref } from 'vue'
+import { computed, ref } from 'vue'
 import Table from '@/views/components/Table/Table.vue'
 import TableHeader from '@/views/components/Table/TableHeader.vue'
 import gql from 'graphql-tag'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import TableMessage from '@/views/components/Table/TableMessage.vue'
 import ImageRegistryCredentialListRow from '@/views/partials/ImageRegistryCredentialListRow.vue'
+import CreateImageRegistryCredentialModal from '@/views/partials/CreateImageRegistryCredentialModal.vue'
 
 const toast = useToast()
-const isModalOpen = ref(false)
-const openModal = () => {
-  isModalOpen.value = true
-}
-const closeModal = () => {
-  isModalOpen.value = false
-}
 
-// New Image Registry Credential form state
-const newImageRegistryCredential = reactive({
-  url: '',
-  username: '',
-  password: ''
-})
-
-const {
-  mutate: createImageRegistryCredential,
-  loading: isImageRegistryCredentialCreating,
-  onDone: onImageRegistryCredentialCreateSuccess,
-  onError: onImageRegistryCredentialCreateFail
-} = useMutation(
-  gql`
-    mutation ($input: ImageRegistryCredentialInput!) {
-      createImageRegistryCredential(input: $input) {
-        id
-        url
-        username
-        password
-      }
-    }
-  `,
-  {
-    variables: {
-      input: newImageRegistryCredential
-    }
-  }
+// Create Image Registry Credential
+const createImageRegistryCredentialModalRef = ref(null)
+const openCreateImageRegistryCredentialModal = computed(
+  () => createImageRegistryCredentialModalRef.value?.openModal ?? (() => {})
 )
-
-onImageRegistryCredentialCreateSuccess(() => {
-  closeModal()
-  refetchImageRegistryCredentialList()
-  newImageRegistryCredential.name = ''
-  newImageRegistryCredential.username = ''
-  newImageRegistryCredential.password = ''
-  toast.success('Image Registry Credential created successfully')
-})
-
-onImageRegistryCredentialCreateFail((err) => {
-  toast.error(err.message)
-})
 
 // Delete Image Registry Credential mutation
 const {
@@ -91,7 +47,11 @@ onImageRegistryCredentialDeleteSuccess(() => {
 })
 
 const deleteImageRegistryCredentialWithConfirmation = (imageRegistryCredential) => {
-  if (confirm(`Are you sure you want to delete Image Registry Credential ?\nExisting deployments using this Image Registry Credential can't use this credential anymore.`)) {
+  if (
+    confirm(
+      `Are you sure you want to delete Image Registry Credential ?\nExisting deployments using this Image Registry Credential can't use this credential anymore.`
+    )
+  ) {
     deleteImageRegistryCredential({ id: imageRegistryCredential.id })
   }
 }
@@ -127,89 +87,16 @@ onImageRegistryCredentialListError((err) => {
 <template>
   <section class="mx-auto w-full max-w-7xl">
     <!-- Modal for create -->
-    <ModalDialog
-      :close-modal="closeModal"
-      :is-open="isModalOpen">
-      <template v-slot:header>Add Image Registry Credential</template>
-      <template v-slot:body>
-        Enter the necessary information for configuring the new Image Registry Credential.
-        <form @submit.prevent="">
-          <!--  Url Field   -->
-          <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="url">
-              URL (example: ghcr.io)
-            </label>
-            <div class="mt-1">
-              <input
-                id="url"
-                v-model="newImageRegistryCredential.url"
-                autocomplete="off"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                name="url"
-                placeholder="URL"
-                type="text" />
-            </div>
-          </div>
-          <!-- Username Field -->
-          <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="username">
-              Image Registry Username
-            </label>
-            <div class="mt-1">
-              <input
-                id="username"
-                v-model="newImageRegistryCredential.username"
-                autocomplete="off"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                name="username"
-                placeholder="Image Registry Username"
-                type="text" />
-            </div>
-          </div>
-          <!-- Password Field -->
-          <div class="mt-4">
-            <label
-              class="block text-sm font-medium text-gray-700"
-              for="password">
-              Image Registry Password
-            </label>
-            <div class="mt-1">
-              <input
-                id="password"
-                v-model="newImageRegistryCredential.password"
-                autocomplete="new-password"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                name="password"
-                placeholder="Image Registry Password"
-                type="text" />
-            </div>
-          </div>
-        </form>
-      </template>
-      <template v-slot:footer>
-        <FilledButton
-          :click="createImageRegistryCredential"
-          :loading="isImageRegistryCredentialCreating"
-          type="primary"
-          >Add Now
-        </FilledButton>
-      </template>
-    </ModalDialog>
+    <CreateImageRegistryCredentialModal
+      ref="createImageRegistryCredentialModalRef"
+      :callback-on-create="refetchImageRegistryCredentialList" />
 
     <!-- Top Page bar   -->
     <PageBar>
       <template v-slot:title>Image Registry Credentials</template>
       <template v-slot:subtitle> Manage Image Registry Credentials and usage in deployments</template>
       <template v-slot:buttons>
-        <FilledButton
-          :click="openModal"
-          type="primary"
-          >Add New
-        </FilledButton>
+        <FilledButton :click="openCreateImageRegistryCredentialModal" type="primary">Add New</FilledButton>
       </template>
     </PageBar>
 
@@ -221,9 +108,7 @@ onImageRegistryCredentialListError((err) => {
         <TableHeader align="left">Password</TableHeader>
         <TableHeader align="right">Actions</TableHeader>
       </template>
-      <template
-        v-if="imageRegistryCredentials.length === 0"
-        v-slot:message>
+      <template v-if="imageRegistryCredentials.length === 0" v-slot:message>
         <TableMessage>
           No Image Registry Credentials found.<br />
           Click on the Add New button to create a new Image Registry Credential.

@@ -17,6 +17,8 @@ import {
 } from '@/vendor/utils.js'
 import newApplicationUpdater from '@/store/applicationUpdater.js'
 import { useRouter } from 'vue-router'
+import CreateGitCredentialModal from '@/views/partials/CreateGitCredentialModal.vue'
+import CreateImageRegistryCredentialModal from '@/views/partials/CreateImageRegistryCredentialModal.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -133,7 +135,11 @@ const enableGenerateConfigurationButton = computed(() => {
 })
 
 // List Image Registry Credentials query
-const { result: imageRegistryCredentialList, onError: onImageRegistryCredentialListError } = useQuery(
+const {
+  result: imageRegistryCredentialList,
+  onError: onImageRegistryCredentialListError,
+  refetch: refetchImageRegistryCredentialList
+} = useQuery(
   gql`
     query {
       imageRegistryCredentials {
@@ -152,7 +158,11 @@ const imageRegistryCredentials = computed(() => imageRegistryCredentialList.valu
 
 onImageRegistryCredentialListError((err) => toast.error(err.message))
 // Fetch git credentials
-const { result: gitCredentialList, onError: onGitCredentialListError } = useQuery(
+const {
+  result: gitCredentialList,
+  onError: onGitCredentialListError,
+  refetch: refetchGitCredentialList
+} = useQuery(
   gql`
     query {
       gitCredentials {
@@ -313,9 +323,24 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
     generateConfigurationRefetch()
   }
 }
+
+// Create Git Credential
+const createGitCredentialModalRef = ref(null)
+const openCreateGitCredentialModal = computed(() => createGitCredentialModalRef.value?.openModal ?? (() => {}))
+
+// Create Image Registry Credential
+const createImageRegistryCredentialModalRef = ref(null)
+const openCreateImageRegistryCredentialModal = computed(
+  () => createImageRegistryCredentialModalRef.value?.openModal ?? (() => {})
+)
 </script>
 
 <template>
+  <!--  Modals -->
+  <CreateGitCredentialModal ref="createGitCredentialModalRef" :callback-on-create="refetchGitCredentialList" />
+  <CreateImageRegistryCredentialModal
+    ref="createImageRegistryCredentialModalRef"
+    :callback-on-create="refetchImageRegistryCredentialList" />
   <div :key="2" class="mb-5 mt-5 flex w-full flex-row justify-between p-6">
     <div class="w-1/2 max-w-md">
       <!--  Git as Source  -->
@@ -387,6 +412,12 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
               </option>
             </select>
           </div>
+          <p class="mt-2 flex items-center text-sm">
+            Need to add credential for private repo ?
+            <a @click="openCreateGitCredentialModal" class="ml-1.5 cursor-pointer font-bold text-primary-600"
+              >Click Here</a
+            >
+          </p>
         </div>
       </div>
 
@@ -452,6 +483,12 @@ const generateConfigurationForCustomDockerFile = (customDockerFile) => {
               </option>
             </select>
           </div>
+          <p class="mt-2 flex items-center text-sm">
+            Need to add credential for private registry ?
+            <a @click="openCreateImageRegistryCredentialModal" class="ml-1.5 cursor-pointer font-bold text-primary-600"
+              >Click Here</a
+            >
+          </p>
         </div>
       </div>
 
