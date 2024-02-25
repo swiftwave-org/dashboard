@@ -7,16 +7,6 @@ import gql from 'graphql-tag'
 import { useToast } from 'vue-toastification'
 
 const props = defineProps({
-  application: {
-    type: String,
-    required: false,
-    default: ''
-  },
-  applicationId: {
-    type: String,
-    required: false,
-    default: ''
-  },
   callbackOnCreate: {
     type: Function,
     required: false,
@@ -27,24 +17,20 @@ const props = defineProps({
 const toast = useToast()
 
 const isModalOpen = ref(false)
-const openModal = () => {
+const specificApplicationId = ref('')
+const isSpecificApplicationChosen = computed(() => specificApplicationId.value !== '')
+const openModal = (appId) => {
   newIngressRuleDetails.protocol = 'http'
   newIngressRuleDetails.domainId = 0
   newIngressRuleDetails.port = 80
   newIngressRuleDetails.applicationId = ''
   newIngressRuleDetails.targetPort = 80
   isModalOpen.value = true
-  if (props.applicationId === '') fetchApplications()
-  else {
-    applicationListResult.value = {
-      applications: [
-        {
-          id: props.applicationId,
-          name: props.application
-        }
-      ]
-    }
+  if (appId) {
+    specificApplicationId.value = appId
+    newIngressRuleDetails.applicationId = appId
   }
+  fetchApplications()
   fetchDomains()
 }
 const closeModal = () => {
@@ -106,20 +92,14 @@ const {
   result: domainListResult,
   load: loadDomains,
   refetch: refetchDomains
-} = useLazyQuery(
-  gql`
-    query {
-      domains {
-        id
-        name
-      }
+} = useLazyQuery(gql`
+  query {
+    domains {
+      id
+      name
     }
-  `,
-  null,
-  {
-    pollInterval: 10000
   }
-)
+`)
 const domains = computed(() => domainListResult.value?.domains ?? [])
 
 const fetchDomains = () => {
@@ -212,7 +192,11 @@ defineExpose({
             <div class="mt-1 flex space-x-2">
               <select
                 v-model="newIngressRuleDetails.applicationId"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                :disabled="isSpecificApplicationChosen"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                :class="{
+                  'cursor-not-allowed': isSpecificApplicationChosen
+                }">
                 <option value="">Select application name</option>
                 <option v-for="application in applications" :key="application.id" :value="application.id">
                   {{ application.name }}
