@@ -11,6 +11,11 @@ const props = defineProps({
     type: Function,
     required: false,
     default: () => {}
+  },
+  callbackOnPop: {
+    type: Function,
+    required: false,
+    default: () => {}
   }
 })
 
@@ -23,6 +28,7 @@ const openModal = () => {
 }
 const closeModal = () => {
   isModalOpen.value = false
+  props.callbackOnPop()
 }
 
 // Register Domain state
@@ -69,31 +75,35 @@ defineExpose({
 </script>
 
 <template>
-  <ModalDialog :close-modal="closeModal" :is-open="isModalOpen">
-    <template v-slot:header>Register New Domain</template>
-    <template v-slot:body>
-      Enter the domain or subdomain name you want to register.
-      <form @submit.prevent="">
-        <!--  Name Field   -->
-        <div class="mt-4">
-          <label class="block text-sm font-medium text-gray-700" for="name"> Domain Name (example: example.com) </label>
-          <div class="mt-1">
-            <input
-              id="name"
-              v-model="newDomainDetails.name"
-              autocomplete="off"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-              name="name"
-              placeholder="example.com or test.example.com"
-              type="text" />
+  <teleport to="body">
+    <ModalDialog :close-modal="closeModal" :is-open="isModalOpen">
+      <template v-slot:header>Register New Domain</template>
+      <template v-slot:body>
+        Enter the domain or subdomain name you want to register.
+        <form @submit.prevent="">
+          <!--  Name Field   -->
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700" for="name">
+              Domain Name (example: example.com)
+            </label>
+            <div class="mt-1">
+              <input
+                id="name"
+                v-model="newDomainDetails.name"
+                autocomplete="off"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                name="name"
+                placeholder="example.com or test.example.com"
+                type="text" />
+            </div>
           </div>
-        </div>
-      </form>
-    </template>
-    <template v-slot:footer>
-      <FilledButton :click="registerDomain" :loading="isDomainRegistering" type="primary">Register</FilledButton>
-    </template>
-  </ModalDialog>
+        </form>
+      </template>
+      <template v-slot:footer>
+        <FilledButton :click="registerDomain" :loading="isDomainRegistering" type="primary">Register</FilledButton>
+      </template>
+    </ModalDialog>
+  </teleport>
 </template>
 
 <style scoped></style>

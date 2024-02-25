@@ -5,9 +5,15 @@ import { computed, reactive, ref } from 'vue'
 import { useLazyQuery, useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useToast } from 'vue-toastification'
+import CreateDomainModal from '@/views/partials/CreateDomainModal.vue'
 
 const props = defineProps({
   callbackOnCreate: {
+    type: Function,
+    required: false,
+    default: () => {}
+  },
+  callbackOnPop: {
     type: Function,
     required: false,
     default: () => {}
@@ -37,6 +43,7 @@ const openModal = (appId) => {
 }
 const closeModal = () => {
   isModalOpen.value = false
+  props.callbackOnPop()
 }
 
 // Create ingress rule
@@ -131,6 +138,18 @@ const fetchApplications = () => {
   }
 }
 
+const reopenModal = () => {
+  isModalOpen.value = true
+}
+
+// Create Domain
+const createDomainModalRef = ref(null)
+const openNewDomainModal = () => {
+  if (!createDomainModalRef.value?.openModal) return
+  isModalOpen.value = false
+  createDomainModalRef.value.openModal()
+}
+
 defineExpose({
   openModal,
   closeModal
@@ -138,6 +157,7 @@ defineExpose({
 </script>
 
 <template>
+  <CreateDomainModal ref="createDomainModalRef" :callback-on-create="fetchDomains" :callback-on-pop="reopenModal" />
   <teleport to="body">
     <ModalDialog :close-modal="closeModal" :is-open="isModalOpen" width="lg">
       <template v-slot:header>Create Ingress Rule</template>
@@ -183,13 +203,19 @@ defineExpose({
               <b>NOTE: </b>You don't need to specify the domain for TCP and UDP protocols. While connecting to the
               server, use the server IP address instead of the domain name.
             </p>
+            <p v-else class="mt-2 flex items-center text-sm">
+              Need to create a domain?
+              <a @click="openNewDomainModal" class="ml-1.5 cursor-pointer font-bold text-primary-600"
+                >Register New Domain</a
+              >
+            </p>
           </div>
 
           <div class="mt-4 w-full text-center text-xl">
             <font-awesome-icon icon="fa-solid fa-arrow-down" />
           </div>
 
-          <div class="mt-4">
+          <div class="mt-2">
             <p class="block text-sm font-medium text-gray-700">Application Name</p>
             <div class="mt-1 flex space-x-2">
               <select
