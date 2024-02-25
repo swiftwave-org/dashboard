@@ -12,6 +12,7 @@ import { computed, reactive, ref } from 'vue'
 import TextButton from '@/views/components/TextButton.vue'
 import ModalDialog from '@/views/components/ModalDialog.vue'
 import Badge from '@/views/components/Badge.vue'
+import CreateDomainModal from '@/views/partials/CreateDomainModal.vue'
 
 const toast = useToast()
 const isModalOpen = ref(false)
@@ -60,7 +61,7 @@ onRedirectRuleCreateFail((err) => {
 })
 
 // Fetch domains from the server
-const { result: domainListResult } = useQuery(
+const { result: domainListResult, refetch: refetchDomains } = useQuery(
   gql`
     query {
       domains {
@@ -143,12 +144,27 @@ onRedirectRulesError((err) => {
 })
 
 const redirectRuleFrontURL = (redirectRule) => {
-  return `${redirectRule.protocol}://${redirectRule.domain.name}`;
+  return `${redirectRule.protocol}://${redirectRule.domain.name}`
 }
 
+// Create Domain
+const createDomainModalRef = ref(null)
+const openNewDomainModal = () => {
+  if (!createDomainModalRef.value?.openModal) return
+  isModalOpen.value = false
+  createDomainModalRef.value.openModal()
+}
+
+const openRedirectRuleRegistrationModal = () => {
+  isModalOpen.value = true
+}
 </script>
 
 <template>
+  <CreateDomainModal
+    ref="createDomainModalRef"
+    :callback-on-create="refetchDomains"
+    :callback-on-pop="openRedirectRuleRegistrationModal" />
   <section class="mx-auto w-full max-w-7xl">
     <!-- Modal for create redirect rules -->
     <ModalDialog :close-modal="closeModal" :is-open="isModalOpen">
@@ -161,9 +177,8 @@ const redirectRuleFrontURL = (redirectRule) => {
             <label class="block text-sm font-medium text-gray-700" for="domain">Select Domain and Protocol</label>
             <div class="mt-2 flex space-x-2">
               <select
-                class="w-3/12 block rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                v-model="newRedirectRuleDetails.protocol"
-              >
+                class="block w-4/12 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                v-model="newRedirectRuleDetails.protocol">
                 <option value="http">HTTP</option>
                 <option value="https">HTTPS</option>
               </select>
@@ -175,6 +190,12 @@ const redirectRuleFrontURL = (redirectRule) => {
                 <option v-for="domain in domains" :key="domain.id" :value="domain.id">{{ domain.name }}</option>
               </select>
             </div>
+            <p class="mt-2 flex items-center text-sm">
+              Need to create a domain?
+              <a @click="openNewDomainModal" class="ml-1.5 cursor-pointer font-bold text-primary-600"
+                >Register New Domain</a
+              >
+            </p>
           </div>
 
           <!--  Redirected URL   -->
@@ -236,8 +257,7 @@ const redirectRuleFrontURL = (redirectRule) => {
           </TableRow>
           <TableRow align="center">
             <div class="text-sm text-gray-900">
-              <a :href="redirectRuleFrontURL(redirectRule)" target="_blank"
-                >{{ redirectRuleFrontURL(redirectRule) }}</a
+              <a :href="redirectRuleFrontURL(redirectRule)" target="_blank">{{ redirectRuleFrontURL(redirectRule) }}</a
               >&nbsp;&nbsp; <font-awesome-icon icon="fa-solid fa-arrow-right" />&nbsp;&nbsp;
               <a :href="redirectRule.redirectURL" target="_blank">{{ redirectRule.redirectURL }}</a>
             </div>
