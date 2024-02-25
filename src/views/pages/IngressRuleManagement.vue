@@ -8,109 +8,12 @@ import Table from '@/views/components/Table/Table.vue'
 import TableHeader from '@/views/components/Table/TableHeader.vue'
 import TableMessage from '@/views/components/Table/TableMessage.vue'
 import TableRow from '@/views/components/Table/TableRow.vue'
-import { computed, reactive, ref } from 'vue'
+import { computed, ref } from 'vue'
 import TextButton from '@/views/components/TextButton.vue'
-import ModalDialog from '@/views/components/ModalDialog.vue'
 import Badge from '@/views/components/Badge.vue'
+import CreateIngressRuleModal from '@/views/partials/CreateIngressRuleModal.vue'
 
 const toast = useToast()
-const isModalOpen = ref(false)
-const openModal = () => {
-  isModalOpen.value = true
-}
-const closeModal = () => {
-  isModalOpen.value = false
-}
-
-// Create ingress rule
-const newIngressRuleDetails = reactive({
-  protocol: 'http',
-  domainId: 0,
-  port: 80,
-  applicationId: '',
-  targetPort: 80
-})
-
-const {
-  mutate: createIngressRule,
-  loading: isIngressRuleCreating,
-  onDone: onIngressRuleCreateSuccess,
-  onError: onIngressRuleCreateFail
-} = useMutation(
-  gql`
-    mutation ($input: IngressRuleInput!) {
-      createIngressRule(input: $input) {
-        id
-      }
-    }
-  `,
-  {
-    variables: {
-      input: newIngressRuleDetails
-    }
-  }
-)
-
-onIngressRuleCreateSuccess(() => {
-  closeModal()
-  newIngressRuleDetails.protocol = 'http'
-  newIngressRuleDetails.domainId = 0
-  newIngressRuleDetails.port = 80
-  newIngressRuleDetails.applicationId = ''
-  newIngressRuleDetails.targetPort = 80
-  toast.success('Ingress Rule created successfully')
-  refetchIngressRules()
-})
-
-onIngressRuleCreateFail((err) => {
-  toast.error(err.message)
-})
-
-const onChangeProtocol = () => {
-  if (newIngressRuleDetails.protocol === 'https') {
-    newIngressRuleDetails.port = 443
-  } else if (newIngressRuleDetails.protocol === 'http') {
-    newIngressRuleDetails.port = 80
-  } else {
-    newIngressRuleDetails.port = 81
-    newIngressRuleDetails.domainId = 0
-  }
-}
-
-// Fetch domains from the server
-const { result: domainListResult } = useQuery(
-  gql`
-    query {
-      domains {
-        id
-        name
-      }
-    }
-  `,
-  null,
-  {
-    pollInterval: 10000
-  }
-)
-const domains = computed(() => domainListResult.value?.domains ?? [])
-
-// Fetch applications from the server
-const { result: applicationListResult } = useQuery(
-  gql`
-    query {
-      applications {
-        id
-        name
-      }
-    }
-  `,
-  null,
-  {
-    pollInterval: 10000
-  }
-)
-const applications = computed(() => applicationListResult.value?.applications ?? [])
-
 
 // Delete ingress rule
 const {
@@ -181,95 +84,22 @@ const ingressRules = computed(() => ingressRulesRaw.value?.ingressRules ?? [])
 onIngressRulesError((err) => {
   toast.error(err.message)
 })
+
+// Create new ingress rule
+const newIngressRuleModalRef = ref(null)
+const openNewIngressRuleModal = computed(() => newIngressRuleModalRef.value?.openModal ?? (() => {}))
 </script>
 
 <template>
   <section class="mx-auto w-full max-w-7xl">
     <!-- Modal for create persistent volumes -->
-    <ModalDialog :close-modal="closeModal" :is-open="isModalOpen" width="lg">
-      <template v-slot:header>Create Ingress Rule</template>
-      <template v-slot:body>
-        Enter the details of the new ingress rule.
-        <form @submit.prevent="">
-          <!-- Domains -->
-          <div class="mt-4">
-            <p class="block text-sm font-medium text-gray-700">Ingress Info</p>
-            <div class="mt-2 flex space-x-2">
-              <select
-                v-model="newIngressRuleDetails.protocol"
-                class="w-4/12 block rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                @change="onChangeProtocol">
-                <option value="http">HTTP</option>
-                <option value="https">HTTPS</option>
-                <option value="tcp">TCP</option>
-                <option value="udp">UDP</option>
-              </select>
-              <select
-                v-show="newIngressRuleDetails.protocol === 'http' || newIngressRuleDetails.protocol === 'https'"
-                v-model="newIngressRuleDetails.domainId"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-              >
-                <option value="0">Select a domain</option>
-                <option v-for="domain in domains" :key="domain.id" :value="domain.id">{{ domain.name }}</option>
-              </select>
-              <p
-                v-show="newIngressRuleDetails.protocol === 'tcp' || newIngressRuleDetails.protocol === 'udp'"
-                class="text-base font-medium text-gray-700 w-full flex items-center justify-end pr-2"
-              >
-                Listen on port
-              </p>
-              <input
-                v-model="newIngressRuleDetails.port"
-                :readonly="newIngressRuleDetails.protocol === 'https'"
-                autocomplete="off"
-                class="w-3/12 block rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm read-only:bg-gray-100"
-                placeholder="Port"
-                type="number" />
-            </div>
-            <p
-              v-if="newIngressRuleDetails.protocol === 'tcp' || newIngressRuleDetails.protocol === 'udp'"
-              class="mt-2 text-sm text-danger-500"
-            ><b>NOTE: </b>You don't need to specify the domain for TCP and UDP protocols. While connecting to the
-              server, use the server IP address instead of the domain name.</p>
-          </div>
-
-          <div class="text-center w-full mt-4 text-xl">
-            <font-awesome-icon icon="fa-solid fa-arrow-down" />
-          </div>
-
-          <div class="mt-4">
-            <p class="block text-sm font-medium text-gray-700">Application Name</p>
-            <div class="mt-1 flex space-x-2">
-              <select
-                v-model="newIngressRuleDetails.applicationId"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
-                <option value="">Select application name</option>
-                <option v-for="application in applications" :key="application.id" :value="application.id">
-                  {{ application.name }}
-                </option>
-              </select>
-              <input
-                v-model="newIngressRuleDetails.targetPort"
-                class="w-3/12 block rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                placeholder="Port"
-                type="number" />
-            </div>
-          </div>
-        </form>
-      </template>
-      <template v-slot:footer>
-        <FilledButton :click="createIngressRule" :loading="isIngressRuleCreating" type="primary"
-        >Create Now
-        </FilledButton>
-      </template>
-    </ModalDialog>
-
+    <CreateIngressRuleModal :callbackOnCreate="refetchIngressRules" ref="newIngressRuleModalRef" />
     <!-- Top Page bar   -->
     <PageBar>
       <template v-slot:title>Ingress Rules</template>
       <template v-slot:subtitle>Manage Ingress Rules</template>
       <template v-slot:buttons>
-        <FilledButton :click="openModal" type="primary">Add New</FilledButton>
+        <FilledButton :click="openNewIngressRuleModal" type="primary">Add New</FilledButton>
       </template>
     </PageBar>
 
@@ -300,15 +130,18 @@ onIngressRulesError((err) => {
           </TableRow>
           <TableRow align="center">
             <div class="text-sm text-gray-900">
-              <a v-if="ingressRule.protocol === 'http' || ingressRule.protocol === 'https'"
-                 :href="ingressRule.protocol+'://' + ingressRule.domain.name + ':' + ingressRule.port.toString()"
-                 target="_blank"
-              >{{ ingressRule.protocol }}://{{ ingressRule.domain.name }}:{{ ingressRule.port }}</a
+              <a
+                v-if="ingressRule.protocol === 'http' || ingressRule.protocol === 'https'"
+                :href="ingressRule.protocol + '://' + ingressRule.domain.name + ':' + ingressRule.port.toString()"
+                target="_blank"
+                >{{ ingressRule.protocol }}://{{ ingressRule.domain.name }}:{{ ingressRule.port }}</a
               >
-              <a v-else-if="ingressRule.protocol === 'tcp'"
-                 href="javascript:void(0);">tcp://&lt;server-ip&gt;:{{ ingressRule.port }}</a>
-              <a v-else-if="ingressRule.protocol === 'udp'"
-                 href="javascript:void(0);">udp://&lt;server-ip&gt;:{{ ingressRule.port }}</a>
+              <a v-else-if="ingressRule.protocol === 'tcp'" href="javascript:void(0);"
+                >tcp://&lt;server-ip&gt;:{{ ingressRule.port }}</a
+              >
+              <a v-else-if="ingressRule.protocol === 'udp'" href="javascript:void(0);"
+                >udp://&lt;server-ip&gt;:{{ ingressRule.port }}</a
+              >
               <a v-else href="javascript:void(0);"><i>Unknown</i></a>
               &nbsp;&nbsp;<font-awesome-icon icon="fa-solid fa-arrow-right" />&nbsp;&nbsp;
               <a href="javascript:void(0);">{{ ingressRule.application.name }}:{{ ingressRule.targetPort }}</a>
@@ -316,7 +149,7 @@ onIngressRulesError((err) => {
           </TableRow>
           <TableRow align="right">
             <TextButton :click="() => deleteIngressRulesWithConfirmation(ingressRule)" type="danger"
-            >Delete
+              >Delete
             </TextButton>
           </TableRow>
         </tr>
