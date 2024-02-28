@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('@/views/pages/DeployApplication.vue')
     },
     {
+      path: '/deploy-stack',
+      name: 'Deploy Stack',
+      component: () => import('@/views/pages/DeployStack.vue')
+    },
+    {
       path: '/applications',
       name: 'Applications',
       component: () => import('@/views/pages/ApplicationManagement.vue')

@@ -19,6 +19,7 @@ import {
   faCloud,
   faCodeBranch,
   faCopy,
+  faCubesStacked,
   faEye,
   faEyeSlash,
   faFile,
@@ -97,7 +98,8 @@ library.add(
   faFile,
   faMoon,
   faPlay,
-  faCircleStop
+  faCircleStop,
+  faCubesStacked
 )
 
 // Environment variables
