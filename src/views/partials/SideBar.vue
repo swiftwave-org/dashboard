@@ -34,16 +34,23 @@ const isShowSideBar = computed(() => {
     </RouterLink>
 
     <div class="mt-6 flex flex-1 flex-col justify-between">
-      <nav class="-mx-3 space-y-6">
-        <div class="space-y-3">
+      <nav class="-mx-3 space-y-5">
+        <div class="space-y-2.5">
+          <label class="px-3 text-xs font-semibold uppercase text-white"> Deploy </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-700"
             to="/deploy-application">
             <font-awesome-icon icon="fa-solid fa-hammer" />
-            <span class="mx-2 text-sm font-medium">Deploy New Application</span>
+            <span class="mx-2 text-sm font-medium">Deploy Application</span>
+          </RouterLink>
+          <RouterLink
+            class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-700"
+            to="/deploy-stack">
+            <font-awesome-icon icon="fa-solid fa-cubes-stacked" />
+            <span class="mx-2 text-sm font-medium">Deploy Stack</span>
           </RouterLink>
         </div>
-        <div class="space-y-3">
+        <div class="space-y-2.5">
           <label class="px-3 text-xs font-semibold uppercase text-white"> Project </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
@@ -58,7 +65,7 @@ const isShowSideBar = computed(() => {
             <span class="mx-2 text-sm font-medium">Persistent Volumes</span>
           </RouterLink>
         </div>
-        <div class="space-y-3">
+        <div class="space-y-2.5">
           <label class="px-3 text-xs font-semibold uppercase text-white"> Credentials </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
@@ -73,7 +80,7 @@ const isShowSideBar = computed(() => {
             <span class="mx-2 text-sm font-medium">Image Reg Credentials</span>
           </RouterLink>
         </div>
-        <div class="space-y-3">
+        <div class="space-y-2.5">
           <label class="px-3 text-xs font-semibold uppercase text-white"> Routing </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
@@ -94,7 +101,7 @@ const isShowSideBar = computed(() => {
             <span class="mx-2 text-sm font-medium">Redirect Rules</span>
           </RouterLink>
         </div>
-        <div class="space-y-3">
+        <div class="space-y-2.5">
           <label class="px-3 text-xs font-semibold uppercase text-white"> User </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
