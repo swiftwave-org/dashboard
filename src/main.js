@@ -38,6 +38,7 @@ import {
   faRightFromBracket,
   faRotateRight,
   faSkullCrossbones,
+  faStore,
   faTrash,
   faTriangleExclamation,
   faUpload,
@@ -99,7 +100,8 @@ library.add(
   faMoon,
   faPlay,
   faCircleStop,
-  faCubesStacked
+  faCubesStacked,
+  faStore
 )
 
 // Environment variables

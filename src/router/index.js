@@ -24,6 +24,11 @@ const router = createRouter({
       component: () => import('@/views/pages/DeployStack.vue')
     },
     {
+      path: '/app-store',
+      name: 'App Store',
+      component: () => import('@/views/pages/AppStore.vue')
+    },
+    {
       path: '/applications',
       name: 'Applications',
       component: () => import('@/views/pages/ApplicationManagement.vue')
