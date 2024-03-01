@@ -1,5 +1,7 @@
 import { createApp, h, markRaw, provide } from 'vue'
 import { createPinia } from 'pinia'
+import vueDebounce from 'vue-debounce'
+
 import { DefaultApolloClient } from '@vue/apollo-composable'
 
 import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, split } from '@apollo/client/core'
@@ -31,6 +33,7 @@ import {
   faLink,
   faListCheck,
   faLocationArrow,
+  faMagnifyingGlass,
   faMoon,
   faNetworkWired,
   faPlay,
@@ -38,6 +41,7 @@ import {
   faRightFromBracket,
   faRotateRight,
   faSkullCrossbones,
+  faStore,
   faTrash,
   faTriangleExclamation,
   faUpload,
@@ -99,7 +103,9 @@ library.add(
   faMoon,
   faPlay,
   faCircleStop,
-  faCubesStacked
+  faCubesStacked,
+  faStore,
+  faMagnifyingGlass
 )
 
 // Environment variables
@@ -191,6 +197,7 @@ app.use(Toast, {
   icon: true,
   rtl: false
 })
+app.directive('debounce', vueDebounce({ lock: true }))
 app.mount('#app')
 
 // Protect routes
