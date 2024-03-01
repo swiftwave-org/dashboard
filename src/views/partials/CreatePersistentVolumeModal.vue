@@ -68,10 +68,11 @@ const {
   }
 )
 
-onDomainRegisterSuccess(() => {
+onDomainRegisterSuccess((result) => {
   closeModal()
+  let createdPersistentVolume = result.data.createPersistentVolume
   newPersistentVolumeDetails.name = ''
-  props.callbackOnCreate()
+  props.callbackOnCreate(createdPersistentVolume)
 })
 
 onDomainRegisterFail((err) => {
