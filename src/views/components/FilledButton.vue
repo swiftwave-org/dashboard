@@ -22,6 +22,10 @@ const props = defineProps({
   slim: {
     type: Boolean,
     default: false
+  },
+  rounded: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -42,10 +46,12 @@ const isDisabled = computed(() => {
       'hover:bg-[type]-600/80': !disabled,
       'cursor-progress': loading,
       'py-2 text-sm': !slim,
-      'px-2 py-1 text-xs': slim
+      'px-2 py-1 text-xs': slim,
+      'rounded-full': rounded,
+      'rounded-md': !rounded
     }"
     :disabled="isDisabled"
-    class="flex items-center justify-center rounded-md px-3 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+    class="flex items-center justify-center px-3 font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
     type="button"
     @click="click">
     <!--    spinner -->
