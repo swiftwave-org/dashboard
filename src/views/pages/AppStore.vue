@@ -139,7 +139,7 @@ const openStackFileForInstall = (stack) => {
         class="h-[180px] cursor-pointer rounded-xl border-2 border-secondary-400 p-2 hover:border-primary-500 hover:shadow-lg">
         <!--    Header    -->
         <div class="flex flex-row gap-3 border-b pb-2">
-          <div class="h-12 w-12 rounded-md border border-primary-50 p-1.5">
+          <div class="h-12 w-12 rounded-md p-1.5">
             <img :src="app.logo" class="h-full w-full" :alt="app.title" />
           </div>
           <div>

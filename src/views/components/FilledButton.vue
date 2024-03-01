@@ -16,7 +16,7 @@ const props = defineProps({
     type: String,
     default: 'primary',
     validator(value) {
-      return ['primary', 'success', 'warning', 'danger', 'secondary'].includes(value)
+      return ['primary', 'success', 'warning', 'danger', 'secondary', 'info'].includes(value)
     }
   },
   slim: {
@@ -42,6 +42,7 @@ const isDisabled = computed(() => {
       'bg-success-600 hover:bg-success-600/80 focus-visible:outline-success-600': type === 'success',
       'bg-warning-600 hover:bg-warning-600/80 focus-visible:outline-warning-600': type === 'warning',
       'bg-danger-600 hover:bg-danger-600/80 focus-visible:outline-danger-600': type === 'danger',
+      'bg-info-600 hover:bg-info-600/80 focus-visible:outline-info-600': type === 'info',
       'cursor-not-allowed opacity-50': disabled,
       'hover:bg-[type]-600/80': !disabled,
       'cursor-progress': loading,

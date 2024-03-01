@@ -1,7 +1,3 @@
-<template>
-  <div v-html="markdown.render(source)" />
-</template>
-
 <script setup>
 import MarkdownIt from 'markdown-it'
 import MarkdownItAbbr from 'markdown-it-abbr'
@@ -28,3 +24,7 @@ defineProps({
   }
 })
 </script>
+
+<template>
+  <div class="prose" v-html="markdown.render(source)" />
+</template>

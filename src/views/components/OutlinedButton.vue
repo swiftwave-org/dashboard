@@ -70,7 +70,8 @@ const isDisabled = computed(() => {
         'text-secondary-700': type === 'secondary',
         'text-success-700': type === 'success',
         'text-warning-700': type === 'warning',
-        'text-danger-700': type === 'danger'
+        'text-danger-700': type === 'danger',
+        'text-info-700': type === 'info'
       }"
       class="-ml-1 mr-3 animate-spin"
       fill="none"
