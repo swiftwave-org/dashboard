@@ -2,9 +2,7 @@
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { computed, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
 const props = defineProps({
   selector: {
     type: String,
@@ -75,7 +73,7 @@ const createApplication = () => {
         {{ application.name }}
       </option>
     </select>
-    <p class="mt-2 flex items-center text-sm" v-if="showCreateLink">
+    <p class="ml-1 mt-2 flex items-center text-sm" v-if="showCreateLink">
       Need to create Application ?
       <a class="ml-1.5 cursor-pointer font-bold text-primary-600" @click="createApplication">Click here</a>
     </p>

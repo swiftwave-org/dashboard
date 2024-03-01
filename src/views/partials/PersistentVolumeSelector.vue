@@ -87,7 +87,7 @@ const callbackOnCreate = (e) => {
         {{ pv.name }}
       </option>
     </select>
-    <p class="mt-2 flex items-center text-sm" v-if="showCreateLink">
+    <p class="ml-1 mt-2 flex items-center text-sm" v-if="showCreateLink">
       Need to create Volume ?
       <a class="ml-1.5 cursor-pointer font-bold text-primary-600" @click="createPersistentVolume">Click here</a>
     </p>
