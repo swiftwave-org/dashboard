@@ -9,6 +9,7 @@ import ApplicationDetailsNavbar from '@/views/partials/ApplicationDetailsNavbar.
 import NewApplicationUpdaterStore from '@/store/applicationUpdater.js'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { useToast } from 'vue-toastification'
+import { isNaN } from 'lodash'
 
 // Toast
 const toast = useToast()
@@ -232,7 +233,7 @@ onWakeApplicationError((error) => {
       </div>
       <!--   right side   -->
       <div class="flex flex-col items-end">
-        <p class="text-xl font-medium">Realtime Info</p>
+        <p class="w-full text-center text-xl font-medium">Realtime Info</p>
         <div class="mt-2 flex items-center gap-2 font-medium text-gray-800">
           <p v-if="applicationDetails.isSleeping" class="font-semibold text-blue-600">
             <font-awesome-icon icon="fa-solid fa-moon" />
@@ -248,6 +249,7 @@ onWakeApplicationError((error) => {
                 'text-danger-600': realtimeReplicaCountPercentage === 0
               }"
               class="font-bold"
+              v-if="!isNaN(realtimeReplicaCountPercentage)"
               >[{{ realtimeReplicaCountPercentage }}%]</span
             >
           </p>
@@ -255,7 +257,7 @@ onWakeApplicationError((error) => {
             <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />&nbsp;&nbsp;Not Available
           </p>
         </div>
-        <div class="mt-3">
+        <div class="mt-3 w-full">
           <FilledButton
             v-if="applicationDetails.isSleeping"
             class="w-full"
