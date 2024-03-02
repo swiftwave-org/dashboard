@@ -27,6 +27,7 @@ import {
   faFile,
   faFingerprint,
   faGear,
+  faGlobe,
   faHammer,
   faHardDrive,
   faKey,
@@ -105,7 +106,8 @@ library.add(
   faCircleStop,
   faCubesStacked,
   faStore,
-  faMagnifyingGlass
+  faMagnifyingGlass,
+  faGlobe
 )
 
 // Environment variables
