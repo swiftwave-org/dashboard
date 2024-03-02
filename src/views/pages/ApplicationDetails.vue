@@ -54,7 +54,8 @@ const {
           domain {
             name
           }
-          targetPort
+          protocol
+          port
         }
       }
     }
@@ -208,7 +209,9 @@ onWakeApplicationError((error) => {
           <p v-if="isIngressRulesAvailable" class="max-w-[40vw]">
             <span v-for="(ingressRule, index) in applicationDetails.ingressRules" :key="index">
               <span v-if="index !== 0">, </span>
-              <span>{{ ingressRule.domain?.name ?? 'server_ip' }}:{{ ingressRule.targetPort }}</span>
+              <span
+                >{{ ingressRule.protocol }}://{{ ingressRule.domain?.name ?? 'server_ip' }}:{{ ingressRule.port }}</span
+              >
             </span>
           </p>
           <p v-else>
