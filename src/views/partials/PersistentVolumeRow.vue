@@ -8,6 +8,7 @@ import FilledButton from '@/views/components/FilledButton.vue'
 import { round } from 'lodash'
 import { useToast } from 'vue-toastification'
 import ModalDialog from '@/views/components/ModalDialog.vue'
+import Badge from '@/views/components/Badge.vue'
 
 const props = defineProps({
   volume: {
@@ -141,7 +142,11 @@ const createBackup = () => {
   </Teleport>
   <tr :key="volume.id">
     <TableRow align="left">
-      <div class="text-sm font-medium text-gray-900">{{ volume.name }}</div>
+      <div class="text-sm font-medium text-gray-900">
+        <Badge class="mr-1" type="success" v-if="volume.type === 'local'">local</Badge>
+        <Badge class="mr-1" type="warning" v-if="volume.type === 'nfs'">&nbsp;&nbsp;nfs&nbsp;&nbsp;</Badge>
+        {{ volume.name }}
+      </div>
     </TableRow>
     <TableRow align="center">
       <FilledButton slim type="secondary" :click="showDetails"> Show Details</FilledButton>
