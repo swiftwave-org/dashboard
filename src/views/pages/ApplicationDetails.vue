@@ -9,6 +9,7 @@ import ApplicationDetailsNavbar from '@/views/partials/ApplicationDetailsNavbar.
 import NewApplicationUpdaterStore from '@/store/applicationUpdater.js'
 import FilledButton from '@/views/components/FilledButton.vue'
 import { useToast } from 'vue-toastification'
+import { isNaN } from 'lodash'
 
 // Toast
 const toast = useToast()
@@ -50,6 +51,13 @@ const {
           codePath
           createdAt
         }
+        ingressRules {
+          domain {
+            name
+          }
+          protocol
+          port
+        }
       }
     }
   `,
@@ -62,10 +70,6 @@ const {
 )
 
 const applicationDetails = computed(() => applicationDetailsRaw.value?.application ?? {})
-const lastDeployedOn = computed(() => {
-  const date = new Date(applicationDetailsRaw.value?.application?.latestDeployment?.createdAt)
-  return date.toLocaleString()
-})
 const realtimeInfo = computed(() => applicationDetailsRaw.value?.application?.realtimeInfo ?? {})
 const realtimeReplicaCountPercentage = computed(() => {
   try {
@@ -73,6 +77,10 @@ const realtimeReplicaCountPercentage = computed(() => {
   } catch (e) {
     return 0
   }
+})
+
+const isIngressRulesAvailable = computed(() => {
+  return (applicationDetails.value?.ingressRules ?? []).length > 0
 })
 
 // Environment variables editor
@@ -191,20 +199,41 @@ onWakeApplicationError((error) => {
           <p v-if="applicationDetails.latestDeployment.upstreamType === 'sourceCode'">Source-code uploaded manually</p>
         </div>
         <div class="mt-2 flex items-center gap-2 font-normal text-gray-800">
-          <font-awesome-icon icon="fa-solid fa-calendar-days" />
-          <p>{{ lastDeployedOn }}</p>
-        </div>
-        <div class="mt-2 flex items-center gap-2 font-normal text-gray-800">
           <font-awesome-icon icon="fa-solid fa-gear" />
           <p v-if="applicationDetails.deploymentMode === 'global'">Global Deployment</p>
           <p v-else-if="applicationDetails.deploymentMode === 'replicated'">
             Replicated Deployment (expected {{ applicationDetails.replicas }} instance of the application)
           </p>
         </div>
+        <div class="mt-2 flex items-center gap-2 font-normal text-gray-800">
+          <font-awesome-icon icon="fa-solid fa-globe" />
+          <p v-if="isIngressRulesAvailable" class="max-w-[40vw]">
+            <span v-for="(ingressRule, index) in applicationDetails.ingressRules" :key="index">
+              <span v-if="index !== 0">, </span>
+              <span
+                >{{ ingressRule.protocol }}://{{ ingressRule.domain?.name ?? 'server_ip' }}:{{ ingressRule.port }}</span
+              >
+            </span>
+          </p>
+          <p v-else>
+            <b class="text-warning-600">No Ingress Rules ! </b
+            ><i
+              >(
+              <RouterLink
+                :to="{
+                  name: 'Application Details Ingress Rules',
+                  params: { id: $route.params.id }
+                }"
+                >Add ingress rules
+              </RouterLink>
+              if you want to expose the application to the internet)</i
+            >
+          </p>
+        </div>
       </div>
       <!--   right side   -->
       <div class="flex flex-col items-end">
-        <p class="text-xl font-medium">Realtime Info</p>
+        <p class="w-full text-center text-xl font-medium">Realtime Info</p>
         <div class="mt-2 flex items-center gap-2 font-medium text-gray-800">
           <p v-if="applicationDetails.isSleeping" class="font-semibold text-blue-600">
             <font-awesome-icon icon="fa-solid fa-moon" />
@@ -220,6 +249,7 @@ onWakeApplicationError((error) => {
                 'text-danger-600': realtimeReplicaCountPercentage === 0
               }"
               class="font-bold"
+              v-if="!isNaN(realtimeReplicaCountPercentage)"
               >[{{ realtimeReplicaCountPercentage }}%]</span
             >
           </p>
@@ -227,7 +257,7 @@ onWakeApplicationError((error) => {
             <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />&nbsp;&nbsp;Not Available
           </p>
         </div>
-        <div class="mt-3">
+        <div class="mt-3 w-full">
           <FilledButton
             v-if="applicationDetails.isSleeping"
             class="w-full"

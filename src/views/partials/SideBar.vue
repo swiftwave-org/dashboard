@@ -39,6 +39,12 @@ const isShowSideBar = computed(() => {
           <label class="px-3 text-xs font-semibold uppercase text-white"> Deploy </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-700"
+            to="/app-store">
+            <font-awesome-icon icon="fa-solid fa-store" />
+            <span class="mx-2 text-sm font-medium">App Store</span>
+          </RouterLink>
+          <RouterLink
+            class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-700"
             to="/deploy-application">
             <font-awesome-icon icon="fa-solid fa-hammer" />
             <span class="mx-2 text-sm font-medium">Deploy Application</span>
@@ -48,12 +54,6 @@ const isShowSideBar = computed(() => {
             to="/deploy-stack">
             <font-awesome-icon icon="fa-solid fa-cubes-stacked" />
             <span class="mx-2 text-sm font-medium">Deploy Stack</span>
-          </RouterLink>
-          <RouterLink
-            class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-50 hover:text-gray-700"
-            to="/app-store">
-            <font-awesome-icon icon="fa-solid fa-store" />
-            <span class="mx-2 text-sm font-medium">App Store</span>
           </RouterLink>
         </div>
         <div class="space-y-2.5">
@@ -108,7 +108,7 @@ const isShowSideBar = computed(() => {
           </RouterLink>
         </div>
         <div class="space-y-2.5">
-          <label class="px-3 text-xs font-semibold uppercase text-white"> User </label>
+          <label class="px-3 text-xs font-semibold uppercase text-white"> Administration </label>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
             to="/users">
