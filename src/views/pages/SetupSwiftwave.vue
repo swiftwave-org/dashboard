@@ -97,6 +97,7 @@ const startCountDown = () => {
 }
 
 const fetchDetails = async () => {
+  if(!isUpdateRequired) return
   const { success, data } = await systemConfigStore.fetch()
   if (success) {
     Object.assign(formState, data)
