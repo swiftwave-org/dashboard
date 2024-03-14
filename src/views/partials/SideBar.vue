@@ -20,7 +20,7 @@ const isShowSideBar = computed(() => {
   if (!authStore.IsLoggedIn) {
     return false
   } else {
-    return !['Download Persistent Volume Backup'].includes(router.currentRoute.value.name)
+    return !['Download Persistent Volume Backup', 'Maintenance', 'Setup'].includes(router.currentRoute.value.name)
   }
 })
 </script>
@@ -109,6 +109,12 @@ const isShowSideBar = computed(() => {
         </div>
         <div class="space-y-2.5">
           <label class="px-3 text-xs font-semibold uppercase text-white"> Administration </label>
+          <RouterLink
+            class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+            to="/setup?update=1">
+            <font-awesome-icon icon="fa-solid fa-gear" />
+            <span class="mx-2 text-sm font-medium">System Configuration</span>
+          </RouterLink>
           <RouterLink
             class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
             to="/users">

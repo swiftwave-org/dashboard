@@ -5,6 +5,16 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/setup',
+      name: 'Setup',
+      component: () => import('@/views/pages/SetupSwiftwave.vue')
+    },
+    {
+      path: '/maintenance',
+      name: 'Maintenance',
+      component: () => import('@/views/pages/UnderMaintenance.vue')
+    },
+    {
       path: '/login',
       name: 'Login',
       component: LoginView
