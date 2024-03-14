@@ -40,6 +40,7 @@ import {
   faPlay,
   faPlus,
   faRightFromBracket,
+  faRocket,
   faRotateRight,
   faSkullCrossbones,
   faStore,
@@ -107,7 +108,8 @@ library.add(
   faCubesStacked,
   faStore,
   faMagnifyingGlass,
-  faGlobe
+  faGlobe,
+  faRocket
 )
 
 // Environment variables
@@ -158,13 +160,13 @@ const apolloClient = new ApolloClient({
   link: link,
   defaultOptions: {
     query: {
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'no-cache'
     },
     mutate: {
       fetchPolicy: 'no-cache'
     },
     watchQuery: {
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'no-cache'
     }
   },
   cache: new InMemoryCache()
@@ -205,6 +207,9 @@ app.mount('#app')
 // Protect routes
 router.beforeEach(async (to) => {
   const authStore = useAuthStore()
+  if ((to.name === 'Setup' && parseInt(to.query?.update ?? 0) === 0) || to.name === 'Maintenance') {
+    return
+  }
   if (!authStore.IsLoggedIn && to.name !== 'Login') {
     return { name: 'Login', query: { redirect: to.path } }
   }

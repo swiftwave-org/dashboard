@@ -92,6 +92,11 @@ export const useAuthStore = defineStore('auth_details', () => {
         return res.status === 200
       }
     } catch (e) {
+      if (e.isAxiosError) {
+        if (e.message.includes('Network Error')) {
+          return true
+        }
+      }
       return false
     }
   }
