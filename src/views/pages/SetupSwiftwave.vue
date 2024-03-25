@@ -80,7 +80,7 @@ const formState = reactive({
     }
   }
 })
-const timeCount = ref(5)
+const timeCount = ref(3)
 const setupSuccessful = ref(false)
 const toggleStagingEnv = () => (formState.lets_encrypt.staging_env = !formState.lets_encrypt.staging_env)
 const toggleImageRegistry = () =>
@@ -121,7 +121,6 @@ const startCountDown = () => {
     timeCount.value--
     if (timeCount.value === 0) {
       clearInterval(interval)
-      // window.location.href = router.resolve({ name: 'Maintenance' }).href
       router.push({ name: 'Maintenance' })
     }
   }, 1000)
