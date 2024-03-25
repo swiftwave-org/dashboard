@@ -15,7 +15,7 @@ const router = useRouter()
 const toast = useToast()
 
 const deployNewApplication = () => {
-  router.push('/deploy-application')
+  router.push('/deploy/application')
 }
 
 const {
@@ -85,7 +85,7 @@ const applications = computed(() => applicationsResult.value?.applications ?? []
           No deployed applications found.<br />
           Click on the "Deploy New" button to deploy a new application.
         </TableMessage>
-        <TableMessage v-if="isApplicationsLoading"> Loading deployed applications... </TableMessage>
+        <TableMessage v-if="isApplicationsLoading"> Loading deployed applications...</TableMessage>
       </template>
       <template v-slot:body>
         <ApplicationListRow v-for="application in applications" :key="application.id" :application="application" />

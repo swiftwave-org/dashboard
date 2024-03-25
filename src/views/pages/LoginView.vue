@@ -57,10 +57,10 @@ const login = async () => {
       </div>
 
       <!--   Login Form   -->
-      <form class="space-y-6" @submit.prevent="login">
+      <form class="space-y-4" @keydown.enter.prevent="login">
         <div>
           <label class="block text-sm font-medium leading-6 text-gray-900" for="username">Username</label>
-          <div class="mt-2">
+          <div class="mt-1">
             <input
               id="username"
               v-model="username"
@@ -74,7 +74,7 @@ const login = async () => {
         </div>
         <div>
           <label class="block text-sm font-medium leading-6 text-gray-900" for="password">Password</label>
-          <div class="mt-2">
+          <div class="mt-1">
             <input
               id="password"
               v-model="password"
@@ -85,13 +85,7 @@ const login = async () => {
               type="password" />
           </div>
         </div>
-        <div
-          v-if="!authenticationStatus.visible"
-          class="mb-5 rounded border-s-4 border-gray-500 bg-gray-50 p-2"
-          role="alert">
-          <p>Login session will be active for next <strong>6 hours</strong></p>
-        </div>
-        <div>
+        <div class="py-2">
           <FilledButton :click="login" class="w-full"> Sign in</FilledButton>
         </div>
       </form>

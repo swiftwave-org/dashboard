@@ -23,25 +23,31 @@ const router = createRouter({
       path: '',
       redirect: '/applications'
     },
+
     {
-      path: '/deploy-application',
-      name: 'Deploy Application',
-      component: () => import('@/views/pages/DeployApplication.vue')
-    },
-    {
-      path: '/deploy-stack',
-      name: 'Deploy Stack',
-      component: () => import('@/views/pages/DeployStack.vue')
-    },
-    {
-      path: '/app-store',
-      name: 'App Store',
-      component: () => import('@/views/pages/AppStore.vue')
-    },
-    {
-      path: '/app-store/install',
-      name: 'Install from App Store',
-      component: () => import('@/views/pages/AppInstall.vue')
+      path: '/deploy',
+      children: [
+        {
+          path: 'application',
+          name: 'Deploy Application',
+          component: () => import('@/views/pages/DeployApplication.vue')
+        },
+        {
+          path: 'stack',
+          name: 'Deploy Stack',
+          component: () => import('@/views/pages/DeployStack.vue')
+        },
+        {
+          path: 'app-store',
+          name: 'App Store',
+          component: () => import('@/views/pages/AppStore.vue')
+        },
+        {
+          path: 'app-store/install',
+          name: 'Install from App Store',
+          component: () => import('@/views/pages/AppInstall.vue')
+        }
+      ]
     },
     {
       path: '/applications',
@@ -144,6 +150,11 @@ const router = createRouter({
       path: '/pv-backup-download/:backup_id',
       name: 'Download Persistent Volume Backup',
       component: () => import('@/views/pages/DownloadPVBackup.vue')
+    },
+    {
+      path: '/servers',
+      name: 'Servers',
+      component: () => import('@/views/pages/ServerManagement.vue')
     }
   ]
 })

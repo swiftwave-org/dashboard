@@ -11,9 +11,12 @@ import {
   faArrowDown,
   faArrowRight,
   faArrowUpRightFromSquare,
+  faBook,
   faBox,
   faCalendarDays,
+  faChartColumn,
   faChevronDown,
+  faChevronRight,
   faCircleCheck,
   faCircleDown,
   faCircleStop,
@@ -22,6 +25,7 @@ import {
   faCodeBranch,
   faCopy,
   faCubesStacked,
+  faEllipsisVertical,
   faEye,
   faEyeSlash,
   faFile,
@@ -33,6 +37,7 @@ import {
   faKey,
   faLink,
   faListCheck,
+  faListUl,
   faLocationArrow,
   faMagnifyingGlass,
   faMoon,
@@ -42,12 +47,17 @@ import {
   faRightFromBracket,
   faRocket,
   faRotateRight,
+  faRoute,
+  faServer,
   faSkullCrossbones,
   faStore,
+  faTerminal,
   faTrash,
   faTriangleExclamation,
   faUpload,
   faUsers,
+  faVault,
+  faWrench,
   faXmark
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -78,6 +88,8 @@ library.add(
   faUsers,
   faRightFromBracket,
   faChevronDown,
+  faChevronRight,
+  faVault,
   faArrowRight,
   faUpload,
   faDocker,
@@ -109,7 +121,15 @@ library.add(
   faStore,
   faMagnifyingGlass,
   faGlobe,
-  faRocket
+  faRocket,
+  faWrench,
+  faRoute,
+  faServer,
+  faListUl,
+  faEllipsisVertical,
+  faChartColumn,
+  faTerminal,
+  faBook
 )
 
 // Environment variables

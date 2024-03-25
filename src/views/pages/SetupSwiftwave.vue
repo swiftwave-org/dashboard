@@ -15,6 +15,10 @@ const isSimple = ref(true)
 const isAdvanced = computed(() => !isSimple.value)
 const toggleMode = () => (isSimple.value = !isSimple.value)
 const formState = reactive({
+  new_admin_credential: {
+    username: '',
+    password: ''
+  },
   network_name: 'swiftwave_network',
   extra_restricted_ports: '',
   lets_encrypt: {
@@ -57,19 +61,26 @@ const formState = reactive({
   },
   task_queue_config: {
     type: 'local',
+    remote_task_queue_type: 'none',
     max_outstanding_messages_per_queue: 1000,
     no_of_workers_per_queue: 1,
     amqp_config: {
-      protocol: 'amqp',
+      protocol: 'amqps',
       host: '',
-      port: 5672,
+      port: 5671,
       username: '',
       password: '',
       vhost: ''
+    },
+    redis_config: {
+      host: '',
+      port: 6379,
+      password: '',
+      database: 0
     }
   }
 })
-const timeCount = ref(5)
+const timeCount = ref(3)
 const setupSuccessful = ref(false)
 const toggleStagingEnv = () => (formState.lets_encrypt.staging_env = !formState.lets_encrypt.staging_env)
 const toggleImageRegistry = () =>
@@ -80,9 +91,28 @@ const toggleS3Backup = () =>
 const toggleS3ForcePathStyle = () =>
   (formState.pv_backup_config.s3_config.force_path_style = !formState.pv_backup_config.s3_config.force_path_style)
 const isRemoteS3Backup = computed(() => formState.pv_backup_config.s3_config.enabled)
-const toggleTaskQueue = () =>
-  (formState.task_queue_config.type = formState.task_queue_config.type === 'local' ? 'remote' : 'local')
-const isRemoteTaskQueue = computed(() => formState.task_queue_config.type === 'remote')
+
+const isLocalTaskQueue = computed(() => formState.task_queue_config.type === 'local')
+const isRedisTaskQueue = computed(
+  () => formState.task_queue_config.remote_task_queue_type === 'redis' && formState.task_queue_config.type === 'remote'
+)
+const isAMQPTaskQueue = computed(
+  () => formState.task_queue_config.remote_task_queue_type === 'amqp' && formState.task_queue_config.type === 'remote'
+)
+
+const switchTaskQueueType = (type) => {
+  if (type === 'local') {
+    formState.task_queue_config.type = 'local'
+    formState.task_queue_config.remote_task_queue_type = 'none'
+  } else if (type === 'redis') {
+    formState.task_queue_config.type = 'remote'
+    formState.task_queue_config.remote_task_queue_type = 'redis'
+  } else if (type === 'amqp') {
+    formState.task_queue_config.type = 'remote'
+    formState.task_queue_config.remote_task_queue_type = 'amqp'
+  }
+}
+
 const togglePubSub = () =>
   (formState.pubsub_config.type = formState.pubsub_config.type === 'local' ? 'remote' : 'local')
 const isRemotePubSub = computed(() => formState.pubsub_config.type === 'remote')
@@ -91,13 +121,13 @@ const startCountDown = () => {
     timeCount.value--
     if (timeCount.value === 0) {
       clearInterval(interval)
-      window.location.href = router.resolve({ name: 'Maintenance' }).href
+      router.push({ name: 'Maintenance' })
     }
   }, 1000)
 }
 
 const fetchDetails = async () => {
-  if(!isUpdateRequired) return
+  if (!isUpdateRequired) return
   const { success, data } = await systemConfigStore.fetch()
   if (success) {
     Object.assign(formState, data)
@@ -110,6 +140,12 @@ onMounted(() => {
 })
 
 const submitConfig = async () => {
+  if (!isUpdateRequired) {
+    if (!formState.new_admin_credential.username || !formState.new_admin_credential.password) {
+      toast.error('Admin Username and Password are required')
+      return
+    }
+  }
   let res = await systemConfigStore.submit(formState)
   if (res.success) {
     setupSuccessful.value = true
@@ -123,7 +159,6 @@ const updateConfig = async () => {
   let res = await systemConfigStore.update(formState)
   if (res.success) {
     setupSuccessful.value = true
-    toast.success(res.message)
     startCountDown()
   } else {
     toast.error(res.message)
@@ -154,6 +189,28 @@ const updateConfig = async () => {
         Simple
         <Switch :enabled="!isSimple" :on-change="toggleMode" />
         Advanced
+      </div>
+    </div>
+    <!--  New Admin info  -->
+    <div class="info-section" v-if="!isUpdateRequired">
+      <!--   label   -->
+      <div class="label">
+        <p>New Admin Credential</p>
+        <span />
+      </div>
+      <div class="content">
+        <div class="input-label">
+          <span>Username</span>
+          <span>Username for the new admin</span>
+        </div>
+        <input type="text" v-model="formState.new_admin_credential.username" />
+      </div>
+      <div class="content">
+        <div class="input-label">
+          <span>Password</span>
+          <span>Password for the new admin</span>
+        </div>
+        <input type="password" v-model="formState.new_admin_credential.password" />
       </div>
     </div>
     <!-- Networking section [advanced] -->
@@ -387,7 +444,7 @@ const updateConfig = async () => {
           <span>Redis Host</span>
           <span>For example, localhost</span>
         </div>
-        <input type="number" v-model="formState.pubsub_config.redis_config.host" />
+        <input type="text" v-model="formState.pubsub_config.redis_config.host" />
       </div>
       <div class="content" v-if="isRemotePubSub">
         <div class="input-label">
@@ -408,7 +465,7 @@ const updateConfig = async () => {
           <span>Redis Database ID</span>
           <span>Database to connect with the pubsub</span>
         </div>
-        <input type="text" v-model="formState.pubsub_config.redis_config.database" />
+        <input type="number" v-model="formState.pubsub_config.redis_config.database" />
       </div>
     </div>
     <!-- Task Queue Config -->
@@ -429,23 +486,82 @@ const updateConfig = async () => {
           <span>Queue Type</span>
           <span>It's always reliable to configure a remote task queue to store all the messages</span>
         </div>
-        <div class="flex items-center gap-2 font-medium">
-          <span>Local</span>
-          <Switch :on-change="toggleTaskQueue" :enabled="formState.task_queue_config.type === 'remote'" />
-          <span>Remote</span>
+        <div class="multi-select">
+          <div
+            @click="switchTaskQueueType('local')"
+            :class="{
+              active: isLocalTaskQueue
+            }">
+            Local
+          </div>
+          <div
+            @click="switchTaskQueueType('redis')"
+            :class="{
+              active: isRedisTaskQueue
+            }">
+            Redis
+          </div>
+          <div
+            @click="switchTaskQueueType('amqp')"
+            :class="{
+              active: isAMQPTaskQueue
+            }">
+            AMQP
+          </div>
         </div>
       </div>
-      <div class="content" v-if="isAdvanced && !isRemoteTaskQueue">
+      <div class="rounded-md border border-success-600 bg-success-100 p-2 text-success-800">
+        <span v-if="isLocalTaskQueue"
+          >Pre-configured PostgresSQL database will be used to store the tasks for reliability</span
+        >
+        <span v-else-if="isRedisTaskQueue">Configure Redis as task queue</span>
+        <span v-else-if="isAMQPTaskQueue"
+          >Configure AMQP compatible queue (RabbitMQ, LavinMQ, ActiveMQ etc.) as task queue</span
+        >
+      </div>
+
+      <!--  Local Task Queue config    -->
+      <div class="content" v-if="isAdvanced && isLocalTaskQueue">
         <div class="input-label">
           <span>Max Outstanding Messages Per Queue</span>
           <span>Maximum number of tasks</span>
         </div>
         <input type="number" v-model="formState.task_queue_config.max_outstanding_messages_per_queue" />
       </div>
-      <div class="rounded-md border border-success-600 bg-success-100 p-2 text-success-800" v-if="isRemoteTaskQueue">
-        You can configure RabbitMQ or any other AMQP compatible queue as a remote task queue
+
+      <!--   Redis Task Queue Config   -->
+      <div class="content" v-if="isRedisTaskQueue">
+        <div class="input-label">
+          <span>Redis Host</span>
+          <span>For example, localhost</span>
+        </div>
+        <input type="text" v-model="formState.task_queue_config.redis_config.host" />
       </div>
-      <div class="content" v-if="isRemoteTaskQueue">
+      <div class="content" v-if="isRedisTaskQueue">
+        <div class="input-label">
+          <span>Redis Port</span>
+          <span>Port to connect with Redis server</span>
+        </div>
+        <input type="text" v-model="formState.task_queue_config.redis_config.port" />
+      </div>
+      <div class="content" v-if="isRedisTaskQueue">
+        <div class="input-label">
+          <span>Redis Password</span>
+          <span>Password to authenticate with redis server</span>
+        </div>
+        <input type="password" v-model="formState.task_queue_config.redis_config.password" />
+      </div>
+      <div class="content" v-if="isRedisTaskQueue">
+        <div class="input-label">
+          <span>Redis Database ID</span>
+          <span>Database to connect for task queue</span>
+        </div>
+        <input type="number" v-model="formState.task_queue_config.redis_config.database" />
+      </div>
+
+      <!--   AMQP Config   -->
+
+      <div class="content" v-if="isAMQPTaskQueue">
         <div class="input-label">
           <span>Queue Protocol</span>
           <span>For example, amqp</span>
@@ -455,35 +571,35 @@ const updateConfig = async () => {
           <option value="amqps">AMQPS</option>
         </select>
       </div>
-      <div class="content" v-if="isRemoteTaskQueue">
+      <div class="content" v-if="isAMQPTaskQueue">
         <div class="input-label">
           <span>Queue Host</span>
           <span>For example, localhost</span>
         </div>
         <input type="text" v-model="formState.task_queue_config.amqp_config.host" />
       </div>
-      <div class="content" v-if="isRemoteTaskQueue">
+      <div class="content" v-if="isAMQPTaskQueue">
         <div class="input-label">
           <span>Queue Port</span>
           <span>Port to connect with AMQP server</span>
         </div>
         <input type="number" v-model="formState.task_queue_config.amqp_config.port" />
       </div>
-      <div class="content" v-if="isRemoteTaskQueue">
+      <div class="content" v-if="isAMQPTaskQueue">
         <div class="input-label">
           <span>Queue Username</span>
           <span>Username to authenticate with the queue</span>
         </div>
         <input type="text" v-model="formState.task_queue_config.amqp_config.username" />
       </div>
-      <div class="content" v-if="isRemoteTaskQueue">
+      <div class="content" v-if="isAMQPTaskQueue">
         <div class="input-label">
           <span>Queue Password</span>
           <span>Password to authenticate with the queue</span>
         </div>
         <input type="password" v-model="formState.task_queue_config.amqp_config.password" />
       </div>
-      <div class="content" v-if="isRemoteTaskQueue">
+      <div class="content" v-if="isAMQPTaskQueue">
         <div class="input-label">
           <span>Queue VHost</span>
           <span>Virtual host to connect with the queue</span>
@@ -544,6 +660,22 @@ const updateConfig = async () => {
 
     input {
       @apply w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+    }
+  }
+
+  .multi-select {
+    @apply flex h-fit w-min overflow-hidden rounded-md border border-secondary-400;
+
+    div {
+      @apply cursor-pointer border-r border-secondary-400 bg-secondary-100 px-5 py-2 transition-all hover:bg-secondary-400 hover:text-white;
+    }
+
+    div:last-child {
+      @apply border-0;
+    }
+
+    .active {
+      @apply bg-primary-600  text-white;
     }
   }
 }
