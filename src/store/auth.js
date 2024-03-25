@@ -1,12 +1,15 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import axios from 'axios'
 import { getHttpBaseUrl } from '@/vendor/utils.js'
+import { jwtDecode } from 'jwt-decode'
+import moment from 'moment'
 
 export const useAuthStore = defineStore('auth_details', () => {
   const IsLoggedIn = ref(false)
   const AccessToken = ref('')
   const IsLoggingInProgress = ref(false)
+  let currentTime = ref(Date.now())
 
   function FetchBearerToken() {
     if (IsLoggedIn.value) {
@@ -115,5 +118,52 @@ export const useAuthStore = defineStore('auth_details', () => {
     setInterval(() => logoutOnInvalidToken(callback), 5000)
   }
 
-  return { IsLoggedIn, IsLoggingInProgress, FetchBearerToken, Login, Logout, SetCredential, StartAuthChecker }
+  const sessionRelativeTimeoutStatus = computed(() => {
+    if (IsLoggedIn.value) {
+      try {
+        const token = localStorage.getItem('token')
+        if (token) {
+          const decoded = jwtDecode(token)
+          const exp = moment(new Date(decoded.exp * 1000))
+          return moment.duration(exp.diff(currentTime.value)).humanize(true)
+        }
+      } catch (e) {
+        return 'N/A'
+      }
+    }
+    return ''
+  })
+
+  async function fetchSWVersion() {
+    if (!IsLoggedIn.value) return '...'
+    try {
+      const HTTP_BASE_URL = getHttpBaseUrl()
+      let config = {
+        method: 'get',
+        url: `${HTTP_BASE_URL}/version`,
+        headers: {
+          Authorization: FetchBearerToken()
+        }
+      }
+      const res = await axios.request(config)
+      return res.data
+    } catch (e) {
+      return 'N/A'
+    }
+  }
+
+  setInterval(() => {
+    currentTime.value = Date.now()
+  }, 10000)
+  return {
+    IsLoggedIn,
+    IsLoggingInProgress,
+    FetchBearerToken,
+    Login,
+    Logout,
+    SetCredential,
+    StartAuthChecker,
+    sessionRelativeTimeoutStatus,
+    fetchSWVersion
+  }
 })

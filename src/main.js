@@ -14,6 +14,7 @@ import {
   faBox,
   faCalendarDays,
   faChevronDown,
+  faChevronRight,
   faCircleCheck,
   faCircleDown,
   faCircleStop,
@@ -42,12 +43,15 @@ import {
   faRightFromBracket,
   faRocket,
   faRotateRight,
+  faRoute,
   faSkullCrossbones,
   faStore,
   faTrash,
   faTriangleExclamation,
   faUpload,
   faUsers,
+  faVault,
+  faWrench,
   faXmark
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -78,6 +82,8 @@ library.add(
   faUsers,
   faRightFromBracket,
   faChevronDown,
+  faChevronRight,
+  faVault,
   faArrowRight,
   faUpload,
   faDocker,
@@ -109,7 +115,9 @@ library.add(
   faStore,
   faMagnifyingGlass,
   faGlobe,
-  faRocket
+  faRocket,
+  faWrench,
+  faRoute
 )
 
 // Environment variables
