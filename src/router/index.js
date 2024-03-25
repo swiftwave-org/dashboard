@@ -150,6 +150,11 @@ const router = createRouter({
       path: '/pv-backup-download/:backup_id',
       name: 'Download Persistent Volume Backup',
       component: () => import('@/views/pages/DownloadPVBackup.vue')
+    },
+    {
+      path: '/servers',
+      name: 'Servers',
+      component: () => import('@/views/pages/ServerManagement.vue')
     }
   ]
 })

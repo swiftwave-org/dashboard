@@ -11,8 +11,10 @@ import {
   faArrowDown,
   faArrowRight,
   faArrowUpRightFromSquare,
+  faBook,
   faBox,
   faCalendarDays,
+  faChartColumn,
   faChevronDown,
   faChevronRight,
   faCircleCheck,
@@ -23,6 +25,7 @@ import {
   faCodeBranch,
   faCopy,
   faCubesStacked,
+  faEllipsisVertical,
   faEye,
   faEyeSlash,
   faFile,
@@ -34,6 +37,7 @@ import {
   faKey,
   faLink,
   faListCheck,
+  faListUl,
   faLocationArrow,
   faMagnifyingGlass,
   faMoon,
@@ -44,8 +48,10 @@ import {
   faRocket,
   faRotateRight,
   faRoute,
+  faServer,
   faSkullCrossbones,
   faStore,
+  faTerminal,
   faTrash,
   faTriangleExclamation,
   faUpload,
@@ -117,7 +123,13 @@ library.add(
   faGlobe,
   faRocket,
   faWrench,
-  faRoute
+  faRoute,
+  faServer,
+  faListUl,
+  faEllipsisVertical,
+  faChartColumn,
+  faTerminal,
+  faBook
 )
 
 // Environment variables
