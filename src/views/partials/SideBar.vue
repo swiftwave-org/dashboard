@@ -86,7 +86,7 @@ onMounted(() => {
           </template>
           <template #title> Applications & Volumes</template>
           <template #content>
-            <div class="space-y-2.5">
+            <div class="space-y-2">
               <RouterLink
                 class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
                 to="/applications">
@@ -103,36 +103,13 @@ onMounted(() => {
           </template>
         </SideBarOption>
 
-        <SideBarOption :active-urls="['Git Credentials', 'Image Registry Credentials']">
-          <template #icon>
-            <font-awesome-icon icon="fa-solid fa-vault" />
-          </template>
-          <template #title>Manage Credentials</template>
-          <template #content>
-            <div class="space-y-2.5">
-              <RouterLink
-                class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-                to="/git-credentials">
-                <font-awesome-icon icon="fa-solid fa-code-branch" />
-                <span class="mx-2 text-sm font-medium">Git Credentials</span>
-              </RouterLink>
-              <RouterLink
-                class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-                to="/image-registry-credentials">
-                <font-awesome-icon icon="fa-solid fa-cloud" />
-                <span class="mx-2 text-sm font-medium">Image Reg Credentials</span>
-              </RouterLink>
-            </div>
-          </template>
-        </SideBarOption>
-
         <SideBarOption :active-urls="['Domains', 'Redirect Rules', 'Ingress Rules']">
           <template #icon>
             <font-awesome-icon icon="fa-solid fa-route" />
           </template>
           <template #title>Manage Routing</template>
           <template #content>
-            <div class="space-y-2.5">
+            <div class="space-y-2">
               <RouterLink
                 class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
                 to="/domains">
@@ -155,13 +132,53 @@ onMounted(() => {
           </template>
         </SideBarOption>
 
+        <SideBarOption :active-urls="['Git Credentials', 'Image Registry Credentials']">
+          <template #icon>
+            <font-awesome-icon icon="fa-solid fa-vault" />
+          </template>
+          <template #title>Manage Credentials</template>
+          <template #content>
+            <div class="space-y-2">
+              <RouterLink
+                class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+                to="/git-credentials">
+                <font-awesome-icon icon="fa-solid fa-code-branch" />
+                <span class="mx-2 text-sm font-medium">Git Credentials</span>
+              </RouterLink>
+              <RouterLink
+                class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+                to="/image-registry-credentials">
+                <font-awesome-icon icon="fa-solid fa-cloud" />
+                <span class="mx-2 text-sm font-medium">Image Reg Credentials</span>
+              </RouterLink>
+            </div>
+          </template>
+        </SideBarOption>
+
+        <SideBarOption :active-urls="['Servers']">
+          <template #icon>
+            <font-awesome-icon icon="fa-solid fa-server" />
+          </template>
+          <template #title>Server Management</template>
+          <template #content>
+            <div class="space-y-2">
+              <RouterLink
+                class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+                to="/servers">
+                <font-awesome-icon icon="fa-solid fa-list-ul" />
+                <span class="mx-2 text-sm font-medium">Server list</span>
+              </RouterLink>
+            </div>
+          </template>
+        </SideBarOption>
+
         <SideBarOption :active-urls="['Users']">
           <template #icon>
             <font-awesome-icon icon="fa-solid fa-gear" />
           </template>
           <template #title> Administration</template>
           <template #content>
-            <div class="space-y-2.5">
+            <div class="space-y-2">
               <RouterLink
                 class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
                 to="/users">
@@ -186,23 +203,6 @@ onMounted(() => {
                 <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
                 <span class="mx-2 text-sm font-medium">Logout</span>
               </a>
-            </div>
-          </template>
-        </SideBarOption>
-
-        <SideBarOption :active-urls="['Servers']">
-          <template #icon>
-            <font-awesome-icon icon="fa-solid fa-server" />
-          </template>
-          <template #title>Server Management</template>
-          <template #content>
-            <div class="space-y-2.5">
-              <RouterLink
-                class="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-                to="/servers">
-                <font-awesome-icon icon="fa-solid fa-list-ul" />
-                <span class="mx-2 text-sm font-medium">Server list</span>
-              </RouterLink>
             </div>
           </template>
         </SideBarOption>

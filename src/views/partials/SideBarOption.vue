@@ -52,13 +52,13 @@ const closeMenu = () => {
   <Disclosure v-slot="{ open }">
     <div
       ref="disclosureBtnRef"
-      class="mt-3"
+      class="mt-2.5"
       :class="{
         'is-active': open
       }">
       <DisclosureButton
         as="button"
-        class="flex w-full items-center justify-between rounded-lg border border-gray-100 bg-gray-100 bg-opacity-10 bg-clip-padding px-3 py-1.5 text-gray-200 backdrop-blur-sm backdrop-filter">
+        class="flex w-full items-center justify-between rounded-lg bg-gray-100 bg-opacity-10 bg-clip-padding px-3 py-1.5 text-gray-200 backdrop-blur-sm backdrop-filter">
         <div>
           <slot name="icon"></slot>
           <span class="mx-2 text-sm font-medium">
@@ -74,7 +74,7 @@ const closeMenu = () => {
       </DisclosureButton>
     </div>
 
-    <div class="mt-3">
+    <div class="mt-2.5">
       <transition
         enter-active-class="transition duration-50 ease-in"
         enter-from-class="transform opacity-0"
@@ -83,7 +83,7 @@ const closeMenu = () => {
         leave-from-class="transform opacity-100"
         leave-to-class="transform opacity-0">
         <DisclosurePanel class="mt-0">
-          <div class="ml-3 mr-1 mt-0 transition-all">
+          <div class="ml-4 mr-0 mt-0 transition-all">
             <slot name="content"></slot>
           </div>
         </DisclosurePanel>
