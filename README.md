@@ -1,12 +1,3 @@
-> [!CAUTION]
-> For `develop` versio, we have moved to monorepo structure. 
-> 
-> Dashboard source code move to main repo https://github.com/swiftwave-org/swiftwave
-> 
-> Please raise issues and PR there (if required)
-
-
-
 # dashboard
 
 This template should help get you started developing with Vue 3 in Vite.
