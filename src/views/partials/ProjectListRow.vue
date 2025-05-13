@@ -71,7 +71,7 @@ const viewApplicationGroupDetails = () => {
       <div class="text-sm text-success-600">{{ healthyServiceCount }}&nbsp;Healthy</div>
     </TableRow>
     <TableRow align="center">
-      <div class="text-sm text-danger-600">{{ unhealthyServiceCount }}&nbsp;Unhealthy</div>
+      <div class="text-sm" :class="[ unhealthyServiceCount ? 'text-danger-600' : 'text-gray-700']">{{ unhealthyServiceCount }}&nbsp;Unhealthy</div>
     </TableRow>
     <TableRow align="right" flex>
       <FilledButton :click="viewApplicationGroupDetails" slim type="primary">View Details</FilledButton>
