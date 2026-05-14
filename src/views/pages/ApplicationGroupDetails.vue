@@ -283,7 +283,6 @@ const isAnyAppInfoChanged = computed(() => {
 
 // Environment Variables Editor Related
 const environmentVariableKeys = (app) => {
-  console.log(environmentVariableDetails)
   return environmentVariableDetails[app.id].keys
 }
 const environmentVariableMap = (app) => {
